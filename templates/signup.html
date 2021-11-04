@@ -1,0 +1,209 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block title %}Register{% endblock %}
+
+{% block style_content %}
+
+
+<style type="text/css">
+    .wrapper {
+        display: flex;
+        width: 100%;
+        align-items: stretch;
+    }
+    
+    .error{
+      color: red;
+      font-size: 12px;
+      font-weight: 300;
+    }
+    
+    
+    .form_base{
+        margin-top: 8%;
+        margin-bottom: 5%;
+    }
+    .label_name{
+      font-size: 16px;
+      font-weight: 500;
+      color: #434343;
+    }
+    
+    .form-control{
+      width: 400px;
+      height: 48px;
+      background-color: #ffffff;
+      font-size: 14px;
+      font-weight: 500;
+      color: #434343;
+      border-radius: 5px;
+      border: 1px solid #d6d6d6;
+      padding: 6px 12px; 
+    }
+    
+    .form-group{
+      margin-top: 1.5rem;
+      margin-bottom: 1rem; 
+    }
+    .input-group{
+      margin-top: 15px; 
+    }
+    input[type=radio] {
+         margin: 5px -12px;
+       }
+    
+    .input-group label{
+      font-weight: 500;
+    }
+    
+    .form-control:focus {
+      border-color: #ABCDEF !important;
+      box-shadow: 0 0 5px rgba(171,205,239,1) !important;
+      font-size: 14px;
+      font-weight: 500;
+      color:#434343;
+    }
+    
+    input::placeholder  { /* Chrome, Firefox, Opera, Safari 10.1+ */
+      color: #434343; /* Firefox */
+    }
+
+
+    
+    .logdet {
+        text-align: left;
+        font-size: 30px;
+        margin-top: 20px;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+    #btn{
+      background-color: #A43FDD;
+      border-radius: 5px;
+      height: 48px;
+    
+    }
+    .btn:hover{
+      color: white;
+      box-shadow:0 0 3px #A43FDD!important; 
+    }
+    
+    .foot{
+        text-align: center;    
+        margin-top: 30px;
+        letter-spacing: 0.6px;
+        font-size: 15px;
+        font-weight: 500;
+    }
+    
+    .btn{
+      color: white;
+      font-size: 15px;
+      font-weight: 500;
+    }
+    
+    .fit-image{
+    width: 95%;
+    object-fit: cover;
+    height: auto; /* only if you want fixed height */
+    }
+    
+    body{
+      background-color: #fff;
+    }
+    
+    @media (max-width: 990px) {
+       form{
+        margin-top:50px;
+    }
+    }
+    
+    @media (max-width: 500px) {
+      .form-control{
+      width: 270px;
+      height: 35px;
+      background-color: #ffffff;
+      font-size: 12px;
+      font-weight: 500;
+      color: #737999;
+    }
+    
+    input[type=radio] {
+         margin: 7px -12px;
+       }
+    
+    
+    #btn{
+      height: 40px;
+    }
+    
+    .form-control:focus {
+      
+      font-size: 12px;
+      font-weight: 500;
+      color: #737999;
+    }
+    
+    
+      .logdet{
+        font-size: 25px;
+      }
+    
+      form{
+        margin-top:50px;
+      }
+    
+    }
+    
+    
+    button:focus {outline:0 !important;}
+    
+    
+    </style>
+    {% endblock %}
+    {% block content %}
+      <div class="wrapper mt-4">
+        <div class="container-fluid p-0">
+          <div class="row m-0">
+            <div class="col-lg-6 p-0 justify-content-center">
+                <img src="{% static 'images/Report.png' %}" class="img-responsive fit-image">
+              </div>
+            <div class="col-lg-6  align-self-center p-0" >
+          
+              <div class="row m-0 justify-content-center">
+                <form action="signupuser/" method="post">
+                  {% csrf_token %}
+                  <div class="logdet">Sign Up</div>
+                  <div class="form_base">
+                  <div class="form-group">
+                      <label class="label_name" for="name">Name</label>
+                     <input type="text" class="form-control" id="name"name="name" >
+                  </div>
+    
+              
+                  <div class="form-group">
+                    <label class="label_name" for="user_email">Email</label>
+                     <input type="text" class="form-control" name="user_email" id="email" >
+                  </div>  
+    
+    
+                  <div class="form-group">
+                    <label class="label_name" for="password">Password</label>
+                     <input type="password" class="form-control" name="password" >
+                     <!-- <span class="text-muted" style="font-size: 10px;">Password must contain atleast 1 Uppercase, 1 Lowercase Letter, 1 Number<br> and 1 Special Character</span> -->
+                  </div>
+                </div>
+                 
+                  
+                  <div class=" form-group d-flex justify-content-center" id="btn">
+                   <button type="submit" class="btn btn-block">Sign Up</button>
+                  </div>
+                  <p class="foot">Already have an account?<a href="/login" style="color: #ce907e;padding-left: 3px;text-decoration-line: underline;">Sign In</a></p>
+                </form>
+              </div>
+            </div>
+          
+          </div>
+        </div>
+      </div>
+      {% endblock %}
