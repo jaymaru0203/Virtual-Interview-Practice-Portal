@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% load static %}
-{% block title %}Sign Up{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block head_content %}
 
@@ -169,30 +169,22 @@
             <div class="col-lg-6  align-self-center p-0" >
           
               <div class="row m-0 justify-content-center">
-                <form action="/signup/" method="post">
+                <form action="/login/" method="post">
 
                   {% csrf_token %}
-                  <div class="logdet">Sign Up</div>
+                  <div class="logdet">Login</div>
 
-                  <div class="form_base">
-                  
-                  <div class="form-group">
-                      <label class="label_name" for="name">Name <b class="error">*</b></label>
-                     <input type="text" class="form-control" id="name"name="name">
-                  </div>
-    
+                  <div class="form_base">    
               
                   <div class="form-group">
                     <label class="label_name" for="email">Email <b class="error">*</b></label>
                      <input type="email" class="form-control" name="email" id="email">
                   </div>  
     
-    
                   <div class="form-group">
                     <label class="label_name" for="password">Password <b class="error">*</b></label>
                      <input type="password" class="form-control" name="password" id="password">
 
-                     <span class="text-muted" style="font-size: 10px;">Password must contain atleast 8 characters</span>
                   </div>
                 </div>
                  
@@ -203,9 +195,9 @@
                   {% endif %}
 
                   <div class=" form-group d-flex justify-content-center" id="btn">
-                   <button type="submit" class="btn btn-block">Sign Up</button>
+                   <button type="submit" class="btn btn-block">Login</button>
                   </div>
-                  <p class="foot">Already have an account?<a href="/login/" style="color: #ce907e;padding-left: 3px;text-decoration-line: underline;">Sign In</a></p>
+                  <p class="foot">Don't have an account?<a href="/signup/" style="color: #ce907e;padding-left: 3px;text-decoration-line: underline;">Sign Up</a></p>
                 </form>
               </div>
             </div>

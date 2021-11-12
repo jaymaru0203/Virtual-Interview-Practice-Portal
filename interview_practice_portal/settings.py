@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'authentication'
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'interview_practice_portal.urls'
+AUTH_USER_MODEL = 'authentication.User'
 
 TEMPLATES = [
     {
