@@ -1,19 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-</head>
-<body>
-    Dashboard!
+{% extends "links.html" %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
+{% block head_content %}
+<style>
+    .screen-1{
+        padding: 50px  20px  50px;
+        background-color: #fff;
+      }
+</style>
+{% endblock %}
+
+
+{% block content %} 
+
+<div class="container-fluid screen-1">
     {% if messages %}
         {% for message in messages %}
-        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade show" {% else %} class="alert alert-warning alert-dismissible fade show" {% endif %}  role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         {% endfor %}
     {% endif %}
-    {% if user.is_authenticated %}
-        {{ request.user.email }}
-    {% endif %}
-</body>
-</html>
+    <h3>Dashboard! <a href="/logout/" class="float-right">Logout</a></h3>
+    
+</div>
+  {% endblock %}

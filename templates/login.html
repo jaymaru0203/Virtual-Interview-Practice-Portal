@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "links.html" %}
 {% load static %}
 {% block title %}Login{% endblock %}
 
@@ -162,6 +162,17 @@
     {% block content %}
       <div class="wrapper mt-4">
         <div class="container-fluid p-0">
+          {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <h6>{{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </h6>
+                </div>
+            {% endfor %}
+          {% endif %}
           <div class="row m-0">
             <div class="col-lg-6 p-0 justify-content-center">
                 <img src="{% static 'images/Report.png' %}" class="img-responsive fit-image">
@@ -187,16 +198,13 @@
 
                   </div>
                 </div>
-                 
-                  {% if messages %}
-                        {% for message in messages %}
-                        <p{% if message.tags %} class="{{ message.tags }} text-center"{% endif %}>{{ message }}</p>
-                        {% endfor %}
-                  {% endif %}
 
                   <div class=" form-group d-flex justify-content-center" id="btn">
                    <button type="submit" class="btn btn-block">Login</button>
                   </div>
+
+                  <a href="{% url 'authentication:password_reset' %}">Forgot Password?</a>
+
                   <p class="foot">Don't have an account?<a href="/signup/" style="color: #ce907e;padding-left: 3px;text-decoration-line: underline;">Sign Up</a></p>
                 </form>
               </div>

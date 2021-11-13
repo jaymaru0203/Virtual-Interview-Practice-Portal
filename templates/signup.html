@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "links.html" %}
 {% load static %}
 {% block title %}Sign Up{% endblock %}
 
@@ -160,8 +160,22 @@
     {% endblock %}
 
     {% block content %}
+
+     
+
       <div class="wrapper mt-4">
         <div class="container-fluid p-0">
+          {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <h6>{{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </h6>
+                </div>
+            {% endfor %}
+          {% endif %}
           <div class="row m-0">
             <div class="col-lg-6 p-0 justify-content-center">
                 <img src="{% static 'images/Report.png' %}" class="img-responsive fit-image">
@@ -195,17 +209,11 @@
                      <span class="text-muted" style="font-size: 10px;">Password must contain atleast 8 characters</span>
                   </div>
                 </div>
-                 
-                  {% if messages %}
-                        {% for message in messages %}
-                        <p{% if message.tags %} class="{{ message.tags }} text-center"{% endif %}>{{ message }}</p>
-                        {% endfor %}
-                  {% endif %}
 
                   <div class=" form-group d-flex justify-content-center" id="btn">
                    <button type="submit" class="btn btn-block">Sign Up</button>
                   </div>
-                  <p class="foot">Already have an account?<a href="/login/" style="color: #ce907e;padding-left: 3px;text-decoration-line: underline;">Sign In</a></p>
+                  <p class="foot">Already have an account?<a href="/login/" style="color: #ce907e;padding-left: 3px;text-decoration-line: underline;">Log In</a></p>
                 </form>
               </div>
             </div>
