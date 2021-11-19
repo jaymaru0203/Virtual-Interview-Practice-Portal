@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script
+  src="https://code.jquery.com/jquery-3.6.0.slim.js"
+  integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY="
+  crossorigin="anonymous"></script>
+    <style type="text/css">
+        #video{
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 250px;
+            height: 150px;
+            padding: 0 20px 20px 0;
+            z-index: 5;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <video muted id="video"></video>
+    <script type="text/javascript">  
+
+        window.onload = function() {
+            let checking = ["audioinput", "videoinput"];
+            let onlyHas = [];
+            navigator.mediaDevices.enumerateDevices()
+            .then((devices) => {
+                let haveAllDevices = true;
+                devices.forEach((device) => {
+                    onlyHas.push(device.kind);
+                    if (!(device.kind == checking[0] || device.kind == checking[1])) {
+                        haveAllDevices = false;
+                    }
+                });
+                
+            })
+            .catch(function(err) {
+                console.log(err.name + ": " + err.message);
+            });
+
+
+            //add constraints object
+            var constraints = { audio: true,
+                                video: true};
+        
+            //call getUserMedia, then the magic
+            navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream){
+                var video = document.querySelector('video');
+                video.srcObject = mediaStream;
+                video.play();
+            }).catch(function(err){
+                if (err.name == "NotAllowedError") {
+                    console.log("User has denied accessed")
+                 }
+            });
+        
+        }
+    </script>
+</body>
+
+</html>

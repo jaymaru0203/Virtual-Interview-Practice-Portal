@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}V - Interview{% endblock %}
+{% block title %}Interview Module{% endblock %}
 {% block head_content %}
 
 <style type="text/css">
       .main-screen{
-        padding: 0 160px;
+        padding: 0 20%;
       }
       .screen-1{
         padding: 100px  20px  50px;
@@ -41,26 +41,38 @@
         font-size: 1.2rem;
       }
 
-      .image-screen img{
-        margin: 10% auto;    
-        display: block;
-        border-radius: 15px;
-        box-shadow: -42px -42px 0px 5px rgba(219,219,219,0.75);
-        -webkit-box-shadow: -42px -42px 0px 5px rgba(219,219,219,0.75);
-        -moz-box-shadow: -42px -42px 0px 5px rgba(219,219,219,0.75);
-        justify-content: center;
+      .fit-image{
+      width: 100%;
+      object-fit: cover;
+      height: 300px;
+      border-radius: 8px;
+      background-color: white;/* only if you want fixed height */
+      margin-bottom: 2%;
       }
 
-      .fit-image{
-      width: 80%;
-      object-fit: cover;
-      height: auto;
-      background-color: white;/* only if you want fixed height */
+      .sub-box{
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 8px 5px 34px -12px rgba(101,94,94,0.75);
+        -webkit-box-shadow: 8px 5px 34px -12px rgba(101,94,94,0.75);
+        -moz-box-shadow: 8px 5px 34px -12px rgba(101,94,94,0.75);
+        transition: 0.5s all ease-in-out;
+        margin-bottom: 20px;
+      }
+
+
+      .sub-box:hover{
+        transform: scale(1.05);
+      }
+      @media screen and (max-width: 1000px ){
+        .main-screen{
+          padding: 0 10%;
+        }
       }
 
       @media screen and (max-width: 670px ){
         .main-screen{
-          padding: 0 80px;
+          padding: 0 10%;
         }
       }
       @media screen and (max-width: 500px ){
@@ -107,7 +119,7 @@
         }
   
         .fit-image{
-        width: 85%;
+        width: 100%;
         object-fit: cover;
         height: auto;
         background-color: white;/* only if you want fixed height */
@@ -131,42 +143,39 @@
             </div>
         {% endfor %}
     {% endif %}
-
+<!-- What defines you the best professionally -->
     <div class="row m-0">
-      <div class="col-lg-6 col-md-6 p-0 align-self-center" data-aos="fade-right">
+      <div class="col-lg-6 col-md-6 p-0 align-self-center" >
         <div class="row m-0 justify-content-center">
           <div class="main-screen">
-        <div class="main-text">Practice for the Pressure</div>
-        <div class="sub-text">We use your built-in camera to recreate the pressure of actual interviews so you can gain realistic experience and feel prepared for anything.</div>
-        <div class="link-button">
-            <button class="hire-mech">Explore</button>
+            <div class="sub-box">
+            <img src="{% static 'images/virtual-interview-job2.jpg' %}" class="img-responsive fit-image" >
+            <div class="main-text">Experienced</div>
+            <div class="sub-text">We use your built-in camera to recreate the pressure of actual interviews so you can gain realistic experience and feel prepared for anything.</div>
+              <div class="link-button">
+                <a href="/video"><button class="hire-mech">Practice</button></a>
+              </div>
+            </div>
+        </div>
+        </div>
+        </div>
+        <div class="col-lg-6 col-md-6 p-0 align-self-center" >
+          <div class="row m-0 justify-content-center">
+            <div class="main-screen">
+              <div class="sub-box" >
+              <img src="{% static 'images/virtual-job-interview.jpg' %}" class="img-responsive fit-image" >
+              <div class="main-text">Fresher</div>
+              <div class="sub-text">We use your built-in camera to recreate the pressure of actual interviews so you can gain realistic experience and feel prepared for anything.</div>
+                <div class="link-button">
+                  <a href="/video"><button class="hire-mech">Practice</button></a>
+                </div>
+              </div>
           </div>
-         </div>
-        </div>
-        </div>
-        <div class="col-lg-6 col-md-6 p-0 align-middle mt-auto mb-auto text-center image-screen" data-aos="fade-left"> 
-            <img src="{% static 'images/Interview.jpg' %}" class="img-responsive fit-image" >
-        </div>
+          </div>
+          </div>
     </div>
 
-    <div class="row m-0">
-      <div class="col-lg-6 col-md-6 p-0 align-middle mt-auto mb-auto text-center image-screen" data-aos="fade-left"> 
-        <img src="{% static 'images/Interview.jpg' %}" class="img-responsive fit-image" >
-      </div>
-      <div class="col-lg-6 col-md-6 p-0 align-self-center" data-aos="fade-right">
-        <div class="row m-0 justify-content-center">
-          <div class="main-screen">
-        <div class="main-text">Practice for the Pressure</div>
-        <div class="sub-text">We use your built-in camera to recreate the pressure of actual interviews so you can gain realistic experience and feel prepared for anything.</div>
-        <div class="link-button">
-            <button class="hire-mech">Explore</button>
-          </div>
-         </div>
-        </div>
-      </div>
-    </div>
 </div>
 {% endblock %}
-
         
 <!-- pbkdf2_sha256$216000$LTbfIhENiqFt$oB12jQry2oQKNPx8691u7ZkbXKiZZ7BBALpTCBGQg24= -->
