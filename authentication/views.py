@@ -13,12 +13,6 @@ def dashboard(request):
     else:
         return render(request, "index.html")
 
-def interview(request):
-    return render(request, "interview.html")
-
-def video(request):
-    return render(request, "video.html")
-
 def signup(request):
     if request.user.is_authenticated:
         return redirect('/')

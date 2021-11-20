@@ -1,29 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script
-  src="https://code.jquery.com/jquery-3.6.0.slim.js"
-  integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY="
-  crossorigin="anonymous"></script>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Interview{% endblock %}
+{% block head_content %}
+
     <style type="text/css">
         #video{
-            position: fixed;
-            bottom: 0;
-            right: 0;
-            width: 250px;
-            height: 150px;
-            padding: 0 20px 20px 0;
-            z-index: 5;
+            width: 360px;
+            height: 200px;
+            margin: 10px auto;
             object-fit: cover;
         }
     </style>
-</head>
+{% endblock %}
 
-<body>
-    <video muted id="video"></video>
+{% block content %} 
+
+<div class="container-fluid screen-1">
+    <h1 class="mt-5">Welcome to Your Virtual Interview</h1>
+    <h2>Check Your Audio as Well As Video on this page and Be Ready for your Virtual Interview</h2>
+    <h4>On the Next Page, You will have to chooe if you want to attempt the Fresher Interview or the Interview for Professionally Experienced Professionals</h4>
+    <h4>Post that, your interview starts where there will be no pauses in between to ensure a real interview like experience</h4>
+    <p>Clicking on the Start Interview Button will start your interview with our virtual interviewer Asking you your first question. As the question ends, recording of your answer will start automatically and the same will be prompted on your screen. Speak your answer in the microphone and click on the button for the next question to start and the cycle goes on.</p>
+        
+    <br>
+    <h3>Check Your Video Here</h3>
+    <video muted id="video"></video><br>
+
+    <h3><a href="/choice/">Continue</a></h3>
+</div>
     <script type="text/javascript">  
 
         window.onload = function() {
@@ -62,6 +66,5 @@
         
         }
     </script>
-</body>
 
-</html>
+{% endblock %}

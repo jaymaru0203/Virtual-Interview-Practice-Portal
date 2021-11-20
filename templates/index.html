@@ -4,12 +4,61 @@
 {% block head_content %}
 
 <style type="text/css">
+      *{
+        margin: 0;
+        padding: 0;
+      }
+      body{
+        overflow-x: hidden;
+      }
       .main-screen{
         padding: 0 160px;
       }
       .screen-1{
-        padding: 100px  20px  50px;
+        padding: 40px 0;
         background-color: #fff;
+      }
+
+      header {
+        position: relative;
+        background-color: black;
+        height: 100vh;
+        min-height: 25rem;
+        width: 100%;
+        overflow: hidden;
+        margin: -40px 0 50px;
+      }
+
+      header video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        z-index: 0;
+        -ms-transform: translateX(-50%) translateY(-50%);
+        -moz-transform: translateX(-50%) translateY(-50%);
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+        margin: 0;
+      }
+
+      header .container {
+        position: relative;
+        z-index: 2;
+      }
+
+      header .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: black;
+        opacity: 0.5;
+        z-index: 1;
       }
                 
       .main-text{
@@ -132,6 +181,22 @@
         {% endfor %}
     {% endif %}
 
+  <header>
+    <div class="overlay"></div>
+
+    <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+      <source src="{% static 'videos/cover.mp4' %}" type="video/mp4">
+    </video>
+
+    <div class="container h-100">
+      <div class="d-flex h-100 text-center align-items-center">
+        <div class="w-100 text-white">
+          <h1 class="display-3">Stand Out</h1>
+          <p class="lead mb-0">Kick Anxiety and Be Interview Ready with V-Interview</p>
+        </div>
+      </div>
+    </div>
+  </header>
     <div class="row m-0">
       <div class="col-lg-6 col-md-6 p-0 align-self-center" data-aos="fade-right">
         <div class="row m-0 justify-content-center">

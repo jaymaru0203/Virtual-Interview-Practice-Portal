@@ -1,181 +1,197 @@
-{% extends "base.html" %}
-{% load static %}
-{% block title %}Interview Module{% endblock %}
-{% block head_content %}
 
-<style type="text/css">
-      .main-screen{
-        padding: 0 20%;
-      }
-      .screen-1{
-        padding: 100px  20px  50px;
-        background-color: #fff;
-      }
-                
-      .main-text{
-        font-size: 3rem;
-        font-weight: 700;
-        line-height: normal;
-        margin-bottom: 20px;
-      }
-
-
-      .sub-text{
-        font-size: 1rem;
-        font-weight: 400;
-        line-height: normal;
-        margin-bottom: 20px;
-        text-align: justify;
-        border-left: #A43FDD 8px solid;
-        padding-left: 15px;
-      }
-
-      .hire-mech{
-        width: 200px;
-        border: none;
-        padding: 12px 8px;
-        margin: 20px 0;
-        border-radius:8px;
-        background-color:  #A43FDD;
-        color: #fff;
-        font-size: 1.2rem;
-      }
-
-      .fit-image{
-      width: 100%;
-      object-fit: cover;
-      height: 300px;
-      border-radius: 8px;
-      background-color: white;/* only if you want fixed height */
-      margin-bottom: 2%;
-      }
-
-      .sub-box{
-        padding: 20px;
-        border-radius: 16px;
-        box-shadow: 8px 5px 34px -12px rgba(101,94,94,0.75);
-        -webkit-box-shadow: 8px 5px 34px -12px rgba(101,94,94,0.75);
-        -moz-box-shadow: 8px 5px 34px -12px rgba(101,94,94,0.75);
-        transition: 0.5s all ease-in-out;
-        margin-bottom: 20px;
-      }
-
-
-      .sub-box:hover{
-        transform: scale(1.05);
-      }
-      @media screen and (max-width: 1000px ){
-        .main-screen{
-          padding: 0 10%;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            text-align: center;
         }
-      }
-
-      @media screen and (max-width: 670px ){
-        .main-screen{
-          padding: 0 10%;
+        #videoPlayer{
+            height: 70vh;
+            width: 85vw;
+            margin: 25px auto;
         }
-      }
-      @media screen and (max-width: 500px ){
-        .main-screen{
-          padding: 0 40px;
+        button{
+            font-size: 16px;
+            padding: 2px 4px;
         }
-        .main-text{
-          font-size: 2.5rem;
-          font-weight: 700;
-          line-height: normal;
-          margin-bottom: 20px;
+        #changeButton{
+            display: none;
         }
-  
-  
-        .sub-text{
-          font-size: 0.9rem;
-          font-weight: 400;
-          line-height: normal;
-          margin-bottom: 20px;
-          text-align: justify;
-          border-left: #A43FDD 8px solid;
-          padding-left: 15px;
+        #instructions{
+            color: tomato;
         }
-  
-        .hire-mech{
-          width: 150px;
-          border: none;
-          padding: 8px 4px;
-          margin: 20px 0;
-          border-radius:8px;
-          background-color:  #A43FDD;
-          color: #fff;
-          font-size: 1.2rem;
+        #userVideo{
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 250px;
+            height: 150px;
+            transform: scaleX(-1);
         }
+    </style>
+</head>
+<body>
 
-        .image-screen img{
-          margin: 10% auto;    
-          display: block;
-          border-radius: 15px;
-          box-shadow: -22px -22px 0px 3px rgba(219,219,219,0.75);
-          -webkit-box-shadow: -22px -22px 0px 3px rgba(219,219,219,0.75);
-          -moz-box-shadow: -22px -22px 0px 3px rgba(219,219,219,0.75);
-          justify-content: center;
-        }
-  
-        .fit-image{
-        width: 100%;
-        object-fit: cover;
-        height: auto;
-        background-color: white;/* only if you want fixed height */
-        }
+    <video name='demo' autoplay="true" id="videoPlayer">
+        <source src="../static/interview_questions/{{start}}" type="video/mp4" id="vidSource"/>
+    </video><br>
 
-      }
+    <video muted id="userVideo"></video>
 
-</style>
-{% endblock %}
+    <button onclick="onStart()" id="startButton">Start Interview</button>
+    
+    <h3 id="instructions"></h3><br>
 
-{% block content %} 
-<div class="container-fluid screen-1">
+    <button id="changeButton">End Answer and Start Next Question</button>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade show" {% else %} class="alert alert-warning alert-dismissible fade show" {% endif %}  role="alert">
-                {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        {% endfor %}
-    {% endif %}
-<!-- What defines you the best professionally -->
-    <div class="row m-0">
-      <div class="col-lg-6 col-md-6 p-0 align-self-center" >
-        <div class="row m-0 justify-content-center">
-          <div class="main-screen">
-            <div class="sub-box">
-            <img src="{% static 'images/virtual-interview-job2.jpg' %}" class="img-responsive fit-image" >
-            <div class="main-text">Experienced</div>
-            <div class="sub-text">We use your built-in camera to recreate the pressure of actual interviews so you can gain realistic experience and feel prepared for anything.</div>
-              <div class="link-button">
-                <a href="/video"><button class="hire-mech">Practice</button></a>
-              </div>
-            </div>
-        </div>
-        </div>
-        </div>
-        <div class="col-lg-6 col-md-6 p-0 align-self-center" >
-          <div class="row m-0 justify-content-center">
-            <div class="main-screen">
-              <div class="sub-box" >
-              <img src="{% static 'images/virtual-job-interview.jpg' %}" class="img-responsive fit-image" >
-              <div class="main-text">Fresher</div>
-              <div class="sub-text">We use your built-in camera to recreate the pressure of actual interviews so you can gain realistic experience and feel prepared for anything.</div>
-                <div class="link-button">
-                  <a href="/video"><button class="hire-mech">Practice</button></a>
-                </div>
-              </div>
-          </div>
-          </div>
-          </div>
-    </div>
 
-</div>
-{% endblock %}
+
+
+
+    <script>
+
+        let constraintObj = { 
+            audio: true,
+            video: { 
+                facingMode: "user", 
+                width: { min: 640, ideal: 1280, max: 1920 },
+                height: { min: 480, ideal: 720, max: 1080 } 
+            } 
+        }; 
+
+        var arr = JSON.parse('{{ videos|safe }}')
+        var numberOfVideos = arr.length;
         
-<!-- pbkdf2_sha256$216000$LTbfIhENiqFt$oB12jQry2oQKNPx8691u7ZkbXKiZZ7BBALpTCBGQg24= -->
+        var count=0;
+        var player = document.getElementById('videoPlayer');
+        var videoSource = document.getElementById('vidSource');
+        var changeButton = document.getElementById('changeButton');
+        var instructions = document.getElementById('instructions');
+
+        player.pause();
+
+        //handle older browsers that might implement getUserMedia in some way
+        if (navigator.mediaDevices === undefined) {
+            navigator.mediaDevices = {};
+            navigator.mediaDevices.getUserMedia = function(constraintObj) {
+                let getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                if (!getUserMedia) {
+                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                }
+                return new Promise(function(resolve, reject) {
+                    getUserMedia.call(navigator, constraintObj, resolve, reject);
+                });
+            }
+        }else{
+            navigator.mediaDevices.enumerateDevices()
+            .then(devices => {
+                devices.forEach(device=>{
+                    //console.log(device.kind.toUpperCase(), device.label);
+                    //, device.deviceId
+                })
+            })
+            .catch(err=>{
+                console.log(err.name, err.message);
+            })
+        }
+
+        navigator.mediaDevices.getUserMedia(constraintObj)
+        .then(function(mediaStreamObj) {
+            //connect the media stream to the first video element
+            let video = document.getElementById("userVideo");
+
+            if ("srcObject" in video) {
+                video.srcObject = mediaStreamObj;
+            } else {
+                //old version
+                video.src = window.URL.createObjectURL(mediaStreamObj);
+            }
+            
+            video.onloadedmetadata = function(ev) {
+                //show in the video element what is being captured by the webcam
+                video.play();
+            };
+
+            //add listeners for saving video/audio
+            let mediaRecorder = new MediaRecorder(mediaStreamObj);
+            let chunks = [];
+            
+            player.addEventListener('ended', (ev)=>{
+                mediaRecorder.start();
+                console.log(mediaRecorder.state);
+                instructions.innerHTML = "Recording Your Answer...";
+                changeButton.style.display = 'inline';
+            })
+            changeButton.addEventListener('click', (ev)=>{
+                mediaRecorder.stop();
+                console.log(mediaRecorder.state);
+            });
+
+            mediaRecorder.ondataavailable = function(ev) {
+                chunks.push(ev.data);
+            }
+
+            mediaRecorder.onstop = (ev)=>{
+                let blob = new Blob(chunks, { 'type' : 'video/mp4;' });
+                chunks = [];
+
+                var formData = new FormData();
+                formData.append("blob", blob);
+                formData.append("qs", count);
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', "{% url 'interview:interview' %}", true);
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                xhr.send(formData);
+                console.log("Video recoreded and sent for Question Number: " + count);
+            }
+        })
+
+        .catch(function(err) { 
+            console.log(err.name, err.message); 
+        });
+
+        changeButton.addEventListener('click',nextButtonClickFunction,false);
+
+        function onStart(){
+            document.getElementById('videoPlayer').play();
+            document.getElementById('startButton').style.display = 'none';
+        }
+    
+        function nextButtonClickFunction(e){
+            changeButton.style.display = "none"
+            instructions.innerHTML = ""
+
+            if(!e) 
+            {
+                e = window.event; 
+            }
+
+            count++;
+
+            if(count == numberOfVideos-1){
+                changeButton.innerText = "End Answer";
+            }
+
+            if(count>=numberOfVideos){
+                instructions.innerHTML = "Interview Over!";
+                window.location.href = "/interview_success/";
+            }
+            else{
+                videoSource.src = "../static/interview_questions/"+arr[count];
+                player.load();
+                player.play();
+            }
+        }
+
+    </script>
+
+</body>
+    
+</html>
