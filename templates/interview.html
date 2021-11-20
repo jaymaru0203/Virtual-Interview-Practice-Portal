@@ -1,31 +1,42 @@
+{% extends "links.html" %}
+{% block title %}Document{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+{% block head_content %}
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
+      body{
+        margin:0;
+      }
+      .wrapper {
+        display: flex;
+        width: 100%;
+        align-items: stretch;
+       }
         #videoPlayer{
-            height: 70vh;
-            width: 85vw;
-            margin: 25px auto;
+            height: 100vh;
+            object-fit: cover;
+            width: 100%;
+            overflow: hidden;
         }
-        button{
+        .button{
             font-size: 16px;
             padding: 2px 4px;
+            position:absolute;
+            bottom:5px;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
+
         #changeButton{
             display: none;
         }
         #instructions{
-            color: tomato;
+            color : #fff;
+            z-index: 5;
+            position:absolute;
+            bottom:100px;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         #userVideo{
             position: fixed;
@@ -33,25 +44,36 @@
             right: 20px;
             width: 250px;
             height: 150px;
+            z-index: 5;
             transform: scaleX(-1);
         }
+        .hire-mech{
+          width: 200px;
+          border: none;
+          padding: 12px 8px;
+          margin: 10px 0;
+          border-radius:8px;
+          background-color:  #A43FDD;
+          color: #fff;
+          font-size: 1.2rem;
+        }
     </style>
-</head>
-<body>
-
+{% endblock %}
+{% block content %}
+  <div class="wrapper">
     <video name='demo' autoplay="true" id="videoPlayer">
         <source src="../static/interview_questions/{{start}}" type="video/mp4" id="vidSource"/>
     </video><br>
 
     <video muted id="userVideo"></video>
-
-    <button onclick="onStart()" id="startButton">Start Interview</button>
     
+    <button onclick="onStart()" id="startButton" class="hire-mech button">Start Interview</button>
+    
+
     <h3 id="instructions"></h3><br>
+    <button id="changeButton" class= "hire-mech button">End Answer</button>
 
-    <button id="changeButton">End Answer and Start Next Question</button>
-
-
+  </div>
 
 
 
@@ -192,6 +214,4 @@
 
     </script>
 
-</body>
-    
-</html>
+{%  endblock %}
