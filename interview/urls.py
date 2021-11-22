@@ -9,3 +9,4 @@ urlpatterns = [
     path('interview/' ,views.interview, name='interview'),    
     path('interview_success/' ,views.interview_success, name='interview_success'),    
 ]
+
