@@ -10,16 +10,9 @@ import imageio
 import imageio.plugins.ffmpeg
 from moviepy.tools import subprocess_call
 from moviepy.config import get_setting
-
-import moviepy.editor
 import speech_recognition
 from moviepy.video.io.VideoFileClip import *
 import json, os
-import speech_recognition as sr 
-import moviepy.editor as mp
-import sys
-import subprocess as sp
-import array as arr
 
 # Create your views here.
 def dashboard(request):
@@ -43,63 +36,23 @@ def interview(request):
             # filename = user[0: user.index('@')] + "_" + str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + "_" + request.POST['qs']
             # filename = user[0: user.index('@')]
             # filename = str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + "_" + request.POST['qs']
-            filename = request.POST['qs']
+            filename = user[0: user.index('@')] + "_" + request.POST['qs']
             # store the filename somewhere to be deleted after processing 
             
             extension = ".webm"
-            print("mediiaa1")
+            
             with open(path + filename + extension, 'wb+') as destination:
                 for chunk in request.FILES['blob'].chunks():
                     destination.write(chunk)
-            print("mediiaa2" )
-            
 
-            # audio_clip = mp.AudioFileClip("F:\Django\interview_practice_portal\interview_recordings\{filename}.webm")
-
-            # moviepy.video.io.ffmpeg_tools.ffmpeg_extract_audio("F:\Django\interview_practice_portal\interview_recordings\{filename}.webm", "F:\Django\interview_practice_portal\interview_recordings\{filename}.wav")
-
-
-            # patha = os.path.join(baseDir, "media\\interview_audio\\")
-            # extensiona = ".wav"
             i = rf'F:\Django\interview_practice_portal\interview_recordings\{filename}.webm'
-            print("1" )
             o = rf'F:\Django\interview_practice_portal\interview_audios\{filename}.wav'
-            print("2" )
-            # command = 'ffmpeg -i "F:\Django\interview_practice_portal\interview_recordings\{filename}.webm" -ss 0 -to 5 "F:\Django\interview_practice_portal\interview_recordings\98.mp4"'
             bitrate=3000
             fps=44100
-            digits=6
-            
             cmd = [get_setting("FFMPEG_BINARY"), "-y", "-i", i, "-ab", "%dk"%bitrate,"-ar", "%d"%fps, o]
-            print("5" )
             subprocess_call(cmd)
-            print("4" )
-            # ffm = FFMConverter()
-            # stream = ffmpeg.input(rf"F:\Django\interview_practice_portal\interview_recordings\{filename}.webm")
-            # print("mediiaa2" )
-            # stream = ffmpeg.output(stream,rf"F:\Django\interview_practice_portal\interview_recordings\{filename}.mp4")
-            # ffmpeg.run(stream)
-            # ffm.solve(rf"F:\Django\interview_practice_portal\interview_recordings\{filename}.webm",rf"F:\Django\interview_practice_portal\interview_recordings\{filename}.mp4")
-
-
-            print("mediiaa3")
-            t="2"
-            p="8"
-            # myfile='F:\Django\interview_practice_portal\interview_recordings\hi.mp4'
-            # print(yayyyy)
-            # print(myfile)
-            # Video(video=myfile).save()
-            
-            # video = VideoFileClip(rf"F:\Django\interview_practice_portal\media\{filename}.mp4") 
-            # video.audio.write_audiofile(rf"F:\Django\interview_practice_portal\interview_recordings\{filename}.wav")
-            # # video = VideoFileClip(rf"{path}\prina.mp4") 
-            # # video.audio.write_audiofile(r"F:\Django\interview_practice_portal\media\interview_audio\byi.wav")
-            
-            
             r = speech_recognition.Recognizer()
-            print(6)
             audio = speech_recognition.AudioFile(rf"F:\Django\interview_practice_portal\interview_audios\{filename}.wav")
-            print(7)
             with audio as source:
                 audio_file = r.record(source)
             result = r.recognize_google(audio_file)
@@ -145,37 +98,4 @@ def solve(self,i,o):
         print("some exception")
         
 def interview_success(request):
-    # i = 'F:\Django\interview_practice_portal\interview_recordings\8.webm'
-    # print("1" )
-    # k = "1"
-    # o = rf'F:\Django\interview_practice_portal\interview_recordings\{k}.wav'
-    # print("2" )
-    # # command = 'ffmpeg -i "F:\Django\interview_practice_portal\interview_recordings\{filename}.webm" -ss 0 -to 5 "F:\Django\interview_practice_portal\interview_recordings\98.mp4"'
-    # bitrate=3000
-    # fps=44100
-    # digits=6
-            
-    # command = [get_setting("FFMPEG_BINARY"), "-y", "-i", i, "-ab", "%dk"%bitrate,"-ar", "%d"%fps, o]
-    # print("5" )
-    # subprocess_call(command)
-    # print("4" )
-    # for i in range(1,4):
-    # print(i)
-    # ffmpeg -i "8.webm" -crf 23 "8.mp4"
-    # moviepy.video.io.ffmpeg_tools.ffmpeg_extract_subclip(filename, t1, t2, targetname=None)
-    # clip = mp.VideoFileClip(rf"F:\Django\interview_practice_portal\interview_recordings\8.mpeg4") 
-    # clip.audio.write_audiofile(rf"F:\Django\interview_practice_portal\interview_recordings\1.wav")
-    # video = VideoFileClip() 
-    # video.audio.write_audiofile(rf"F:\Django\interview_practice_portal\interview_recordings\1.wav")
-    # print(i + "     " + done)
-    
-            
-            
-            
-            # r = speech_recognition.Recognizer()
-            # audio = speech_recognition.AudioFile(r"F:\Django\interview_practice_portal\media\interview_recordings\{filename}.wav")
-            # with audio as source:
-            #     audio_file = r.record(source)
-            # result = r.recognize_google(audio_file)
-
     return render(request, "interview_success.html")
