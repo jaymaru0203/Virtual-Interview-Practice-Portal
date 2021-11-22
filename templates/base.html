@@ -64,6 +64,9 @@
               font-weight: 600;
             
             }
+            .fa{
+              color: white;
+            }
             
             .navbar-toggler:focus{
               border: none;
@@ -102,7 +105,7 @@
             <div class="navbar-nav ml-auto">
                 <a href="/" class="nav-item nav-link active">Home</a>
                 {% if user.is_authenticated %}
-                <a href="/instructions/" class="nav-item nav-link">Interview</a>
+                <a href="/choice/" class="nav-item nav-link">Interview</a>
                 <a href="/resources/" class="nav-item nav-link">Resources</a>
                 <a href="/logout/" class="nav-item nav-link">Logout</a>
                 {% else %}

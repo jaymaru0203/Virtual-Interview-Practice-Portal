@@ -5,28 +5,122 @@
 
     <style type="text/css">
         #video{
-            width: 360px;
-            height: 200px;
+            width: 75%;
+            height: 300px;
             margin: 10px auto;
             object-fit: cover;
         }
+        .main-screen{
+            padding: 0 15%;
+          }
+          .screen-1{
+            padding: 100px  20px  50px;
+            background-color: #fff;
+          }
+                    
+          .main-text{
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: normal;
+            margin-bottom: 20px;
+          }
+    
+    
+          .sub-text{
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: normal;
+            margin-bottom: 20px;
+            text-align: justify;
+            border-left: #A43FDD 8px solid;
+            padding-left: 15px;
+          }
+    
+          .hire-mech{
+            width: 200px;
+            border: none;
+            padding: 12px 8px;
+            margin: 20px 0;
+            border-radius:8px;
+            background-color:  #A43FDD;
+            color: #fff;
+            font-size: 1.2rem;
+          }
+
+    
+          @media screen and (max-width: 670px ){
+            .main-screen{
+              padding: 0 80px;
+            }
+          }
+          @media screen and (max-width: 500px ){
+            .main-screen{
+              padding: 0 40px;
+            }
+            .main-text{
+              font-size: 2.5rem;
+              font-weight: 700;
+              line-height: normal;
+              margin-bottom: 20px;
+            }
+      
+      
+            .sub-text{
+              font-size: 0.9rem;
+              font-weight: 400;
+              line-height: normal;
+              margin-bottom: 20px;
+              text-align: justify;
+              border-left: #A43FDD 8px solid;
+              padding-left: 15px;
+            }
+      
+            .hire-mech{
+              width: 150px;
+              border: none;
+              padding: 8px 4px;
+              margin: 20px 0;
+              border-radius:8px;
+              background-color:  #A43FDD;
+              color: #fff;
+              font-size: 1.2rem;
+            }
+            #video{
+                width: 75%;
+                height: 250px;
+                margin: 10px auto;
+                object-fit: cover;
+            }
+    
+
+    
+          }
     </style>
 {% endblock %}
 
 {% block content %} 
 
 <div class="container-fluid screen-1">
-    <h1 class="mt-5">Welcome to Your Virtual Interview</h1>
-    <h2>Check Your Audio as Well As Video on this page and Be Ready for your Virtual Interview</h2>
-    <h4>On the Next Page, You will have to chooe if you want to attempt the Fresher Interview or the Interview for Professionally Experienced Professionals</h4>
-    <h4>Post that, your interview starts where there will be no pauses in between to ensure a real interview like experience</h4>
-    <p>Clicking on the Start Interview Button will start your interview with our virtual interviewer Asking you your first question. As the question ends, recording of your answer will start automatically and the same will be prompted on your screen. Speak your answer in the microphone and click on the button for the next question to start and the cycle goes on.</p>
-        
-    <br>
-    <h3>Check Your Video Here</h3>
-    <video muted id="video"></video><br>
-
-    <h3><a href="/choice/">Continue</a></h3>
+    <div class="row m-0">
+        <div class="col-lg-6 col-md-6 p-0 align-self-center" data-aos="fade-right">
+          <div class="row m-0 justify-content-center">
+            <div class="main-screen">
+                <div class="main-text">Welcome to Your Virtual Interview</div>
+                <div class="sub-text">Check Your Audio as Well As Video on this page and Be Ready for your Virtual Interview</div>
+                <div class="sub-text">Your interview starts where there will be no pauses in between to ensure a real interview like experience</div>
+                <div class="sub-text">Clicking on the Start Interview Button will start your interview with our virtual interviewer Asking you your first question.</div>
+                <div class="sub-text">As the question ends, recording of your answer will start automatically and the same will be prompted on your screen.</div>
+                <div class="sub-text">Speak your answer in the microphone and click on the button for the next question to start and the cycle goes on.</div>
+            </div>
+           </div>
+        </div>
+          <div class="col-lg-6 col-md-6 p-0 align-middle mt-auto mb-auto text-center" data-aos="fade-left"> 
+             <video muted id="video"></video><br>
+              <div class="link-button">
+                <a href="/interview/"><button class="hire-mech">Start Interview</button></a>
+              </div>
+          </div>
+      </div>
 </div>
     <script type="text/javascript">  
 

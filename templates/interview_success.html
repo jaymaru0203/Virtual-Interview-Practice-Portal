@@ -4,15 +4,45 @@
 {% block head_content %}
 
     <style type="text/css">
-        
+        .main-screen{
+            padding: 0 15%;
+          }
+
+          .screen1{
+            padding: 100px;
+            background-color: #fff;
+          }
+        .main-text{
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: normal;
+            margin-bottom: 20px;
+          }
+    
+    
+          .sub-text{
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: normal;
+            margin-bottom: 20px;
+            text-align: justify;
+            border-left: #A43FDD 8px solid;
+            padding-left: 15px;
+          }
     </style>
 {% endblock %}
 
 {% block content %} 
 
-<div class="container-fluid screen-1">
-    <h1 class="mt-5">Interview Completed Successfully!</h1>
-    <h2>You can view the report of the interview on this page</h2>
-</div>
+<div class="container-fluid  screen1">
+    <div class="col-lg-12 col-md-12 p-0 align-self-center" data-aos="fade-right">
+        <div class="row m-0 justify-content-center">
+          <div class="main-screen">
+            <div class="main-text">Interview Completed Successfully!</div>
+            <div class="sub-text">You can view the report of the interview on this page</div>
+          </div> 
+       </div>
+    </div>
+</div>  
 
 {% endblock %}
