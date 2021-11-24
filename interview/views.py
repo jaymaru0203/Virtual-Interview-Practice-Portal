@@ -88,14 +88,6 @@ def interview(request):
         list = ['1.mp4', '2.mp4', '3.mp4']
         json_list = json.dumps(list)
         return render(request, "interview.html", {'videos' : json_list, 'start': "1.mp4"})
-
-def solve(self,i,o):
-    try:
-        s = ffmpeg.input(i)
-        s = ffmpeg.output(s,o)
-        ffmpeg.run(s)
-    except:
-        print("some exception")
         
 def interview_success(request):
     return render(request, "interview_success.html")
