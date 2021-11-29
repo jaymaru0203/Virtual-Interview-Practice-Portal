@@ -45,14 +45,14 @@ def interview(request):
                 for chunk in request.FILES['blob'].chunks():
                     destination.write(chunk)
 
-            i = rf'F:\Django\interview_practice_portal\interview_recordings\{filename}.webm'
-            o = rf'F:\Django\interview_practice_portal\interview_audios\{filename}.wav'
+            i = rf'{baseDir}\interview_recordings\{filename}.webm'
+            o = rf'{baseDir}\interview_audios\{filename}.wav'
             bitrate=3000
             fps=44100
             cmd = [get_setting("FFMPEG_BINARY"), "-y", "-i", i, "-ab", "%dk"%bitrate,"-ar", "%d"%fps, o]
             subprocess_call(cmd)
             r = speech_recognition.Recognizer()
-            audio = speech_recognition.AudioFile(rf"F:\Django\interview_practice_portal\interview_audios\{filename}.wav")
+            audio = speech_recognition.AudioFile(rf"{baseDir}\interview_audios\{filename}.wav")
             with audio as source:
                 audio_file = r.record(source)
             result = r.recognize_google(audio_file)

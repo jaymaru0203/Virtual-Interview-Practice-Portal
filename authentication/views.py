@@ -27,9 +27,9 @@ def signup(request):
         if len(password) < 8:
             messages.error(request, "Password must contain atleast 8 characters!")
             return redirect('/signup/')
-        # if not re.match("/^[a-zA-Z ]*$/", name):
-        #     messages.error(request, "Name must contain only Alphabets and Spaces!")
-        #     return redirect('/signup/')
+        if not re.match("^([a-zA-Z]{2,}\s[a-zA-Z]{2,}$)|([a-zA-Z]{2,}$)|([a-zA-Z]{2,}\s[a-zA-Z]{2,}\s[a-zA-Z]{2,}$)", name):
+            messages.error(request, "Name must contain only Alphabets and Spaces!")
+            return redirect('/signup/')
 
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email ID Already Exists!")
