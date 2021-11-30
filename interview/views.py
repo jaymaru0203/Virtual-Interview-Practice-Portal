@@ -12,26 +12,32 @@ from moviepy.tools import subprocess_call
 from moviepy.config import get_setting
 import speech_recognition
 from moviepy.video.io.VideoFileClip import *
-import json, os
+import json, os, random
 
-# Create your views here.
+
 def dashboard(request):
     return redirect('/')
 
-def instructions(request):
-    return render(request, "instructions.html")
+
+def instructions(request, choice):
+    print(choice)
+    if choice == "experienced" or choice == "fresher":
+        request.session['choice'] = choice
+        return render(request, "instructions.html")
+    else:
+        return redirect('/choice/')
+
 
 def choice(request):
     return render(request, "choice.html")
 
-# in choice method, store the user's choice in session variable to be used further
 
 def interview(request):
     if request.method == "POST":
         baseDir = settings.BASE_DIR
         user = request.user.email
         try:
-            path = os.path.join(baseDir, "interview_recordings\\")
+            path = os.path.join(baseDir, "interview_data\\interview_recordings\\")
             print(baseDir)
             # filename = user[0: user.index('@')] + "_" + str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + "_" + request.POST['qs']
             # filename = user[0: user.index('@')]
@@ -45,21 +51,21 @@ def interview(request):
                 for chunk in request.FILES['blob'].chunks():
                     destination.write(chunk)
 
-            i = rf'{baseDir}\interview_recordings\{filename}.webm'
-            o = rf'{baseDir}\interview_audios\{filename}.wav'
+            i = rf"{baseDir}\interview_data\interview_recordings\{filename}.webm"
+            o = rf"{baseDir}\interview_data\interview_audios\{filename}.wav"
             bitrate=3000
             fps=44100
             cmd = [get_setting("FFMPEG_BINARY"), "-y", "-i", i, "-ab", "%dk"%bitrate,"-ar", "%d"%fps, o]
             subprocess_call(cmd)
             r = speech_recognition.Recognizer()
-            audio = speech_recognition.AudioFile(rf"{baseDir}\interview_audios\{filename}.wav")
+            audio = speech_recognition.AudioFile(rf"{baseDir}\interview_data\interview_audios\{filename}.wav")
             with audio as source:
                 audio_file = r.record(source)
             result = r.recognize_google(audio_file)
 
             print(result)
             # exporting the result 
-            pathw = os.path.join(baseDir, "interview_answers\\")
+            pathw = os.path.join(baseDir, "interview_data\\interview_answers\\")
             extensionw = ".txt"
             with open(pathw + filename + extensionw,mode='w') as file:
                 file.write(result) 
@@ -84,10 +90,24 @@ def interview(request):
             return redirect('/')
  
     else:
-        # Randomize Videos here based on user's experience level (fresher or experienced) and then assign to the list instead of hardcoding
-        list = ['1.mp4', '2.mp4', '3.mp4']
+        ch = request.session['choice']+"/"
+        first = ch+"1.mp4"
+        list = [first]
+
+        randomlist = random.sample(range(2, 16), 5)
+        randomlist.sort()
+
+        for i in range(0,5):
+            vid = ch+str(randomlist[i])+".mp4"
+            list.append(vid)
+    
+        end = ch+"end.mp4"
+        list.append(end)
+
         json_list = json.dumps(list)
-        return render(request, "interview.html", {'videos' : json_list, 'start': "1.mp4"})
+        
+        return render(request, "interview.html", {'videos' : json_list, 'start': first})
+        
         
 def interview_success(request):
     return render(request, "interview_success.html")

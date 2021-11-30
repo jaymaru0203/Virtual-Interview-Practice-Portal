@@ -1,5 +1,5 @@
 {% extends "links.html" %}
-{% block title %}Document{% endblock %}
+{% block title %}Interview{% endblock %}
 
 {% block head_content %}
 
@@ -61,6 +61,7 @@
 {% endblock %}
 {% block content %}
   <div class="wrapper">
+      <h2>{{videos}}</h2>
     <video name='demo' autoplay="true" id="videoPlayer">
         <source src="../static/interview_questions/{{start}}" type="video/mp4" id="vidSource"/>
     </video><br>
@@ -161,6 +162,10 @@
             }
 
             mediaRecorder.onstop = (ev)=>{
+                if(count == numberOfVideos-1){
+                    instructions.innerHTML = "Interview Over! Redirecting in 3 seconds...";
+                    setTimeout(()=>{window.location.href = "/interview_success/";}, 9000)
+                }
                 let blob = new Blob(chunks, { 'type' : 'video/mp4;' });
                 chunks = [];
 
