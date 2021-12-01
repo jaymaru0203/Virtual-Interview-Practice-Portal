@@ -5,8 +5,6 @@ from .models import User
 from django.contrib import messages
 import re
 
-
-
 def dashboard(request):
     if request.user.is_authenticated:
         return render(request, "dashboard.html")
@@ -20,16 +18,16 @@ def signup(request):
         name = request.POST['name']
         email = request.POST['email']
         password = request.POST['password']
-        pattern = re.compile("/^[a-zA-Z ]*$/")
+        # pattern = re.compile("/^[a-zA-Z ]*$/")
         
-        print("below")
-        print(name) 
-        print(bool(re.match(r"[a-zA-Z ]", name)))
-        print(bool(re.match(r'[\w.@+\- ]+$', name)))
-        print(bool(re.match(r"/^[a-zA-Z ]*$/", name)))
-        print(bool(re.match(r"^[\\p{L} .'-]+$", name)))
-        print(bool(re.match(r"/^[a-z ,.'-]+$/i", name)))
-        print(pattern.match(name))
+        # print("below")
+        # print(name) 
+        # print(bool(re.match(r"[a-zA-Z ]", name)))
+        # print(bool(re.match(r'[\w.@+\- ]+$', name)))
+        # print(bool(re.match(r"/^[a-zA-Z ]*$/", name)))
+        # print(bool(re.match(r"^[\\p{L} .'-]+$", name)))
+        # print(bool(re.match(r"/^[a-z ,.'-]+$/i", name)))
+        # print(pattern.match(name))
         if len(name) == 0 or len(email) == 0 or len(password) == 0:
             messages.error(request, "Fields Marked with '*' Cannot be Empty!")
             return redirect('/signup/')
