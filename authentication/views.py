@@ -20,16 +20,38 @@ def signup(request):
         name = request.POST['name']
         email = request.POST['email']
         password = request.POST['password']
-
+        pattern = re.compile("/^[a-zA-Z ]*$/")
+        
+        print("below")
+        print(name) 
+        print(bool(re.match(r"[a-zA-Z]", name)))
+        print(bool(re.match(r'[\w.@+\- ]+$', name)))
+        print(bool(re.match(r"/^[a-zA-Z ]*$/", name)))
+        print(bool(re.match(r"^[\\p{L} .'-]+$", name)))
+        print(bool(re.match(r"/^[a-z ,.'-]+$/i", name)))
+        print(pattern.match(name))
         if len(name) == 0 or len(email) == 0 or len(password) == 0:
             messages.error(request, "Fields Marked with '*' Cannot be Empty!")
             return redirect('/signup/')
         if len(password) < 8:
             messages.error(request, "Password must contain atleast 8 characters!")
             return redirect('/signup/')
-        # if not re.match("/^[a-zA-Z ]*$/", name):
-        #     messages.error(request, "Name must contain only Alphabets and Spaces!")
-        #     return redirect('/signup/')
+        if len(name) < 2:
+            messages.error(request, "name must contain atleast 8 characters!")
+            return redirect('/signup/')
+        # if re.match("/^[a-zA-Z ]*$/", name):
+        print("below")
+        print(name)
+        print(bool(re.match(r"[a-zA-Z]+", name)))
+        print(bool(re.match(r"/^[a-zA-Z ]*$/", name)))
+        print(bool(re.match(r"^[\\p{L} .'-]+$", name)))
+        print(bool(re.match(r"/^[a-z ,.'-]+$/i", name)))
+        print(pattern.match(name))
+
+        # if bool(pattern.match(name)):
+        if (bool(re.match(r"^[\\p{L} .'-]+$", name)) == False):
+            messages.error(request, "Name must contain only Alphabets and Spaces!")
+            return redirect('/signup/')
 
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email ID Already Exists!")
