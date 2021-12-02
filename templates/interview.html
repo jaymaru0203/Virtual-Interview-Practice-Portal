@@ -63,7 +63,7 @@
   <div class="wrapper">
       <!-- <h2>{{videos}}</h2> -->
     <video name='demo' autoplay="true" id="videoPlayer">
-        <source src="../static/interview_questions/{{start}}" type="video/mp4" id="vidSource"/>
+        <source src="../static/interview_questions/{{ request.session.choice }}/{{start}}" type="video/mp4" id="vidSource"/>
     </video><br>
 
     <video muted id="userVideo"></video>
@@ -88,10 +88,8 @@
                 height: { min: 480, ideal: 720, max: 1080 } 
             } 
         }; 
-
         var arr = JSON.parse('{{ videos|safe }}')
         var numberOfVideos = arr.length;
-        
         var count=0;
         var player = document.getElementById('videoPlayer');
         var videoSource = document.getElementById('vidSource');
@@ -211,7 +209,7 @@
                 window.location.href = "/interview_success/";
             }
             else{
-                videoSource.src = "../static/interview_questions/"+arr[count];
+                videoSource.src = "../static/interview_questions/{{request.session.choice}}/"+arr[count];
                 player.load();
                 player.play();
             }

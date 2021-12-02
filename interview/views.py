@@ -1,6 +1,7 @@
 from django.core.exceptions import SuspiciousFileOperation
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
+from .models import *
 from django.http import HttpResponse
 from django.contrib import messages
 from django.utils import timezone
@@ -90,23 +91,28 @@ def interview(request):
             return redirect('/')
  
     else:
-        ch = request.session['choice']+"/"
-        first = ch+"1.mp4"
-        list = [first]
+        # ch = request.session['choice']+"/"
+        # first = ch+"1.mp4"
+        list = ["1.mp4"]
 
-        randomlist = random.sample(range(2, 16), 5)
+        randomlist = random.sample(range(2, 17), 5)
         randomlist.sort()
+        print(randomlist)
 
         for i in range(0,5):
-            vid = ch+str(randomlist[i])+".mp4"
+            vid = str(randomlist[i])+".mp4"
             list.append(vid)
-    
-        end = ch+"end.mp4"
-        list.append(end)
+
+        list.append("end.mp4")
 
         json_list = json.dumps(list)
+        questions = []
+        first_question = Question.objects.filter(choice=request.session['choice'],filename="1")
+        question_list = Question.objects.filter(choice=request.session['choice'],filename__in=randomlist)
         
-        return render(request, "interview.html", {'videos' : json_list, 'start': first})
+        print(question_list)
+        
+        return render(request, "interview.html", {'videos' : json_list, 'start': list[0]})
         
         
 def interview_success(request):
