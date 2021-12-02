@@ -91,28 +91,30 @@ def interview(request):
             return redirect('/')
  
     else:
-        # ch = request.session['choice']+"/"
-        # first = ch+"1.mp4"
+
         list = ["1.mp4"]
 
-        randomlist = random.sample(range(2, 17), 5)
+        vidsInDB = len(Question.objects.all())
+        randomlist = random.sample(range(2, vidsInDB), 5)
         randomlist.sort()
-        print(randomlist)
 
         for i in range(0,5):
             vid = str(randomlist[i])+".mp4"
             list.append(vid)
 
-        list.append("end.mp4")
+        list.append("0.mp4")
+        json_videos_list = json.dumps(list)
 
-        json_list = json.dumps(list)
-        questions = []
-        first_question = Question.objects.filter(choice=request.session['choice'],filename="1")
-        question_list = Question.objects.filter(choice=request.session['choice'],filename__in=randomlist)
+        questions = [Question.objects.filter(choice=request.session['choice'],filename=1).first().question]
+        question_list = Question.objects.filter(choice=request.session['choice'],filename__in=randomlist).values_list('question', flat=True)
+
+        for qs in question_list:
+            questions.append(qs)
         
-        print(question_list)
-        
-        return render(request, "interview.html", {'videos' : json_list, 'start': list[0]})
+        questions.append(Question.objects.filter(choice=request.session['choice'],filename=0).first().question)
+        json_questions_list = json.dumps(questions)
+
+        return render(request, "interview.html", {'videos' : json_videos_list, 'start': list[0], 'questions': json_questions_list})
         
         
 def interview_success(request):

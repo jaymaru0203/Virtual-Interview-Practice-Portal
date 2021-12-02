@@ -9,5 +9,5 @@ class Question(models.Model):
         unique_together = ['choice', 'filename']
     INTERVIEW_CHOICE = (('experienced','Experienced'),('fresher','Fresher'))
     choice = models.CharField(max_length=80,choices = INTERVIEW_CHOICE)
-    filename = models.CharField(max_length=12)
+    filename = models.IntegerField()
     question = models.CharField(max_length=250)
