@@ -240,10 +240,10 @@
                 window.location.href = "/interview_success/";
             }
             else{
-                questions.innerHTML = questions_array[count]
                 videoSource.src = "../static/interview_questions/{{request.session.choice}}/"+videos_array[count];
                 player.load();
                 player.play();
+                questions.innerHTML = questions_array[count]
             }
         }
 

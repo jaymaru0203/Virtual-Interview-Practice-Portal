@@ -21,7 +21,6 @@ def dashboard(request):
 
 
 def instructions(request, choice):
-    print(choice)
     if choice == "experienced" or choice == "fresher":
         request.session['choice'] = choice
         return render(request, "instructions.html")
@@ -91,7 +90,8 @@ def interview(request):
             return redirect('/')
  
     else:
-
+        request.session['interview_start_time'] = str(datetime.now().strftime("%b-%d-%Y %H:%M"))
+        print(request.session['interview_start_time'])
         list = ["1.mp4"]
 
         vidsInDB = len(Question.objects.all())
