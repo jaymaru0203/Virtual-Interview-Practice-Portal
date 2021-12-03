@@ -90,11 +90,10 @@ def interview(request):
             return redirect('/')
  
     else:
-        request.session['interview_start_time'] = str(datetime.now().strftime("%b-%d-%Y %H:%M"))
-        print(request.session['interview_start_time'])
-        list = ["1.mp4"]
+        request.session['interview_start_time'] = str(datetime.now().strftime("%b %d, %Y - %H:%M"))
 
-        vidsInDB = len(Question.objects.all())
+        list = ["1.mp4"]
+        vidsInDB = len(Question.objects.filter(choice=request.session['choice']))
         randomlist = random.sample(range(2, vidsInDB), 5)
         randomlist.sort()
 
