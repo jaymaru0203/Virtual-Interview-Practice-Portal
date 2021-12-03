@@ -90,7 +90,13 @@ def interview(request):
             return redirect('/')
  
     else:
-        request.session['interview_start_time'] = str(datetime.now().strftime("%b %d, %Y - %H:%M"))
+        interview_start_time = str(datetime.now().strftime("%b %d, %Y - %H:%M"))
+        interview1 = Interview()
+        interview1.user =  request.user
+        interview1.interview_start_time = interview_start_time
+        interview1.choice = request.session['choice']
+        interview1.save()
+        request.session['interview_id'] = Interview.objects.latest('id').id
 
         list = ["1.mp4"]
         vidsInDB = len(Question.objects.filter(choice=request.session['choice']))
@@ -117,4 +123,10 @@ def interview(request):
         
         
 def interview_success(request):
+    interview_stop_time = str(datetime.now().strftime("%b %d, %Y - %H:%M"))
+    interview_stop_time = interview_stop_time[-5:]
+    interviewstart = Interview.objects.filter(id = request.session.get("interview_id")).interview_start_time
+    interviewstart = interviewstart[-5:]
+    interview2 = Interview()
+    interview2.duration = 
     return render(request, "interview_success.html")

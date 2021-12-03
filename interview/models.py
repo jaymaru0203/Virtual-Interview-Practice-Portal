@@ -23,5 +23,5 @@ class Interview(models.Model):
 
 class InterviewwDetails(models.Model):
     interview_id = models.ForeignKey(Interview, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.DO_NOTHING)
+    question = models.CharField(max_length=250)
     answer = models.TextField()
