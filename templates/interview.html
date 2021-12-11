@@ -57,19 +57,44 @@
           color: #fff;
           font-size: 1.2rem;
         }
+
+        #questions{
+            color : #000;
+            z-index: 5;
+            position: absolute;
+            bottom: 130px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+        }
+        .cross{
+            z-index: 5;
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            transform: translate(-50%, -50%);
+            text-decoration: none;
+            color: #444;
+        }
+        .cross:hover{
+            text-decoration: none;
+            color: #000;
+        }
+
     </style>
 {% endblock %}
 {% block content %}
   <div class="wrapper">
-      <!-- <h2>{{videos}}</h2> -->
+      <a href="{% url 'interview:dashboard' %}" class="cross"><h4> X </h4></a>
     <video name='demo' autoplay="true" id="videoPlayer">
-        <source src="../static/interview_questions/{{start}}" type="video/mp4" id="vidSource"/>
+        <source src="../static/interview_questions/{{ request.session.choice }}/{{start}}" type="video/mp4" id="vidSource"/>
     </video><br>
 
     <video muted id="userVideo"></video>
     
     <button onclick="onStart()" id="startButton" class="hire-mech button">Start Interview</button>
     
+    <h4 id="questions"></h4>
 
     <h3 id="instructions"></h3><br>
     <button id="changeButton" class= "hire-mech button">End Answer</button>
@@ -88,15 +113,18 @@
                 height: { min: 480, ideal: 720, max: 1080 } 
             } 
         }; 
+        var videos_array = JSON.parse('{{ videos|safe }}')
+        var questions_array = JSON.parse('{{ questions|safe }}')
+        console.log(questions_array)
 
-        var arr = JSON.parse('{{ videos|safe }}')
-        var numberOfVideos = arr.length;
-        
+        var numberOfVideos = videos_array.length;
         var count=0;
+
         var player = document.getElementById('videoPlayer');
         var videoSource = document.getElementById('vidSource');
         var changeButton = document.getElementById('changeButton');
         var instructions = document.getElementById('instructions');
+        var questions = document.getElementById('questions');
 
         player.pause();
 
@@ -189,6 +217,7 @@
         function onStart(){
             document.getElementById('videoPlayer').play();
             document.getElementById('startButton').style.display = 'none';
+            questions.innerHTML = questions_array[count]
         }
     
         function nextButtonClickFunction(e){
@@ -211,9 +240,10 @@
                 window.location.href = "/interview_success/";
             }
             else{
-                videoSource.src = "../static/interview_questions/"+arr[count];
+                videoSource.src = "../static/interview_questions/{{request.session.choice}}/"+videos_array[count];
                 player.load();
                 player.play();
+                questions.innerHTML = questions_array[count]
             }
         }
 

@@ -19,6 +19,7 @@ def signup(request):
         name = request.POST['name']
         email = request.POST['email']
         password = request.POST['password']
+        name = name.strip()
         # pattern = re.compile("/^[a-zA-Z ]*$/")
         
         # print("below")
@@ -29,14 +30,15 @@ def signup(request):
         # print(bool(re.match(r"^[\\p{L} .'-]+$", name)))
         # print(bool(re.match(r"/^[a-z ,.'-]+$/i", name)))
         # print(pattern.match(name))
+        
         if len(name) == 0 or len(email) == 0 or len(password) == 0:
             messages.error(request, "Fields Marked with '*' Cannot be Empty!")
             return redirect('/signup/')
         if len(password) < 8:
             messages.error(request, "Password must contain atleast 8 characters!")
             return redirect('/signup/')
-        if (bool(re.match(r"[a-zA-Z]+", name)) == False):
-            messages.error(request, "Name must start with Alphabet!")
+        if not re.match("^([a-zA-Z]{2,}\s[a-zA-Z]{2,}$)|([a-zA-Z]{1,}$)|([a-zA-Z]{2,}\s[a-zA-Z]{2,}\s[a-zA-Z]{2,}$)", name):
+            messages.error(request, "Name must contain only Alphabets and Spaces!")
             return redirect('/signup/')
 
         if User.objects.filter(email=email).exists():

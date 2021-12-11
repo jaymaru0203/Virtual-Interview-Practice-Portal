@@ -1,6 +1,7 @@
 from django.core.exceptions import SuspiciousFileOperation
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
+from .models import *
 from django.http import HttpResponse
 from django.contrib import messages
 from django.utils import timezone
@@ -20,7 +21,6 @@ def dashboard(request):
 
 
 def instructions(request, choice):
-    print(choice)
     if choice == "experienced" or choice == "fresher":
         request.session['choice'] = choice
         return render(request, "instructions.html")
@@ -91,25 +91,44 @@ def interview(request):
             return redirect('/')
  
     else:
-        ch = request.session['choice']+"/"
-        first = ch+"1.mp4"
-        list = [first]
+        interview_start_time = str(datetime.now().strftime("%b %d, %Y - %H:%M"))
+        interview1 = Interview()
+        interview1.user =  request.user
+        interview1.interview_start_time = interview_start_time
+        interview1.choice = request.session['choice']
+        interview1.save()
+        request.session['interview_id'] = Interview.objects.latest('id').id
 
-        randomlist = random.sample(range(2, 16), 5)
+        list = ["1.mp4"]
+        vidsInDB = len(Question.objects.filter(choice=request.session['choice']))
+        randomlist = random.sample(range(2, vidsInDB), 5)
         randomlist.sort()
 
         for i in range(0,5):
-            vid = ch+str(randomlist[i])+".mp4"
+            vid = str(randomlist[i])+".mp4"
             list.append(vid)
-    
-        end = ch+"end.mp4"
-        list.append(end)
 
-        json_list = json.dumps(list)
+        list.append("0.mp4")
+        json_videos_list = json.dumps(list)
+
+        questions = [Question.objects.filter(choice=request.session['choice'],filename=1).first().question]
+        question_list = Question.objects.filter(choice=request.session['choice'],filename__in=randomlist).values_list('question', flat=True)
+
+        for qs in question_list:
+            questions.append(qs)
         
-        return render(request, "interview.html", {'videos' : json_list, 'start': first})
+        questions.append(Question.objects.filter(choice=request.session['choice'],filename=0).first().question)
+        json_questions_list = json.dumps(questions)
+
+        return render(request, "interview.html", {'videos' : json_videos_list, 'start': list[0], 'questions': json_questions_list})
         
         
 def interview_success(request):
+    interview_stop_time = str(datetime.now().strftime("%b %d, %Y - %H:%M"))
+    interview_stop_time = interview_stop_time[-5:]
+    interviewstart = Interview.objects.filter(id = request.session.get("interview_id")).interview_start_time
+    interviewstart = interviewstart[-5:]
+    interview2 = Interview()
+    interview2.duration = 
     return render(request, "interview_success.html")
 
