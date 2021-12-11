@@ -70,6 +70,7 @@ def interview(request):
             with open(pathw + filename + extensionw,mode='w') as file:
                 file.write(result) 
                 print("ready!")
+                
             if os.path.exists(i):
                 os.remove(i)
             else:
@@ -111,3 +112,4 @@ def interview(request):
         
 def interview_success(request):
     return render(request, "interview_success.html")
+

@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from .models import User
 from django.contrib import messages
+from django.contrib.auth.hashers import make_password
 import re
 
 def dashboard(request):
@@ -83,3 +84,37 @@ def logout(request):
     auth_logout(request)
     messages.success(request, "Logged out Successfully!")
     return redirect('/')
+
+def profile(request):
+    if request.method == 'POST':
+        Name = request.POST['Name']
+        Email = request.POST['Email']
+        Password = request.POST['Password']
+
+        if request.user.name != Name and bool(re.match(r"[a-zA-Z]+", Name)) == False:
+            messages.error(request, "Name must start with Alphabet!")
+            return redirect('/profile/')
+        if request.user.email != Email and User.objects.filter(email=Email).exists():
+            messages.error(request, "Email ID Already Exists!")
+            return redirect('/profile/')
+        if(request.user.password != Password):
+            if len(Password) < 8:
+                messages.error(request, "Password must contain atleast 8 characters!")
+                return redirect('/profile/')
+            else:
+                Password = make_password(Password)
+        
+        User.objects.filter(email=request.user.email).update(name=Name,email=Email, password=Password)
+        User.objects.filter(email=request.user.email).update(name=Name,password=Password,email=Email)
+        user = User.objects.get(email=Email)
+        auth_login(request, user)
+        info = User.objects.get(name=request.user.name)
+        context = {}
+        context['info'] = info
+        return render(request, 'profile.html', context)
+
+    else:
+        info = User.objects.get(email=request.user.email)
+        context = {}
+        context['info'] = info
+        return render(request, 'profile.html', context)
