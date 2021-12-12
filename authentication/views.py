@@ -47,9 +47,9 @@ def signup(request):
         else:
             user = User.objects.create_user(email, name = name, password = password)
             user.save()
-            auth_login(request, user)
+            # auth_login(request, user)
             messages.success(request, "Registered Successfully!")
-            return redirect('/')
+            return redirect('/login/')
 
     else: 
         return render(request, "signup.html")

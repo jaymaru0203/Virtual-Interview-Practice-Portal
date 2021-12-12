@@ -129,6 +129,6 @@ def interview_success(request):
     interviewstart = Interview.objects.filter(id = request.session.get("interview_id")).interview_start_time
     interviewstart = interviewstart[-5:]
     interview2 = Interview()
-    interview2.duration = 
+    # interview2.duration = 
     return render(request, "interview_success.html")
 
