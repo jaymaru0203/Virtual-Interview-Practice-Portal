@@ -69,13 +69,19 @@ def login(request):
 
         user = authenticate(email = email, password = password)
 
+        
+
         if user is not None:
             auth_login(request, user)
             messages.success(request, "Logged In Successfully!")
             return redirect('/')
-        else:
+        if User.objects.filter(email=email).exists():
             messages.error(request, "Invalid Credentials!")
             return redirect('/login/')
+        else:
+            messages.error(request, "User does not exist. Please Register First!")
+            return redirect('/signup/')
+
 
     else:
         return render(request, "login.html")
@@ -92,6 +98,10 @@ def profile(request):
         Name = request.POST['Name']
         Email = request.POST['Email']
         Password = request.POST['Password']
+
+        if len(Name) == 0 or len(Email) == 0 or len(Password) == 0:
+            messages.error(request, "Fields Marked with '*' Cannot be Empty!")
+            return redirect('/profile/')
 
         if request.user.name != Name and bool(re.match(r"[a-zA-Z]+", Name)) == False:
             messages.error(request, "Name must start with Alphabet!")

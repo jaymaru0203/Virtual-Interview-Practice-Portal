@@ -189,19 +189,19 @@
                   {% endif %}
 
                   <div class="form_base">  
-                      
+  
                   <div class="form-group">
-                        <label class="label_name" for="Name">Name</label>
+                        <label class="label_name" for="Name">Name <b class="error">*</b></label>
                          <input type="text" class="form-control" name="Name" id="Name" value="{{info.name}}">
                   </div>
               
                   <div class="form-group">
-                    <label class="label_name" for="Email">Email</label>
+                    <label class="label_name" for="Email">Email <b class="error">*</b></label>
                      <input type="email" class="form-control" name="Email" id="Email" value="{{info.email}}">
                   </div>
 
                   <div class="form-group">
-                    <label class="label_name" for="Password">Password</label>
+                    <label class="label_name" for="Password">Password <b class="error">*</b></label>
                      <input type="password" class="form-control" name="Password" id="Password" value="{{info.password}}">
 
                   </div>
