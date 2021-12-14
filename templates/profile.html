@@ -19,7 +19,7 @@
     }
     
     
-    .form_base{
+    form{
         margin-top: 5%;
         margin-bottom: 5%;
     }
@@ -76,10 +76,12 @@
         letter-spacing: 1px;
     }
     #btn{
-      background-color: #A43FDD;
       border-radius: 5px;
       height: 48px;
     
+    }
+    button{
+      margin: 0 10px;
     }
     
     .btn:hover{
@@ -97,8 +99,12 @@
     
     .btn{
       color: white;
+      background-color: #A43FDD;
       font-size: 15px;
       font-weight: 500;
+    }
+    .btn-block+.btn-block{
+      margin-top: 0;
     }
     
     .fit-image{
@@ -163,11 +169,10 @@
     {% block content %}
       <div class="wrapper mt-4">
         <div class="container-fluid p-0">
-          <div class="row m-0">
-            <div class="col-lg-6 p-0 justify-content-center">
+            <!-- <div class="col-lg-6 p-0 justify-content-center">
                 <img src="{% static 'images/Report.png' %}" class="img-responsive fit-image">
-              </div>
-            <div class="col-lg-6  align-self-center p-0" >
+              </div> -->
+            <div class="col-lg-12 p-0" >
           
               <div class="row m-0 justify-content-center">
                 
@@ -178,7 +183,7 @@
                   <div class="logdet">Update Profile</div>
                   {% if messages %}
                     {% for message in messages %}
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
                             <h6>{{ message }}</h6>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -191,32 +196,29 @@
                   <div class="form_base">  
   
                   <div class="form-group">
-                        <label class="label_name" for="Name">Name <b class="error">*</b></label>
+                        <label class="label_name" for="Name">Name</label>
                          <input type="text" class="form-control" name="Name" id="Name" value="{{info.name}}">
                   </div>
               
-                  <div class="form-group">
-                    <label class="label_name" for="Email">Email <b class="error">*</b></label>
-                     <input type="email" class="form-control" name="Email" id="Email" value="{{info.email}}">
+                  <div class="form-group ">
+                    <label class="label_name" for="Email">Email</label>
+                     <input type="email" class="form-control text-muted" name="Email" id="Email" readonly value="{{info.email}}">
                   </div>
 
                   <div class="form-group">
-                    <label class="label_name" for="Password">Password <b class="error">*</b></label>
-                     <input type="password" class="form-control" name="Password" id="Password" value="{{info.password}}">
-
+                    <label class="label_name" for="Password">Password</label>
+                     <input type="password" class="form-control" name="Password" placeholder="Enter New Password (optional)" id="Password">
                   </div>
                 </div>
                 
                   <div class=" form-group d-flex justify-content-center" id="btn">
-                   <button type="submit" id="save" class="btn btn-block inner">Save</button>
-                   <button type="reset" id="cancel" class="btn btn-block inner">Cancel</button>
+                   <button type="submit" id="save" class="btn btn-block">Save</button>
+                   <button type="reset" id="cancel" class="btn btn-block">Cancel</button>
                   </div>
 
                 </form>
               </div>
             </div>
-          
-          </div>
         </div>
       </div>
       {% endblock %}

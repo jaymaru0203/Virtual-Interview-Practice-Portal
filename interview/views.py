@@ -21,6 +21,8 @@ def dashboard(request):
 
 
 def instructions(request, choice):
+    if not request.user.is_authenticated:
+        return redirect('/')
     if choice == "experienced" or choice == "fresher":
         request.session['choice'] = choice
         return render(request, "instructions.html")
@@ -29,10 +31,14 @@ def instructions(request, choice):
 
 
 def choice(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
     return render(request, "choice.html")
 
 
 def interview(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
     if request.method == "POST":
         baseDir = settings.BASE_DIR
         user = request.user.email
@@ -124,6 +130,8 @@ def interview(request):
         
         
 def interview_success(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
     interview_stop_time = str(datetime.now().strftime("%b %d, %Y - %H:%M"))
     interview_stop_time = interview_stop_time[-5:]
     interviewstart = Interview.objects.filter(id = request.session.get("interview_id")).interview_start_time

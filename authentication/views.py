@@ -94,32 +94,32 @@ def logout(request):
     return redirect('/')
 
 def profile(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
     if request.method == 'POST':
         Name = request.POST['Name']
-        Email = request.POST['Email']
+        # Email = request.POST['Email']
         Password = request.POST['Password']
 
-        if len(Name) == 0 or len(Email) == 0 or len(Password) == 0:
-            messages.error(request, "Fields Marked with '*' Cannot be Empty!")
+        if not re.match("^([a-zA-Z]{2,}\s[a-zA-Z]{2,}$)|([a-zA-Z]{1,}$)|([a-zA-Z]{2,}\s[a-zA-Z]{2,}\s[a-zA-Z]{2,}$)", Name):
+            messages.error(request, "Name must contain only Alphabets and Spaces!")
             return redirect('/profile/')
 
-        if request.user.name != Name and bool(re.match(r"[a-zA-Z]+", Name)) == False:
-            messages.error(request, "Name must start with Alphabet!")
+        if(len(Password) == 0):
+            User.objects.filter(email=request.user.email).update(name=Name)
+            user = User.objects.get(email=request.user.email)
+            auth_login(request, user)
+            messages.success(request, "Name updated Successfully!")
+        elif len(Password) < 8:
+            messages.error(request, "Password must contain atleast 8 characters!")
             return redirect('/profile/')
-        if request.user.email != Email and User.objects.filter(email=Email).exists():
-            messages.error(request, "Email ID Already Exists!")
-            return redirect('/profile/')
-        if(request.user.password != Password):
-            if len(Password) < 8:
-                messages.error(request, "Password must contain atleast 8 characters!")
-                return redirect('/profile/')
-            else:
-                Password = make_password(Password)
+        else:
+            Password = make_password(Password)
+            User.objects.filter(email=request.user.email).update(name=Name,password=Password)
+            user = User.objects.get(email=request.user.email)
+            auth_login(request, user)
+            messages.success(request, "Profile updated Successfully!")
         
-        User.objects.filter(email=request.user.email).update(name=Name,email=Email, password=Password)
-        User.objects.filter(email=request.user.email).update(name=Name,password=Password,email=Email)
-        user = User.objects.get(email=Email)
-        auth_login(request, user)
         info = User.objects.get(name=request.user.name)
         context = {}
         context['info'] = info
