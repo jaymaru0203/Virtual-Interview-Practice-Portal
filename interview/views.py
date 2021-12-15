@@ -2,7 +2,7 @@ from django.core.exceptions import SuspiciousFileOperation
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from .models import *
-from django.http import HttpResponse
+from django.http import HttpResponse, request
 from django.contrib import messages
 from django.utils import timezone
 from django.conf import settings
@@ -14,6 +14,8 @@ from moviepy.config import get_setting
 import speech_recognition
 from moviepy.video.io.VideoFileClip import *
 import json, os, random
+from .middlewares.auth import auth_middleware
+from django.utils.decorators import method_decorator
 
 
 def dashboard(request):
@@ -29,10 +31,13 @@ def instructions(request, choice):
     else:
         return redirect('/choice/')
 
-
+# @method_decorator(auth_middleware(request))
 def choice(request):
     if not request.user.is_authenticated:
         return redirect('/')
+    if request.session.get('interview_id'):
+        print("Session variable exists")
+        print(request.session.get('interview_id'))
     return render(request, "choice.html")
 
 
@@ -107,6 +112,7 @@ def interview(request):
 
         list = ["1.mp4"]
         vidsInDB = len(Question.objects.filter(choice=request.session['choice']))
+        print(request.session['choice'])
         randomlist = random.sample(range(2, vidsInDB), 5)
         randomlist.sort()
 
@@ -132,11 +138,13 @@ def interview(request):
 def interview_success(request):
     if not request.user.is_authenticated:
         return redirect('/')
-    interview_stop_time = str(datetime.now().strftime("%b %d, %Y - %H:%M"))
-    interview_stop_time = interview_stop_time[-5:]
+    interview_stop_time = datetime.now()
     interviewstart = Interview.objects.filter(id = request.session.get("interview_id")).interview_start_time
-    interviewstart = interviewstart[-5:]
-    interview2 = Interview()
-    # interview2.duration = 
+    date_object = datetime.strptime(interviewstart, "%b %d, %Y - %H:%M")
+    duration = (interview_stop_time - date_object).total_seconds()/60
+    date_update = Interview.objects.filter(id = request.session.get("interview_id"))
+    date_update.duration = duration
+    date_update.save()
+    del request.session['interview_id']
     return render(request, "interview_success.html")
 
