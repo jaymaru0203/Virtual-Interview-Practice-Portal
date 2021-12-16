@@ -50,13 +50,11 @@ def interview(request):
         try:
             path = os.path.join(baseDir, "interview_data\\interview_recordings\\")
             print(baseDir)
-            # filename = user[0: user.index('@')] + "_" + str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + "_" + request.POST['qs']
-            # filename = user[0: user.index('@')]
-            # filename = str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + "_" + request.POST['qs']
-            filename = user[0: user.index('@')] + "_" + request.POST['qs']
-            # store the filename somewhere to be deleted after processing 
-            
+    
+            filename = user[0: user.index('@')] + "_" + request.session["interview_id"] + "_" + request.POST['qs']
             extension = ".webm"
+
+            question_text = request.POST['question']
             
             with open(path + filename + extension, 'wb+') as destination:
                 for chunk in request.FILES['blob'].chunks():
@@ -73,8 +71,8 @@ def interview(request):
             with audio as source:
                 audio_file = r.record(source)
             result = r.recognize_google(audio_file)
-
             print(result)
+
             # exporting the result 
             pathw = os.path.join(baseDir, "interview_data\\interview_answers\\")
             extensionw = ".txt"
@@ -112,6 +110,9 @@ def interview(request):
 
         list = ["1.mp4"]
         vidsInDB = len(Question.objects.filter(choice=request.session['choice']))
+        if vidsInDB < 3:
+            messages.error(request, "Request Cannot be Processed Right Now! Please Try Again Later")
+            return redirect('/')
         print(request.session['choice'])
         randomlist = random.sample(range(2, vidsInDB), 5)
         randomlist.sort()

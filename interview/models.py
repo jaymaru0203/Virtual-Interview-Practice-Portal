@@ -21,7 +21,8 @@ class Interview(models.Model):
     choice = models.CharField(max_length=20, choices = INTERVIEW_CHOICE)
     duration = models.IntegerField(blank=True,null=True)
 
-class InterviewwDetails(models.Model):
+class InterviewDetail(models.Model):
     interview_id = models.ForeignKey(Interview, on_delete=models.CASCADE)
+    question_no = models.IntegerField()
     question = models.CharField(max_length=250)
     answer = models.TextField()

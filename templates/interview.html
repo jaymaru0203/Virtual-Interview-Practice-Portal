@@ -200,6 +200,7 @@
                 var formData = new FormData();
                 formData.append("blob", blob);
                 formData.append("qs", count);
+                formData.append("question", questions_array[count]);
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', "{% url 'interview:interview' %}", true);
                 xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
