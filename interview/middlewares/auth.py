@@ -5,9 +5,7 @@ def auth_middleware(get_response):
     # One-time configuration and initialization.
 
     def middleware(request):
-        if not request.user.is_authenticated:
+        if not request.user.is_authenticated():
             return redirect('/')
-        response = get_response(request)
-        return response
-
+        print("Hello")
     return middleware
