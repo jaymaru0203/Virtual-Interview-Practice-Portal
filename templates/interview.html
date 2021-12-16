@@ -12,6 +12,20 @@
         width: 100%;
         align-items: stretch;
        }
+
+       #bottomBar{
+           width: 100%;
+           margin: 0;
+           height: 10%;
+           position: fixed;
+           bottom: 0;
+           z-index: 5;
+           background-color: #222;
+           box-shadow: 0 -2px 10px #222;
+           color: #fff;
+           padding: 15px 0;
+       }
+
         #videoPlayer{
             height: 100vh;
             object-fit: cover;
@@ -21,27 +35,36 @@
         .button{
             font-size: 16px;
             padding: 2px 4px;
-            position:absolute;
-            bottom:5px;
+            position: absolute;
+            bottom: 70%;
             left: 50%;
             transform: translate(-50%, -50%);
+        }
+        #stopwatch{
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translate(0, -50%);
+            z-index: 5;
+            font-size: 28px;
+            font-weight: 600;
         }
 
         #changeButton{
             display: none;
         }
         #instructions{
-            color : #fff;
-            z-index: 5;
             position:absolute;
-            bottom:100px;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            bottom: 80%;
+            left: 2%;
+            font-size: 20px;
+            color: #222;
+            font-weight: 500;
         }
         #userVideo{
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            right: 0px;
             width: 250px;
             height: 150px;
             z-index: 5;
@@ -51,7 +74,7 @@
           width: 200px;
           border: none;
           padding: 12px 8px;
-          margin: 10px 0;
+          margin: -7px 0;
           border-radius:8px;
           background-color:  #A43FDD;
           color: #fff;
@@ -59,13 +82,12 @@
         }
 
         #questions{
-            color : #000;
-            z-index: 5;
             position: absolute;
-            bottom: 130px;
+            top: 50%;
             left: 50%;
+            width: 70%;
             transform: translate(-50%, -50%);
-            width: 80%;
+            font-size: 20px;
         }
         .cross{
             z-index: 5;
@@ -85,19 +107,23 @@
 {% endblock %}
 {% block content %}
   <div class="wrapper">
-      <a href="{% url 'interview:dashboard' %}" class="cross"><h4> X </h4></a>
+      <a href="/" class="cross"><h4> X </h4></a>
     <video name='demo' autoplay="true" id="videoPlayer">
         <source src="../static/interview_questions/{{ request.session.choice }}/{{start}}" type="video/mp4" id="vidSource"/>
     </video><br>
 
-    <video muted id="userVideo"></video>
+    <div id="bottomBar">
+        <div id="stopwatch">00 : 00</div>
+        <video muted id="userVideo"></video>
+        <button onclick="onStart()" id="startButton" class="hire-mech button">Start Interview</button>
     
-    <button onclick="onStart()" id="startButton" class="hire-mech button">Start Interview</button>
-    
-    <h4 id="questions"></h4>
+        <p id="questions"></p>
 
-    <h3 id="instructions"></h3><br>
-    <button id="changeButton" class= "hire-mech button">End Answer</button>
+        <p id="instructions">TEmpoerary Text</p><br>
+        <button id="changeButton" class= "hire-mech button">End Answer</button>
+    </div>
+    
+    
 
   </div>
 
@@ -115,7 +141,6 @@
         }; 
         var videos_array = JSON.parse('{{ videos|safe }}')
         var questions_array = JSON.parse('{{ questions|safe }}')
-        console.log(questions_array)
 
         var numberOfVideos = videos_array.length;
         var count=0;
@@ -125,8 +150,59 @@
         var changeButton = document.getElementById('changeButton');
         var instructions = document.getElementById('instructions');
         var questions = document.getElementById('questions');
+        var timer = document.getElementById('stopwatch');
 
-        player.pause();
+        //CODE FOR TIMER FOR EACH ANSWER
+        var min = 0;
+        var sec = 0;
+        var stoptime = true;
+
+        function startTimer() {
+            if (stoptime == true) {
+                  stoptime = false;
+                  timerCycle();
+              }
+          }
+
+        function stopTimer() {
+            if (stoptime == false) {
+                stoptime = true;
+            }
+        }
+
+        function resetTimer() {
+            timer.innerHTML = "00:00";
+            stoptime = true;
+            sec = 0;
+            min = 0;
+        }
+
+          function timerCycle() {
+            if (stoptime == false) {
+            sec = parseInt(sec);
+            min = parseInt(min);
+            sec = sec + 1;
+            if (sec == 60) {
+              min = min + 1;
+              sec = 0;
+            }
+        
+            if (sec < 10 || sec == 0) {
+              sec = '0' + sec;
+            }
+            if (min < 10 || min == 0) {
+              min = '0' + min;
+            }
+        
+            timer.innerHTML = min + ' : ' + sec;
+        
+            setTimeout("timerCycle()", 1000);
+          }
+        }
+
+        //CODE FOR TIMER ENDS
+
+        player.pause(); //to prevent default start of the first question
 
         //handle older browsers that might implement getUserMedia in some way
         if (navigator.mediaDevices === undefined) {
@@ -174,14 +250,47 @@
             let mediaRecorder = new MediaRecorder(mediaStreamObj);
             let chunks = [];
             
+            // Code to be executed Everytime the Question Video Ends
             player.addEventListener('ended', (ev)=>{
-                mediaRecorder.start();
-                console.log(mediaRecorder.state);
-                instructions.innerHTML = "Recording Your Answer...";
-                changeButton.style.display = 'inline';
+                var seconds = 3;
+                if(count == numberOfVideos-1){
+                    redir()
+                }
+                else{
+                    anim()
+                }
+                function anim(){
+                    // 3 Seconds Buffer Time before starting the Recording of Answer
+                    if (seconds > 0) {
+                        instructions.innerHTML = "Starting to Record your Answer in "+seconds+"..."
+                        seconds--;
+                        setTimeout(anim, 1000);
+                    }
+                    else {
+                        mediaRecorder.start();
+                        startTimer();
+                        console.log(mediaRecorder.state);
+                        instructions.innerHTML = "Recording Your Answer...";
+                        changeButton.style.display = 'inline';
+                    }
+                }
+                function redir(){
+                    if (seconds > 0) {
+                        instructions.innerHTML = "Interview Completed Successfully! Redirecting in "+seconds+"..."
+                        seconds--;
+                        setTimeout(redir, 1000);
+                    }
+                    else {
+                        window.location.href = "/interview_success/";
+                    }
+                }
             })
+
+            //CODE FOR WHEN THE END ANSWER BUTTON IS CLICKED
             changeButton.addEventListener('click', (ev)=>{
                 mediaRecorder.stop();
+                stopTimer();
+                resetTimer();
                 console.log(mediaRecorder.state);
             });
 
@@ -189,18 +298,16 @@
                 chunks.push(ev.data);
             }
 
+            //SEND FORM DATA VIA AJAX CONTAINING THE QUESTION, ANSWER, ETC. 
             mediaRecorder.onstop = (ev)=>{
-                if(count == numberOfVideos-1){
-                    instructions.innerHTML = "Interview Over! Redirecting in 3 seconds...";
-                    setTimeout(()=>{window.location.href = "/interview_success/";}, 9000)
-                }
+                
                 let blob = new Blob(chunks, { 'type' : 'video/mp4;' });
                 chunks = [];
 
                 var formData = new FormData();
                 formData.append("blob", blob);
                 formData.append("qs", count);
-                formData.append("question", questions_array[count]);
+                formData.append("question", questions_array[count-1]);
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', "{% url 'interview:interview' %}", true);
                 xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
@@ -215,15 +322,32 @@
 
         changeButton.addEventListener('click',nextButtonClickFunction,false);
 
+        // Initial Code 
         function onStart(){
             document.getElementById('videoPlayer').play();
             document.getElementById('startButton').style.display = 'none';
-            questions.innerHTML = questions_array[count]
+            typeWriter();
+        }
+
+        // CODE TO PRINT THE QUESTIONS LETTER BY LETTER
+        var i = 0;
+        var txt = (count+1) + ". " + questions_array[count];
+        function typeWriter() {
+            if (i < txt.length) {
+                questions.innerHTML += txt.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50);
+            }
+            else{
+                i = 0;
+                txt = (count+2) + ". " + questions_array[count+1];
+            }
         }
     
         function nextButtonClickFunction(e){
-            changeButton.style.display = "none"
-            instructions.innerHTML = ""
+            changeButton.style.display = "none";
+            instructions.innerHTML = "";
+            questions.innerHTML = "";
 
             if(!e) 
             {
@@ -244,7 +368,7 @@
                 videoSource.src = "../static/interview_questions/{{request.session.choice}}/"+videos_array[count];
                 player.load();
                 player.play();
-                questions.innerHTML = questions_array[count]
+                typeWriter();
             }
         }
 

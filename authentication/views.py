@@ -5,14 +5,23 @@ from .models import User
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 import re
+from interview.models import *
 
 def dashboard(request):
+    if "interview_id" in request.session:
+        Interview.objects.filter(id=request.session["interview_id"]).delete()
+        del request.session["interview_id"]
+    
     if request.user.is_authenticated:
         return render(request, "dashboard.html")
     else:
         return render(request, "index.html")
 
 def signup(request):
+    if "interview_id" in request.session:
+        Interview.objects.filter(id=request.session["interview_id"]).delete()
+        del request.session["interview_id"]
+        
     if request.user.is_authenticated:
         return redirect('/')
     if request.method == "POST":
@@ -57,6 +66,10 @@ def signup(request):
 
 
 def login(request):
+    if "interview_id" in request.session:
+        Interview.objects.filter(id=request.session["interview_id"]).delete()
+        del request.session["interview_id"]
+
     if request.user.is_authenticated:
         return redirect('/')
     if request.method == "POST":
@@ -89,11 +102,19 @@ def login(request):
 
 
 def logout(request):
+    if "interview_id" in request.session:
+        Interview.objects.filter(id=request.session["interview_id"]).delete()
+        del request.session["interview_id"]
+    
     auth_logout(request)
     messages.success(request, "Logged out Successfully!")
     return redirect('/')
 
 def profile(request):
+    if "interview_id" in request.session:
+        Interview.objects.filter(id=request.session["interview_id"]).delete()
+        del request.session["interview_id"]
+
     if not request.user.is_authenticated:
         return redirect('/')
     if request.method == 'POST':

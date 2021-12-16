@@ -19,12 +19,25 @@ from django.utils.decorators import method_decorator
 
 
 def dashboard(request):
-    return redirect('/')
 
+    if "interview_id" in request.session:
+        Interview.objects.filter(id=request.session["interview_id"]).delete()
+        del request.session["interview_id"]
+        messages.error(request, "Interview Terminated Unexpectedly!")
+        return redirect('/')
+
+    return redirect('/')
 
 def instructions(request, choice):
     if not request.user.is_authenticated:
         return redirect('/')
+
+    if "interview_id" in request.session:
+        Interview.objects.filter(id=request.session["interview_id"]).delete()
+        del request.session["interview_id"]
+        messages.error(request, "Interview Terminated Unexpectedly!")
+        return redirect('/')
+
     if choice == "experienced" or choice == "fresher":
         request.session['choice'] = choice
         return render(request, "instructions.html")
@@ -35,15 +48,22 @@ def instructions(request, choice):
 def choice(request):
     if not request.user.is_authenticated:
         return redirect('/')
-    if request.session.get('interview_id'):
-        print("Session variable exists")
-        print(request.session.get('interview_id'))
+
+    if "interview_id" in request.session:
+        Interview.objects.filter(id=request.session["interview_id"]).delete()
+        del request.session["interview_id"]
+        messages.error(request, "Interview Terminated Unexpectedly!")
+        return redirect('/')
+
     return render(request, "choice.html")
 
 
 def interview(request):
     if not request.user.is_authenticated:
         return redirect('/')
+    # if not 'interview_id' in request.session:
+    #     messages.error(request, "Interview Terminated Unexpectedly!")
+    #     return redirect('/')
     if request.method == "POST":
         baseDir = settings.BASE_DIR
         user = request.user.email
@@ -51,10 +71,12 @@ def interview(request):
             path = os.path.join(baseDir, "interview_data\\interview_recordings\\")
             print(baseDir)
     
-            filename = user[0: user.index('@')] + "_" + request.session["interview_id"] + "_" + request.POST['qs']
+            # filename = user[0: user.index('@')] + "_" + request.session["interview_id"] + "_" + request.POST['qs']
+            filename = user[0: user.index('@')] + "_" + request.POST['qs']
             extension = ".webm"
 
             question_text = request.POST['question']
+            qs = request.POST['qs']
             
             with open(path + filename + extension, 'wb+') as destination:
                 for chunk in request.FILES['blob'].chunks():
@@ -71,14 +93,22 @@ def interview(request):
             with audio as source:
                 audio_file = r.record(source)
             result = r.recognize_google(audio_file)
-            print(result)
+            if result == "":
+                result = "You Did Not Answer This Question"
+
+            interview_answer = InterviewDetail()
+            interview_answer.interview_id = Interview.objects.filter(id=request.session['interview_id']).first()
+            interview_answer.question_no = int(qs)
+            interview_answer.question = str(question_text)
+            interview_answer.answer = str(result)
+            interview_answer.save()
 
             # exporting the result 
-            pathw = os.path.join(baseDir, "interview_data\\interview_answers\\")
-            extensionw = ".txt"
-            with open(pathw + filename + extensionw,mode='w') as file:
-                file.write(result) 
-                print("ready!")
+            # pathw = os.path.join(baseDir, "interview_data\\interview_answers\\")
+            # extensionw = ".txt"
+            # with open(pathw + filename + extensionw,mode='w') as file:
+            #     file.write(result) 
+            #     print("ready!")
                 
             if os.path.exists(i):
                 os.remove(i)
@@ -113,7 +143,6 @@ def interview(request):
         if vidsInDB < 3:
             messages.error(request, "Request Cannot be Processed Right Now! Please Try Again Later")
             return redirect('/')
-        print(request.session['choice'])
         randomlist = random.sample(range(2, vidsInDB), 5)
         randomlist.sort()
 
@@ -139,11 +168,13 @@ def interview(request):
 def interview_success(request):
     if not request.user.is_authenticated:
         return redirect('/')
+    if not 'interview_id' in request.session:
+        return redirect('/')
     interview_stop_time = datetime.now()
-    interviewstart = Interview.objects.filter(id = request.session.get("interview_id")).interview_start_time
+    interviewstart = Interview.objects.filter(id = request.session["interview_id"]).first().interview_start_time
     date_object = datetime.strptime(interviewstart, "%b %d, %Y - %H:%M")
     duration = (interview_stop_time - date_object).total_seconds()/60
-    date_update = Interview.objects.filter(id = request.session.get("interview_id"))
+    date_update = Interview.objects.filter(id = request.session["interview_id"]).first()
     date_update.duration = duration
     date_update.save()
     del request.session['interview_id']
