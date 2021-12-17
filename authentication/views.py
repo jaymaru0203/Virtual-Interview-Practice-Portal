@@ -11,6 +11,7 @@ def dashboard(request):
     if "interview_id" in request.session:
         Interview.objects.filter(id=request.session["interview_id"]).delete()
         del request.session["interview_id"]
+        messages.error(request, "Interview Terminated Unexpectedly!")
     
     if request.user.is_authenticated:
         return render(request, "dashboard.html")
@@ -21,6 +22,7 @@ def signup(request):
     if "interview_id" in request.session:
         Interview.objects.filter(id=request.session["interview_id"]).delete()
         del request.session["interview_id"]
+        messages.error(request, "Interview Terminated Unexpectedly!")
         
     if request.user.is_authenticated:
         return redirect('/')
@@ -69,6 +71,7 @@ def login(request):
     if "interview_id" in request.session:
         Interview.objects.filter(id=request.session["interview_id"]).delete()
         del request.session["interview_id"]
+        messages.error(request, "Interview Terminated Unexpectedly!")
 
     if request.user.is_authenticated:
         return redirect('/')
@@ -105,6 +108,7 @@ def logout(request):
     if "interview_id" in request.session:
         Interview.objects.filter(id=request.session["interview_id"]).delete()
         del request.session["interview_id"]
+        messages.error(request, "Interview Terminated Unexpectedly!")
     
     auth_logout(request)
     messages.success(request, "Logged out Successfully!")
@@ -114,6 +118,7 @@ def profile(request):
     if "interview_id" in request.session:
         Interview.objects.filter(id=request.session["interview_id"]).delete()
         del request.session["interview_id"]
+        messages.error(request, "Interview Terminated Unexpectedly!")
 
     if not request.user.is_authenticated:
         return redirect('/')

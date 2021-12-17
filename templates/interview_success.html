@@ -40,6 +40,9 @@
           <div class="main-screen">
             <div class="main-text">Interview Completed Successfully!</div>
             <div class="sub-text">You can view the report of the interview on this page</div>
+            {% for ans in answers %}
+              {{ans}}
+            {% end for %}
           </div> 
        </div>
     </div>

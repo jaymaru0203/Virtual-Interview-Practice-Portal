@@ -19,13 +19,6 @@ from django.utils.decorators import method_decorator
 
 
 def dashboard(request):
-
-    if "interview_id" in request.session:
-        Interview.objects.filter(id=request.session["interview_id"]).delete()
-        del request.session["interview_id"]
-        messages.error(request, "Interview Terminated Unexpectedly!")
-        return redirect('/')
-
     return redirect('/')
 
 def instructions(request, choice):
@@ -119,8 +112,7 @@ def interview(request):
                 os.remove(o)
             else:
                 print("The file does not exist")
-            
-            return redirect('/')
+            return HttpResponse('')
             
         except:
             raise SuspiciousFileOperation 
@@ -177,6 +169,9 @@ def interview_success(request):
     date_update = Interview.objects.filter(id = request.session["interview_id"]).first()
     date_update.duration = duration
     date_update.save()
+
+    answers = InterviewDetail.objects.filter(id=request.session["interview_id"]).order_by('question_no')
+
     del request.session['interview_id']
-    return render(request, "interview_success.html")
+    return render(request, "interview_success.html", {"answers": answers})
 
