@@ -153,12 +153,14 @@ def interview(request):
             for item in correct_result['corrections']:
                 if item['definition'] == 'Accept comma addition':
                     analysis += "Please take small pauses in between!"
+                    # break
                     # print(item['start'])
             print("analysisss 1111 " + analysis)
 
             if freq > 30.0:
                 print("analysisss 1111 " + analysis)
                 s = str(freq) + "% words in your answer are stop words"
+                analysis += s
                 analysis += "Avoid using stop words frequently! " 
 
             print("analysisss 2222 " + analysis)
@@ -272,7 +274,7 @@ def interview(request):
 
             # config = {
             # 'verbose': False,
-            # 'audio_file': os.path.join(data_path, 'F:\Django\video\audio\converted.wav'),
+            # 'audio_file': os.path.join(data_path, ''),
             # 'buffer_size': 2048,
             # 'no_search': False,
             # 'full_utt': False,
