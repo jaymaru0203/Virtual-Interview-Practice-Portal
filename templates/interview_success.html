@@ -39,9 +39,20 @@
         <div class="row m-0 justify-content-center">
           <div class="main-screen">
             <div class="main-text">Interview Completed Successfully!</div>
-            <div class="sub-text">You can view the report of the interview on this page</div>
+            <!-- <div class="sub-text">You can view the report of the interview on this page</div> -->
+            <div class="sub-text">Here is the report of your interview!</div>
             {% for ans in answers %}
-              {{ans}}
+            <div class="sub-text"> question --> {{ans.question}}</div>
+            <div class="sub-text"> Your answer --> {{ans.answer}}</div>
+            <div class="sub-text"> Correct answer --> {{ans.correct_answer}} </div>
+            {% for c in cor %}
+            <div class="sub-text"> Correct answer --> {{c}} </div>
+            {% endfor %}
+            <div class="sub-text"> {{ans.frequency}}% of the words are stop words.</div>
+            {% if ans.frequency > 60 %}
+            <!-- <div class="sub-text"> Please take a small pause before the use of conjunctions!</div> -->
+            <div class="sub-text"> Please use stop words less frequently!</div>
+          {% endif %}
             {% endfor %}
           </div> 
        </div>

@@ -26,3 +26,7 @@ class InterviewDetail(models.Model):
     question_no = models.IntegerField()
     question = models.CharField(max_length=250)
     answer = models.TextField()
+    correct_answer = models.TextField()
+    analysis = models.TextField()
+    frequency = models.FloatField()
+    nature = models.TextField()
