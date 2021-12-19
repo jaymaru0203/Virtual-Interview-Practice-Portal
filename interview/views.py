@@ -130,7 +130,7 @@ def interview(request):
             print("PUNCTT  " + response.text)
             punct_result = response.text
 
-            # p = Punctuator("F:\Django\video\vids\model.pcl")
+            # p = Punctuator("")
             # print("PUnchhhh   " + Punctuator.punctuate("I love dance I love some text"))
 
             # correcting grammar
