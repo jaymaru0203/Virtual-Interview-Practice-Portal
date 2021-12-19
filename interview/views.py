@@ -130,6 +130,9 @@ def interview(request):
             print("PUNCTT  " + response.text)
             punct_result = response.text
 
+            # p = Punctuator("F:\Django\video\vids\model.pcl")
+            # print("PUnchhhh   " + Punctuator.punctuate("I love dance I love some text"))
+
             # correcting grammar
             parser = GingerIt()
             correct_result  = parser.parse(punct_result)
@@ -244,6 +247,13 @@ def interview(request):
             # res = stt.recognize(audio=f, content_type='audio/mp3', model='en-US_NarrowbandModel').get_result()
 
             # print(res)
+
+            # synonyms = []
+            # print(wordnet.synsets("good"))
+            # for syn in wordnet.synsets("reading"):
+            #     for l in syn.lemmas():
+            #         synonyms.append(l.name())
+            # print(set(synonyms))
 
             # n = nltk.tokenize.punkt.PunktSentenceTokenizer()
             # n.sentences_from_text(result)
