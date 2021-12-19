@@ -262,7 +262,7 @@ def interview(request):
 
             # config = {
             # 'verbose': False,
-            # 'audio_file': os.path.join(data_path, 'F:\Django\video\audio\converted.wav'),
+            # 'audio_file': os.path.join(data_path, ''),
             # 'buffer_size': 2048,
             # 'no_search': False,
             # 'full_utt': False,
