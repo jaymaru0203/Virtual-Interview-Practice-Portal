@@ -150,12 +150,14 @@ def interview(request):
             for item in correct_result['corrections']:
                 if item['definition'] == 'Accept comma addition':
                     analysis += "Please take small pauses in between!"
+                    # break
                     # print(item['start'])
             print("analysisss 1111 " + analysis)
 
             if freq > 30.0:
                 print("analysisss 1111 " + analysis)
                 s = str(freq) + "% words in your answer are stop words"
+                analysis += s
                 analysis += "Avoid using stop words frequently! " 
 
             print("analysisss 2222 " + analysis)
