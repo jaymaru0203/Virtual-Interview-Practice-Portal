@@ -177,7 +177,7 @@ def interview(request):
             if request.POST['qs'] == "1" and word in result:
                 analysis += "Try asking atleast 1 or 2 questions to the interviewer. "
             
-            print("analysiss 3 " + analysis)
+            print("analysis 3 " + analysis)
 
             if freq > 30.0:
                 s = str(freq) + "% words in your answer are stop words. "
