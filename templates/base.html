@@ -36,12 +36,12 @@
             }
             
             .navbar{
-              background-color: #000;
+              background-color: #222;
               padding: 0;
               min-height: 40px;
-              box-shadow: 0px 1px 10px #000;
+              box-shadow: 0px 1px 10px #222;
               border-radius: 0;
-              opacity: 0.75;
+              opacity: 0.85;
               color: #fff;
             }
             
@@ -62,8 +62,8 @@
               color: #fff;
               font-size: 16px;
               font-weight: 600;
-            
             }
+
             .fa{
               color: white;
             }
@@ -82,6 +82,20 @@
             .hidden{
               display: none;
             }  
+
+            #logo{
+              width: 40%;
+              margin: 5px 10px;
+            }
+            
+            @media screen and (max-width: 768px){
+              #logo{
+                width: 80%;
+              }
+              #logo-anchor{
+                width: 40%;
+              }
+            }
             
         </style>
         {% block head_content %}
@@ -92,6 +106,9 @@
     <div class="wrapper">
       <nav class="navbar navbar-expand-md fixed-top main-nav">
         <!-- <a href="#" class="navbar-brand">Brand</a> -->
+        <a class="navbar-brand" href="/" id="logo-anchor">
+          <img src="{% static 'images/logo.png' %}" id="logo">
+        </a>
 
         <button type="button" id="ChangeToggle" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
             <div id="navbar-hamburger"><i class="fa fa-bars"></i></div>
@@ -101,17 +118,18 @@
 
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
-
             <div class="navbar-nav ml-auto">
-                <a href="/" class="nav-item nav-link active">Home</a>
+              <!-- <img src="{% static 'images/logo.png' %}" id="logo"> -->
+
+                <a href="/" class="nav-item nav-link" id="home-page">Home</a>
                 {% if user.is_authenticated %}
-                <a href="/choice/" class="nav-item nav-link">Interview</a>
-                <a href="/resources/" class="nav-item nav-link">Resources</a>
-                <a href="/profile/" class="nav-item nav-link">Profile</a>
-                <a href="/logout/" class="nav-item nav-link">Logout</a>
+                <a href="/choice/" class="nav-item nav-link" id="interview-page">Interview</a>
+                <a href="/resources/" class="nav-item nav-link" id="resources-page">Resources</a>
+                <a href="/profile/" class="nav-item nav-link" id="profile-page">Profile</a>
+                <a href="/logout/" class="nav-item nav-link" id="logout-page">Logout</a>
                 {% else %}
-                <a href="/login/" class="nav-item nav-link">Login</a>
-                <a href="/signup/" class="nav-item nav-link">Sign Up</a>
+                <a href="/login/" class="nav-item nav-link" id="login-page">Login</a>
+                <a href="/signup/" class="nav-item nav-link" id="signup-page">Sign Up</a>
                 {% endif %}
             </div>
 
