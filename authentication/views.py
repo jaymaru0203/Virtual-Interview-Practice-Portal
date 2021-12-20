@@ -127,6 +127,11 @@ def profile(request):
         # Email = request.POST['Email']
         Password = request.POST['Password']
 
+        if Name == "":
+            messages.error(request, "Name Field cannot be empty!")
+            return redirect('/profile/')
+
+
         if not re.match("^([a-zA-Z]{2,}\s[a-zA-Z]{2,}$)|([a-zA-Z]{1,}$)|([a-zA-Z]{2,}\s[a-zA-Z]{2,}\s[a-zA-Z]{2,}$)", Name):
             messages.error(request, "Name must contain only Alphabets and Spaces!")
             return redirect('/profile/')

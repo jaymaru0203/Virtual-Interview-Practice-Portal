@@ -29,4 +29,5 @@ class InterviewDetail(models.Model):
     correct_answer = models.TextField()
     analysis = models.TextField()
     frequency = models.FloatField()
+    correction_frequency = models.IntegerField()
     nature = models.TextField()

@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Resources{% endblock %}
+{% block head_content %}
+
+<style type="text/css">
+    .main{
+        margin: 5% 2%;
+    }
+
+    .main-text{
+        font-size: 40px;
+        font-weight: 700;
+        line-height: normal;
+        margin-bottom: 20px;
+      }
+      .sub-text{
+        font-size: 28px;
+        font-weight: 500;
+        line-height: normal;
+        margin-bottom: 20px;
+        color: rgb(61, 61, 61);
+        margin-left: 2%;
+        font-family:Arial, Helvetica, sans-serif;
+        margin-top: 3%;
+      }
+      .textbox{
+          padding: 3% 2%;
+          border-radius: 12px;
+          margin-bottom: 15px;
+          box-shadow: 7px 7px 11px -4px rgba(181,178,178,0.75);
+          -webkit-box-shadow: 7px 7px 11px -4px rgba(181,178,178,0.75);
+          -moz-box-shadow: 7px 7px 11px -4px rgba(181,178,178,0.75);
+          background-color: #fff;
+      }
+      .textmain{
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: normal;
+        margin-bottom: 10px;
+        color: rgb(24, 13, 23);
+      }
+      .textsub{
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: normal;
+        text-align: justify;
+        border-left: #A43FDD 8px solid;
+        padding-left: 10px;
+
+      }
+
+      @media screen and (max-width: 900px ){
+        .main{
+            margin: 70px 20px;
+        }
+    
+        .main-text{
+            font-size: 30px;
+            font-weight: 700;
+            line-height: normal;
+            margin-bottom: 20px;
+          }
+          .sub-text{
+            font-size: 22px;
+            font-weight: 500;
+            line-height: normal;
+            margin-bottom: 20px;
+            color: rgb(61, 61, 61);
+            margin-left: 2%;
+            font-family:Arial, Helvetica, sans-serif;
+            margin-top: 3%;
+          }
+          .textbox{
+              padding: 4% 3%;
+              border-radius: 12px;
+              margin-bottom: 15px;
+              box-shadow: 7px 7px 11px -4px rgba(181,178,178,0.75);
+              -webkit-box-shadow: 7px 7px 11px -4px rgba(181,178,178,0.75);
+              -moz-box-shadow: 7px 7px 11px -4px rgba(181,178,178,0.75);
+              background-color: #fff;
+          }
+          .textmain{
+            font-size: 1.2rem;
+            font-weight: 700;
+            line-height: normal;
+            margin-bottom: 10px;
+            color: rgb(24, 13, 23);
+          }
+          .textsub{
+            font-size: 0.8rem;
+            font-weight: 400;
+            line-height: normal;
+            text-align: justify;
+            border-left: #A43FDD 8px solid;
+            padding-left: 10px;
+    
+          }
+      }
+</style>
+{% endblock %}
+
+{% block content %} 
+<div class="container-fluid p-0">
+   <div class="main">
+    <div class="text-center main-text" >How to prepare for an interview</div>
+    <div class="sub-text"><span style="padding-right: 10px;"><img src="https://img.icons8.com/ios-glyphs/24/A43FDD/filled-circle.png"/></span>4 ways to make a good expression</div>
+   <div class="row m-0">
+   <div class="col-lg-6 col-md-6 m-0">
+    <div class="textbox">
+        <div class="textmain">Punctuality</div>
+        <div class="textsub">Arriving late will increase your stress levels and give the employer a bad first impression, so do your best to arrive in good time.</div>
+    </div>
+    <div class="textbox">
+        <div class="textmain">Body language</div>
+        <div class="textsub">Once you're seated, sit naturally without slouching in your chair or leaning on the desk.Throughout the interview, remember to smile frequently and maintain eye contact. </div>
+    </div>
+   </div>
+   <div class="col-lg-6 col-md-6 m-0">
+    <div class="textbox">
+        <div class="textmain">Positivity and enthusiasm</div>
+        <div class="textsub">During the interview, respond to questions with positive statements, be enthusiastic about the job and avoid badmouthing your previous employers or university tutors.</div>
+    </div>
+    <div class="textbox">
+        <div class="textmain">Clarity</div>
+        <div class="textsub">Answer all questions clearly and concisely,.It's acceptable to pause before answering a difficult question to give yourself thinking time, or asking for clarification if you're unsure what a question means. When answering, don't speak too quickly.</div>
+    </div>
+   </div>
+</div> 
+<div class="sub-text"><span style="padding-right: 10px;"><img src="https://img.icons8.com/ios-glyphs/24/A43FDD/filled-circle.png"/></span>Top HR Interview Question and Answers</div>
+<div class="row m-0">
+    <div class="col-lg-6 col-md-6 m-0">
+     <div class="textbox">
+         <div class="textmain">Fresher</div>
+         <div class="textsub"><a href="https://www.interviewbit.com/hr-interview-questions/">HR interview rounds can make or break your opportunity to join your dream company.</a></div>
+     </div>
+    </div>
+    <div class="col-lg-6 col-md-6 m-0">
+     <div class="textbox">
+         <div class="textmain">Experienced</div>
+         <div class="textsub"><a href="https://www.interviewbit.com/hr-interview-questions/">Open this link for practicing questions and answers before interview</a></div>
+     </div>
+    </div>
+ </div> 
+ <div class="sub-text"><span style="padding-right: 10px;"><img src="https://img.icons8.com/ios-glyphs/24/A43FDD/filled-circle.png"/></span>Sample HR Interview Videos</div>
+<div class="row m-0">
+    <div class="col-lg-6 col-md-6 m-0">
+        <div class="embed-responsive embed-responsive-21by9">
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/715jNDMGm7I"></iframe>
+          </div>
+    </div>
+    <div class="col-lg-6 col-md-6 m-0">
+        <div class="embed-responsive embed-responsive-21by9">
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/bhlzxLBLe7E"></iframe>
+          </div>
+    </div>
+ </div> 
+   </div> 
+</div>
+{% endblock %}
+
+        

@@ -84,6 +84,12 @@ def choice(request):
 #     link = "https://www.ibm.com/docs/en/zos-basic-skills?topic=zos-what-is-database-management-system"
 #     return render(request, "aa.html", {"link": link})
 
+def resources(request):
+    return render(request, "resources.html")
+
+def technical(request):
+    return render(request, "technical.html")
+
 def interview(request):
     if not request.user.is_authenticated:
         return redirect('/')
@@ -94,9 +100,9 @@ def interview(request):
         baseDir = settings.BASE_DIR
         user = request.user.email
         try:
+            # print("Baseeee Diiirr    " + baseDir)
             path = os.path.join(baseDir, "interview_data\\interview_recordings\\")
-            print(baseDir)
-    
+            
             # filename = user[0: user.index('@')] + "_" + request.session["interview_id"] + "_" + request.POST['qs']
             filename = user[0: user.index('@')] + "_" + request.POST['qs']
             extension = ".webm"
@@ -119,9 +125,11 @@ def interview(request):
             with audio as source:
                 audio_file = r.record(source)
             result = r.recognize_google(audio_file)
-            print(result)
-            if result == "":
-                result = "You Did Not Answer This Question"
+            
+            # if result == "":
+            #     result = "You Did Not Answer This Question"
+
+            print("Result " + result)
 
             # adding punctuations
             data = {"text": result}
@@ -137,6 +145,8 @@ def interview(request):
             parser = GingerIt()
             correct_result  = parser.parse(punct_result)
             print(correct_result)
+
+            cfreq = len(correct_result['corrections'])
  
             # stop words frequency
             word_tokens = word_tokenize(result) 
@@ -149,44 +159,37 @@ def interview(request):
             #analysis
             
             analysis = ""
-            print("analysisss  " + analysis)
             for item in correct_result['corrections']:
                 if item['definition'] == 'Accept comma addition':
-                    analysis += "Please take small pauses in between!"
-                    # break
-                    # print(item['start'])
-            print("analysisss 1111 " + analysis)
+                    analysis += "Please take small pauses in between! "
+                    break
+
+            print("analysis 1 " + analysis)
+
+            print ("textblob polarity  " + str(TextBlob(result).sentiment.polarity))
+            
+            if TextBlob(result).sentiment.polarity <= 0.0:
+                analysis += "Your response should be more positive. "
+
+            print("analysis 2 " + analysis)
+            
+            word = "no "
+            if request.POST['qs'] == "1" and word in result:
+                analysis += "Try asking atleast 1 or 2 questions to the interviewer. "
+            
+            print("analysis 3 " + analysis)
 
             if freq > 30.0:
-                print("analysisss 1111 " + analysis)
-                s = str(freq) + "% words in your answer are stop words"
+                s = str(freq) + "% words in your answer are stop words. "
                 analysis += s
                 analysis += "Avoid using stop words frequently! " 
 
-            print("analysisss 2222 " + analysis)
-
-            # word = "no "
-            # if <question no. == 16>  and word in correct_result:
-            #     analysis += "Try asking atleast 1 or 2 questions to the interviewer. "
-
-            print("analysisss 3333 " + analysis)
-     
-            # txt = "no thank ypu i dont have any questiopns"
-            print ("textblob polarity  " + str(TextBlob(result).sentiment.polarity))
-            print(type(TextBlob(result).sentiment.polarity))
-            # tt = TextBlob(correct_result).sentiment.polarity
-            # if tt <= 0.0:
-            #     print("duhhhhh")
-            #     analysis += "Your response should be more positive. "
-
-            print("analysisss 4444 " + analysis)
-
+            print("analysis 4 " + analysis)
+            
             if analysis == "":
                 analysis += "Good Job! Your answer is perfect!"
-
-            print("analysisss 5555 " + analysis)
-
-            print("annalyysiisss  " + analysis)
+                
+            print("final analysis  " + analysis)
 
             interview_answer = InterviewDetail()
             interview_answer.interview_id = Interview.objects.filter(id=request.session['interview_id']).first()
@@ -196,6 +199,7 @@ def interview(request):
             interview_answer.correct_answer = str(correct_result['result'])
             interview_answer.analysis = str(analysis)
             interview_answer.frequency = int(freq)
+            interview_answer.correction_frequency = int(cfreq)
             interview_answer.save()
 
             # exporting the result 
@@ -307,29 +311,36 @@ def interview(request):
         request.session['interview_id'] = Interview.objects.latest('id').id
 
         list = ["1.mp4"]
+
+
+        print("choiceeee  " + request.session['choice'])
+        
         vidsInDB = len(Question.objects.filter(choice=request.session['choice']))
         if vidsInDB < 3:
             messages.error(request, "Request Cannot be Processed Right Now! Please Try Again Later")
             return redirect('/')
-        randomlist = random.sample(range(2, vidsInDB-1), 4)
+        if(request.session['choice'] == "fresher"):
+            randomlist = random.sample(range(2, vidsInDB-1), 4)
+        else:
+            randomlist = random.sample(range(2, vidsInDB+2), 4)
         randomlist.sort()
 
         for i in range(0,4):
             vid = str(randomlist[i])+".mp4"
             list.append(vid)
-
+        
         list.append("16.mp4")
         list.append("0.mp4")
         json_videos_list = json.dumps(list)
 
-        questions = [Question.objects.filter(choice=request.session['choice'],filename=1).first().question]
+        questions = [Question.objects.filter(filename=1).first().question]
         question_list = Question.objects.filter(choice=request.session['choice'],filename__in=randomlist).values_list('question', flat=True)
 
         for qs in question_list:
             questions.append(qs)
         
-        questions.append(Question.objects.filter(choice=request.session['choice'],filename=16).first().question)
-        questions.append(Question.objects.filter(choice=request.session['choice'],filename=0).first().question)
+        questions.append(Question.objects.filter(filename=16).first().question)
+        questions.append(Question.objects.filter(filename=0).first().question)
         json_questions_list = json.dumps(questions)
 
         return render(request, "interview.html", {'videos' : json_videos_list, 'start': list[0], 'questions': json_questions_list})
@@ -349,7 +360,8 @@ def interview_success(request):
     date_update.save()
     eid = Interview.objects.filter(id=request.session['interview_id']).first()
     answers = InterviewDetail.objects.filter(interview_id=eid).order_by('question_no')
+    details = {'start':eid.interview_start_time,'duration':eid.duration}
     
     del request.session['interview_id']
-    return render(request, "interview_success.html", {"answers": answers})
+    return render(request, "interview_success.html", {"answers": answers,"details": details})
 

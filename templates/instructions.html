@@ -158,6 +158,7 @@
             }).catch(function(err){
                 if (err.name == "NotAllowedError") {
                     console.log("User has denied accessed")
+                    window.location.href = "/technical/";
                  }
             });
         

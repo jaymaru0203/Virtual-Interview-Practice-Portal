@@ -301,6 +301,7 @@
             mediaRecorder.onstop = (ev)=>{
                 
                 let blob = new Blob(chunks, { 'type' : 'video/mp4;' });
+
                 chunks = [];
 
                 var formData = new FormData();

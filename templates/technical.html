@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Technical Support{% endblock %}
+{% block head_content %}
+
+<style type="text/css">
+    .main{
+        margin: 5% 2%;
+    }
+
+    .main-text{
+        font-size: 40px;
+        font-weight: 700;
+        line-height: normal;
+        margin-bottom: 20px;
+    }
+
+      .errortext{
+        padding: 10px;
+        background-color: rgb(224, 86, 86);
+        color: #fff;
+      }
+
+      .sub-text{
+        font-size: 28px;
+        font-weight: 500;
+        line-height: normal;
+        margin-bottom: 20px;
+        color: rgb(61, 61, 61);
+        margin-left: 2%;
+        font-family:Arial, Helvetica, sans-serif;
+        margin-top: 3%;
+      }
+      .textbox{
+          padding: 3% 2%;
+          border-radius: 12px;
+          margin-bottom: 15px;
+          box-shadow: 7px 7px 11px -4px rgba(181,178,178,0.75);
+          -webkit-box-shadow: 7px 7px 11px -4px rgba(181,178,178,0.75);
+          -moz-box-shadow: 7px 7px 11px -4px rgba(181,178,178,0.75);
+          background-color: #fff;
+      }
+      .textmain{
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: normal;
+        margin-bottom: 10px;
+        color: rgb(24, 13, 23);
+      }
+      .textsub{
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: normal;
+        text-align: justify;
+        border-left: #A43FDD 8px solid;
+        padding-left: 10px;
+
+      }
+
+      @media screen and (max-width: 900px ){
+        .main{
+            margin: 70px 20px;
+        }
+    
+        .main-text{
+            font-size: 30px;
+            font-weight: 700;
+            line-height: normal;
+            margin-bottom: 20px;
+          }
+          .sub-text{
+            font-size: 20px;
+            font-weight: 500;
+            line-height: normal;
+            margin-bottom: 20px;
+            color: rgb(61, 61, 61);
+            margin-left: 2%;
+            font-family:Arial, Helvetica, sans-serif;
+            margin-top: 3%;
+          }
+          .textbox{
+              padding: 4% 3%;
+              border-radius: 12px;
+              margin-bottom: 15px;
+              box-shadow: 7px 7px 11px -4px rgba(181,178,178,0.75);
+              -webkit-box-shadow: 7px 7px 11px -4px rgba(181,178,178,0.75);
+              -moz-box-shadow: 7px 7px 11px -4px rgba(181,178,178,0.75);
+              background-color: #fff;
+          }
+          .textmain{
+            font-size: 1.2rem;
+            font-weight: 700;
+            line-height: normal;
+            margin-bottom: 10px;
+            color: rgb(24, 13, 23);
+          }
+          .textsub{
+            font-size: 0.8rem;
+            font-weight: 400;
+            line-height: normal;
+            text-align: justify;
+            border-left: #A43FDD 8px solid;
+            padding-left: 10px;
+    
+          }
+      }
+</style>
+{% endblock %}
+
+{% block content %} 
+<div class="container-fluid p-0">
+   <div class="main">
+    <div class="text-center main-text" >Technical Support</div>
+    <div class="text-center errortext">Please go to the settings and enable camera and microphone, so to load interview page. Without that interview can't be started.</div>
+    <div class="sub-text"><span style="padding-right: 10px;"><img src="https://img.icons8.com/ios-glyphs/24/A43FDD/filled-circle.png"/></span>Setting Camera and Microphone on different browser</div>
+   <div class="row m-0">
+   <div class="col-lg-6 col-md-6 m-0">
+    <div class="textbox">
+        <div class="textmain">Google Chrome</div>
+        <div class="textsub">If you are using Google Chrome, please follow the steps below. This is also available on Google's support documentation here:<a href="User your camera and microphone">User your camera and microphone</a> 
+            <br>
+            1. Open Chrome Chrome
+            <br><br>
+            2. At the top right, click More More and then Settings.
+            <br><br>
+            3. At the bottom, click Advanced.
+            <br><br>
+            4. Under "Privacy and security," click Content settings.
+            <br><br>
+            5. Click Camera or Microphone.
+            <br><br>
+            6. Turn Ask before accessing on or off.</div>
+    </div>
+    <div class="textbox">
+        <div class="textmain">Microsoft Edge</div>
+        <div class="textsub">To access your browser camera permissions: If you'd like to access all permissions, please follow Microsoft's documentation here:<a href="https://support.microsoft.com/en-us/windows/windows-camera-microphone-and-privacy-a83257bc-e990-d54a-d212-b5e41beba857">Windows 10 camera, microphone, and privacy</a> 
+            <br>
+            1. Go to the website that wants to use your microphone and/or camera.
+            <br><br>
+            2. If a dialog box appears asking if you want to give the website permission to use your camera or microphone, select Allow once or Always allow, or close the dialog box to block access.
+           </div>
+    </div>
+   </div>
+   <div class="col-lg-6 col-md-6 m-0">
+    <div class="textbox">
+        <div class="textmain">FireFox</div>
+        <div class="textsub">If you have your settings set to "Always ask", you should see the following dialogue box when you start recording in Acclaim, which will allow you to edit settings:</div><br>
+        <img src="https://getacclaim.zendesk.com/hc/article_attachments/360001912272/Screen_Shot_2018-03-08_at_9.04.00_AM.png" style="display: block;
+        margin-left: auto;
+        margin-right: auto;" width="50%">
+    </div>
+    <div class="textbox">
+        <div class="textmain">Safari</div>
+        <div class="textsub">Safari currently does not support the WebRTC video standard. We recommend using alternative browsers when recording on Acclaim.</div>
+    </div>
+   </div>
+</div>
+</div> 
+</div>
+{% endblock %}
