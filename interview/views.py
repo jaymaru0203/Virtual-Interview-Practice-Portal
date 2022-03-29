@@ -186,11 +186,11 @@ def interview(request):
             print("Result " + result)
 
             # adding punctuations
-            data = {"text": result}
-            url = "http://bark.phon.ioc.ee/punctuator"
-            response = requests.post(url, data)
-            print("PUNCTT  " + response.text)
-            punct_result = response.text
+            # data = {"text": result}
+            # url = "http://bark.phon.ioc.ee/punctuator"
+            # response = requests.post(url, data)
+            # print("PUNCTT  " + response.text)
+            # punct_result = response.text
 
             # p = Punctuator("")
             # print("PUnchhhh   " + Punctuator.punctuate("I love dance I love some text"))
@@ -201,9 +201,9 @@ def interview(request):
 
             # parser = GingerIt()
             # print("GTRKGRT")
-            # text = 'The smelt of fliwers bring back memories.'
+            text = 'The smelt of fliwers bring back memories.'
             # correct_result  = parser.parse(text)
-            correct_result = GingerIt().parse("The smelt of fliwers bring back memories.")
+            correct_result = GingerIt().parse(result)
             print(correct_result)
 
             cfreq = len(correct_result['corrections'])
@@ -214,7 +214,7 @@ def interview(request):
             stopwords_x = [w for w in word_tokens if w in stopwords]
             freq = len(stopwords_x) / len(word_tokens) * 100
             freq = round(freq, 2)
-            print(freq)
+            print("frequency ",freq)
 
             #analysis
             
@@ -255,7 +255,8 @@ def interview(request):
             interview_answer.interview_id = Interview.objects.filter(id=request.session['interview_id']).first()
             interview_answer.question_no = int(qs)
             interview_answer.question = str(question_text)
-            interview_answer.answer = str(punct_result)
+            # interview_answer.answer = str(punct_result)
+            interview_answer.answer = str(result)
             interview_answer.correct_answer = str(correct_result['result'])
             interview_answer.analysis = str(analysis)
             interview_answer.frequency = int(freq)
@@ -385,7 +386,8 @@ def interview(request):
             randomlist = random.sample(range(2, vidsInDB+2), 4)
         randomlist.sort()
 
-        for i in range(0,4):
+        # for i in range(0,4):
+        for i in range(0):
             vid = str(randomlist[i])+".mp4"
             list.append(vid)
         
