@@ -386,8 +386,7 @@ def interview(request):
             randomlist = random.sample(range(2, vidsInDB+2), 4)
         randomlist.sort()
 
-        # for i in range(0,4):
-        for i in range(0):
+        for i in range(0,4):
             vid = str(randomlist[i])+".mp4"
             list.append(vid)
         
