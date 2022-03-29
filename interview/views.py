@@ -203,7 +203,7 @@ def interview(request):
             # print("GTRKGRT")
             # text = 'The smelt of fliwers bring back memories.'
             # correct_result  = parser.parse(text)
-            correct_result = GingerIt().parse("The smelt of fliwers bring back memories.")
+            correct_result = GingerIt().parse(punct_result)
             print(correct_result)
 
             cfreq = len(correct_result['corrections'])
