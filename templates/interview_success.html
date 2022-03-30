@@ -1,99 +1,96 @@
-{% extends "base.html" %}
-{% load static %}
-{% block title %}Interview{% endblock %}
-{% block head_content %}
+{% extends "base.html" %} {% load static %} {% block title %}Interview{% endblock %} {% block head_content %}
 
-    <style type="text/css">
-        .main-screen{
-            padding: 0 15%;
-          }
+<style type="text/css">
+	.main-screen {
+		padding: 0 15%;
+	}
 
-          #interview-page{
-            color: #fff;
-            font-size: 16px;
-            font-weight: 600;
-          }
+	#interview-page {
+		color: #fff;
+		font-size: 16px;
+		font-weight: 600;
+	}
 
-          .screen1{
-            padding: 100px;
-            background-color: #fff;
-          }
+	.screen1 {
+		padding: 100px;
+		background-color: #fff;
+	}
 
-        .main-text{
-            font-size: 1.5rem;
-            font-weight: 500;
-            line-height: normal;
-            margin-bottom: 20px;
-          }
-    
-    
-          .sub-text{
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: normal;
-            margin-bottom: 20px;
-            text-align: justify;
-            border-left: #A43FDD 8px solid;
-            padding-left: 15px;
-          }
+	.main-text {
+		font-size: 1.5rem;
+		font-weight: 500;
+		line-height: normal;
+		margin-bottom: 20px;
+	}
 
-          .center {
-            text-align: center;
-          }
+	.sub-text {
+		font-size: 1rem;
+		font-weight: 400;
+		line-height: normal;
+		margin-bottom: 20px;
+		text-align: justify;
+		border-left: #a43fdd 8px solid;
+		padding-left: 15px;
+	}
 
-          .d{
-            text-align: center;
-            border: #A43FDD 4px solid;
-            margin-bottom: 20px;
-          }
+	.center {
+		text-align: center;
+	}
 
-    </style>
-{% endblock %}
+	.d {
+		text-align: center;
+		border: #a43fdd 2px solid;
+		margin-bottom: 20px;
+		padding: 20px;
+	}
 
-{% block content %} 
+	.card-link {
+		color: inherit;
+	}
+</style>
+{% endblock %} {% block content %}
 
-<div class="container-fluid  screen1">
-    <div class="col-lg-12 col-md-12 p-0 align-self-center" data-aos="fade-right">
-        <div class="row m-0 justify-content-center">
-          <div class="main-screen">
-            <div class="main-text">Interview Completed Successfully; Here is the report of your interview!</div>
-            <!-- <div class="sub-text">You can view the report of the interview on this page</div> -->
-            <!-- <div class="center">
-              <h3>Here is the report of your interview!</h3>
-            </div> -->
-          <!-- <div></div> -->
-            <div class="d">
-              <strong> Start date and time of your interview is {{details.start}} <br>
-              The duration of your interview is {{details.duration}} minutes. </strong> 
-            </div>
-            <!-- <div class="sub-text">Here is the report of your interview!</div> -->
-            
-            {% for ans in answers %}
-            <div class="sub-text"> 
-            <strong> Question {{ans.question_no}} </strong> --> {{ans.question}} <br>
-            <strong> Your answer </strong> --> {{ans.answer}} <br><br>
-            <!-- <div class="sub-text"> Correct answer --> 
-              <!-- {{ans.correct_answer}} </div> -->
-            <!-- {% for c in cor %} -->
-            <!-- <div class="sub-text"> Correct answer --> 
-              <!-- {{c}} </div>  -->
-            <!-- {% endfor %} -->
-            {% if ans.correction_frequency == 1 %}
-            <strong> Your answer has {{ans.correction_frequency}} mistake. <br> </strong>
-            {% elif ans.correction_frequency == 0 %}
-            <strong> Well Done! Your answer is perfect.<br> </strong>
-            {% else %}
-            <strong>Your answer has {{ans.correction_frequency}} mistakes. <br> </strong>
-            {% endif %}
-          </div>
-            {% endfor %}
+<div class="container-fluid screen1">
+	<div class="col-lg-12 col-md-12 p-0 align-self-center" data-aos="fade-right">
+		<div class="row m-0 justify-content-center">
+			<div class="main-screen">
+				<div class="main-text">Interview Completed Successfully; Here is the report of your interview!</div>
+				<div class="d">
+					<strong>
+						Start date and time of your interview is {{details.start}} <br />
+						The duration of your interview is {{details.duration}} minutes.
+					</strong>
+				</div>
 
-          
-          </div>
+				<div id="accordion">
+					{% for ans in answers %}
+					<div class="card">
+						<div class="card-header">
+							<a class="collapsed card-link" data-toggle="collapse" href="#answer{{ans.question_no}}">
+								<h6>Question {{ans.question_no}} --> {{ans.question}}</h6>
+							</a>
+						</div>
 
-          </div> 
-       </div>
-    </div>
-</div>  
+						<div id="answer{{ans.question_no}}" class="collapse" data-parent="#accordion">
+							<div class="card-body">
+								<strong> Your Corrected Answer </strong> --> {{ans.correct_answer}} <br /><br />
+								{% if ans.correction_frequency == 1 %}
+								<strong> Your answer has {{ans.correction_frequency}} mistake. <br /> </strong>
+								{% elif ans.correction_frequency == 0 %}
+								<strong> Well Done! Your answer is perfect.<br /> </strong>
+								{% else %}
+								<strong>Your answer has {{ans.correction_frequency}} mistakes. <br /> </strong>
+								{% endif %}
+								<br />
+								<strong>Analysis of your Answer --> </strong> {{ ans.analysis }}
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 {% endblock %}
