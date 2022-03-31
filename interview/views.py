@@ -397,39 +397,150 @@ def interview(request):
         interview1.save()
         request.session["interview_id"] = Interview.objects.latest("id").id
 
-        list = ["1.mp4"]
+        list = ["introduction.mp4"]
+        questions = [
+            "Hello, my name is Alice and I will be your Interviewer for today. I hope you are comfortable in this environment. Why don’t we start with a brief introduction of yourself."
+        ]
 
-        vidsInDB = len(Question.objects.filter(choice=request.session["choice"]))
-        if vidsInDB < 3:
-            messages.error(
-                request, "Request Cannot be Processed Right Now! Please Try Again Later"
-            )
-            return redirect("/")
-        if request.session["choice"] == "fresher":
-            randomlist = random.sample(range(2, vidsInDB - 1), 1)
-        else:
-            randomlist = random.sample(range(2, vidsInDB + 2), 4)
-        randomlist.sort()
+        choice = request.session["choice"]
 
-        for i in range(0, 1):
-            vid = str(randomlist[i]) + ".mp4"
+        dir_path = os.path.join(BASE_DIR, "media", "questions", choice)
+
+        initial_dir = os.path.join(dir_path, "initial")
+        intermediate_dir = os.path.join(dir_path, "intermediate")
+        concluding_dir = os.path.join(dir_path, "concluding")
+
+        # no_of_initial_qs = len(
+        #     [
+        #         name
+        #         for name in os.listdir(initial_dir)
+        #         if os.path.isfile(os.path.join(initial_dir, name))
+        #     ]
+        # )
+        # no_of_intermediate_qs = len(
+        #     [
+        #         name
+        #         for name in os.listdir(intermediate_dir)
+        #         if os.path.isfile(os.path.join(intermediate_dir, name))
+        #     ]
+        # )
+        # no_of_concluding_qs = len(
+        #     [
+        #         name
+        #         for name in os.listdir(concluding_dir)
+        #         if os.path.isfile(os.path.join(concluding_dir, name))
+        #     ]
+        # )
+
+        # no_of_initial_qs = len(
+        #     Question.objects.filter(choice=choice, section="initial")
+        # )
+        # no_of_intermediate_qs = len(
+        #     Question.objects.filter(choice=choice, section="intermediate")
+        # )
+        # no_of_concluding_qs = len(
+        #     Question.objects.filter(choice=choice, section="concluding")
+        # )
+
+        # randomlist = random.sample(range(1, no_of_initial_qs + 1), 2)
+        # for i in range(0, 2):
+        #     vid = str(os.path.join("initial", (str(randomlist[i]) + ".mp4")))
+        #     list.append(vid)
+
+        # randomlist = random.sample(range(1, no_of_intermediate_qs + 1), 1)
+        # for i in range(0, 1):
+        #     vid = str(os.path.join("intermediate", (str(randomlist[i]) + ".mp4")))
+        #     list.append(vid)
+
+        # randomlist = random.sample(range(1, no_of_concluding_qs + 1), 2)
+        # for i in range(0, 2):
+        #     vid = str(os.path.join("concluding", (str(randomlist[i]) + ".mp4")))
+        #     list.append(vid)
+
+        # Selecting 2 Random Files From Initial Folder
+        initial_list = random.choices(os.listdir(initial_dir), 2)
+        for i in initial_list:
+            vid = str(os.path.join("initial", i))
             list.append(vid)
 
-        list.append("16.mp4")
-        list.append("0.mp4")
-        json_videos_list = json.dumps(list)
-
-        questions = [Question.objects.filter(filename=1).first().question]
+        # getting the question text for selected files
         question_list = Question.objects.filter(
-            choice=request.session["choice"], filename__in=randomlist
+            choice=choice, section="initial", filename__in=initial_list
         ).values_list("question", flat=True)
-
         for qs in question_list:
             questions.append(qs)
 
-        questions.append(Question.objects.filter(filename=16).first().question)
-        questions.append(Question.objects.filter(filename=0).first().question)
+        # Selecting 1 Random File From Intermediate Folder
+        intermediate_list = random.choices(os.listdir(intermediate_dir), 1)
+        for i in intermediate_list:
+            vid = str(os.path.join("intermediate", i))
+            list.append(vid)
+
+        # getting the question text for selected files
+        question_list = Question.objects.filter(
+            choice=choice, section="intermediate", filename__in=intermediate_list
+        ).values_list("question", flat=True)
+        for qs in question_list:
+            questions.append(qs)
+
+        # Selecting 2 Random Files From Concluding Folder
+        concluding_list = random.choices(os.listdir(concluding_dir), 2)
+        for i in concluding_list:
+            vid = str(os.path.join("concluding", i))
+            list.append(vid)
+
+        # getting the question text for selected files
+        question_list = Question.objects.filter(
+            choice=choice, section="concluding", filename__in=concluding_list
+        ).values_list("question", flat=True)
+        for qs in question_list:
+            questions.append(qs)
+
+        list.append("last.mp4")
+        questions.append(
+            "Do you have any questions for us? I would be happy to answer them to your satisfaction."
+        )
+        list.append("final.mp4")
+        questions.append(
+            "That's all from my side, thank you! You will get the results of this interview soon."
+        )
+
+        json_videos_list = json.dumps(list)
         json_questions_list = json.dumps(questions)
+
+        # list = ["1.mp4"]
+
+        # vidsInDB = len(Question.objects.filter(choice=request.session["choice"]))
+        # if vidsInDB < 3:
+        #     messages.error(
+        #         request, "Request Cannot be Processed Right Now! Please Try Again Later"
+        #     )
+        #     return redirect("/")
+        # if request.session["choice"] == "fresher":
+        #     randomlist = random.sample(range(2, vidsInDB - 1), 1)
+        # else:
+        #     randomlist = random.sample(range(2, vidsInDB + 2), 4)
+        # randomlist.sort()
+
+        # for i in range(0, 1):
+        #     vid = str(randomlist[i]) + ".mp4"
+        #     list.append(vid)
+
+        # list.append("16.mp4")
+        # list.append("0.mp4")
+        # json_videos_list = json.dumps(list)
+
+        # questions = [Question.objects.filter(filename=1).first().question]
+        # question_list = Question.objects.filter(
+        #     choice=request.session["choice"], filename__in=randomlist
+        # ).values_list("question", flat=True)
+
+        # for qs in question_list:
+        #     questions.append(qs)
+
+        # questions.append(Question.objects.filter(filename=16).first().question)
+        # questions.append(Question.objects.filter(filename=0).first().question)
+        # json_questions_list = json.dumps(questions)
 
         return render(
             request,

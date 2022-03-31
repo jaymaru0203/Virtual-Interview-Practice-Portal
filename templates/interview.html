@@ -114,7 +114,7 @@
   <div class="wrapper">
       <a href="/" class="cross"><h4> X </h4></a>
     <video name='demo' autoplay="true" id="videoPlayer">
-        <source src="../static/interview_questions/{{ request.session.choice }}/{{start}}" type="video/mp4" id="vidSource"/>
+        <source src="../media/questions/{{ request.session.choice }}/{{start}}" type="video/mp4" id="vidSource"/>
     </video><br>
 
     <div id="bottomBar">
@@ -371,7 +371,7 @@
                 window.location.href = "/interview_success/";
             }
             else{
-                videoSource.src = "../static/interview_questions/{{request.session.choice}}/"+videos_array[count];
+                videoSource.src = "../media/questions/{{request.session.choice}}/"+videos_array[count];
                 player.load();
                 player.play();
                 typeWriter();
