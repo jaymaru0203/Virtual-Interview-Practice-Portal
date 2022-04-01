@@ -399,7 +399,7 @@ def interview(request):
 
         list = ["introduction.mp4"]
         questions = [
-            "Hello, my name is Alice and I will be your Interviewer for today. I hope you are comfortable in this environment. Why don’t we start with a brief introduction of yourself."
+            "Hello, my name is Alice and I will be your Interviewer for today. I hope you are comfortable in this environment. Why dont we start with a brief introduction of yourself."
         ]
 
         choice = request.session["choice"]
@@ -410,57 +410,27 @@ def interview(request):
         intermediate_dir = os.path.join(dir_path, "intermediate")
         concluding_dir = os.path.join(dir_path, "concluding")
 
-        # no_of_initial_qs = len(
-        #     [
-        #         name
-        #         for name in os.listdir(initial_dir)
-        #         if os.path.isfile(os.path.join(initial_dir, name))
-        #     ]
-        # )
-        # no_of_intermediate_qs = len(
-        #     [
-        #         name
-        #         for name in os.listdir(intermediate_dir)
-        #         if os.path.isfile(os.path.join(intermediate_dir, name))
-        #     ]
-        # )
-        # no_of_concluding_qs = len(
-        #     [
-        #         name
-        #         for name in os.listdir(concluding_dir)
-        #         if os.path.isfile(os.path.join(concluding_dir, name))
-        #     ]
-        # )
+        # Generating Lists of All Questions Of Each Type for Using PYTHON.SAMPLE()
+        initial_qs_list = []
+        for file in os.listdir(initial_dir):
+            if os.path.isfile(os.path.join(initial_dir, file)):
+                initial_qs_list.append(file)
 
-        # no_of_initial_qs = len(
-        #     Question.objects.filter(choice=choice, section="initial")
-        # )
-        # no_of_intermediate_qs = len(
-        #     Question.objects.filter(choice=choice, section="intermediate")
-        # )
-        # no_of_concluding_qs = len(
-        #     Question.objects.filter(choice=choice, section="concluding")
-        # )
+        intermediate_qs_list = []
+        for file in os.listdir(intermediate_dir):
+            if os.path.isfile(os.path.join(intermediate_dir, file)):
+                intermediate_qs_list.append(file)
 
-        # randomlist = random.sample(range(1, no_of_initial_qs + 1), 2)
-        # for i in range(0, 2):
-        #     vid = str(os.path.join("initial", (str(randomlist[i]) + ".mp4")))
-        #     list.append(vid)
-
-        # randomlist = random.sample(range(1, no_of_intermediate_qs + 1), 1)
-        # for i in range(0, 1):
-        #     vid = str(os.path.join("intermediate", (str(randomlist[i]) + ".mp4")))
-        #     list.append(vid)
-
-        # randomlist = random.sample(range(1, no_of_concluding_qs + 1), 2)
-        # for i in range(0, 2):
-        #     vid = str(os.path.join("concluding", (str(randomlist[i]) + ".mp4")))
-        #     list.append(vid)
+        concluding_qs_list = []
+        for file in os.listdir(concluding_dir):
+            if os.path.isfile(os.path.join(concluding_dir, file)):
+                concluding_qs_list.append(file)
 
         # Selecting 2 Random Files From Initial Folder
-        initial_list = random.choices(os.listdir(initial_dir), 2)
+        initial_list = random.sample(initial_qs_list, 2)
+        initial_list.sort()
         for i in initial_list:
-            vid = str(os.path.join("initial", i))
+            vid = os.path.join("initial", str(i)).replace("\\", "/")
             list.append(vid)
 
         # getting the question text for selected files
@@ -471,9 +441,10 @@ def interview(request):
             questions.append(qs)
 
         # Selecting 1 Random File From Intermediate Folder
-        intermediate_list = random.choices(os.listdir(intermediate_dir), 1)
+        intermediate_list = random.sample(intermediate_qs_list, 1)
+        intermediate_list.sort()
         for i in intermediate_list:
-            vid = str(os.path.join("intermediate", i))
+            vid = os.path.join("intermediate", str(i)).replace("\\", "/")
             list.append(vid)
 
         # getting the question text for selected files
@@ -484,9 +455,10 @@ def interview(request):
             questions.append(qs)
 
         # Selecting 2 Random Files From Concluding Folder
-        concluding_list = random.choices(os.listdir(concluding_dir), 2)
+        concluding_list = random.sample(concluding_qs_list, 2)
+        concluding_list.sort()
         for i in concluding_list:
-            vid = str(os.path.join("concluding", i))
+            vid = os.path.join("concluding", str(i)).replace("\\", "/")
             list.append(vid)
 
         # getting the question text for selected files
@@ -502,12 +474,13 @@ def interview(request):
         )
         list.append("final.mp4")
         questions.append(
-            "That's all from my side, thank you! You will get the results of this interview soon."
+            "Thats all from my side, thank you! You will get the results of this interview soon."
         )
 
         json_videos_list = json.dumps(list)
         json_questions_list = json.dumps(questions)
 
+        # OLD CODE TO RETRIEVE RANDOM FILES FROM OLD FILE SYSTEM
         # list = ["1.mp4"]
 
         # vidsInDB = len(Question.objects.filter(choice=request.session["choice"]))
