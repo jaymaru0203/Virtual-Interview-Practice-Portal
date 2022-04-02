@@ -1,0 +1,185 @@
+{% extends "base.html" %} {% load static %} {% block title %}Your Past Interviews{% endblock %} {% block head_content %}
+
+<style type="text/css">
+	.wrapper {
+		display: flex;
+		width: 100%;
+		align-items: stretch;
+	}
+
+	#profile-page {
+		color: #fff;
+		font-size: 16px;
+		font-weight: 600;
+	}
+
+	.error {
+		color: red;
+		font-size: 14px;
+		font-weight: 500;
+	}
+
+	form {
+		margin-top: 5%;
+		margin-bottom: 5%;
+	}
+	.label_name {
+		font-size: 16px;
+		font-weight: 500;
+		color: #434343;
+	}
+
+	.form-control {
+		width: 400px;
+		height: 48px;
+		background-color: #ffffff;
+		font-size: 14px;
+		font-weight: 500;
+		color: #434343;
+		border-radius: 5px;
+		border: 1px solid #d6d6d6;
+		padding: 6px 12px;
+	}
+
+	.form-group {
+		margin-top: 1.5rem;
+		margin-bottom: 1rem;
+	}
+	.input-group {
+		margin-top: 15px;
+	}
+	input[type="radio"] {
+		margin: 5px -12px;
+	}
+
+	.input-group label {
+		font-weight: 500;
+	}
+
+	.form-control:focus {
+		border-color: #abcdef !important;
+		box-shadow: 0 0 5px rgba(171, 205, 239, 1) !important;
+		font-size: 14px;
+		font-weight: 500;
+		color: #434343;
+	}
+
+	input::placeholder {
+		/* Chrome, Firefox, Opera, Safari 10.1+ */
+		color: #434343; /* Firefox */
+	}
+
+	.logdet {
+		text-align: left;
+		font-size: 30px;
+		margin: 20px 0;
+		font-weight: bold;
+		letter-spacing: 1px;
+	}
+	#btn {
+		border-radius: 5px;
+		height: 48px;
+	}
+	button {
+		margin: 0 10px;
+	}
+
+	.btn:hover {
+		color: white;
+		box-shadow: 0 0 3px #a43fdd !important;
+	}
+
+	.foot {
+		text-align: center;
+		margin-top: 30px;
+		letter-spacing: 0.6px;
+		font-size: 15px;
+		font-weight: 500;
+	}
+
+	.btn {
+		color: white;
+		background-color: #a43fdd;
+		font-size: 15px;
+		font-weight: 500;
+	}
+	.btn-block + .btn-block {
+		margin-top: 0;
+	}
+
+	.fit-image {
+		width: 95%;
+		object-fit: cover;
+		height: auto; /* only if you want fixed height */
+	}
+
+	body {
+		background-color: #fff;
+	}
+
+	@media (max-width: 990px) {
+		form {
+			margin-top: 50px;
+		}
+	}
+
+	@media (max-width: 500px) {
+		.form-control {
+			width: 270px;
+			height: 35px;
+			background-color: #ffffff;
+			font-size: 12px;
+			font-weight: 500;
+			color: #737999;
+		}
+
+		input[type="radio"] {
+			margin: 7px -12px;
+		}
+
+		#btn {
+			height: 40px;
+		}
+
+		.form-control:focus {
+			font-size: 12px;
+			font-weight: 500;
+			color: #737999;
+		}
+
+		.logdet {
+			font-size: 25px;
+		}
+
+		form {
+			margin-top: 50px;
+		}
+	}
+
+	button:focus {
+		outline: 0 !important;
+	}
+</style>
+
+{% endblock %} {% block content %}
+<div class="wrapper mt-4">
+	<div class="container-fluid p-0">
+		<div class="logdet">Your Past Interviews</div>
+		<div class="col-lg-12 p-0">
+			<div class="row m-0 justify-content-center">
+				{% for interview in interviews %}
+				<div class="card" style="width: 18rem">
+					<div class="card-body">
+						<h5 class="card-title">Start Time - {{interview.interview_start_time}}</h5>
+						<h6 class="card-subtitle mb-2 text-muted">Experience Level - {{interview.choice}}</h6>
+						<h6 class="card-subtitle mb-2 text-muted">Interview Duration - {{interview.duration}} minutes</h6>
+						<!-- Put the Inidividual Reports' Link Here for Viewing Full Report -->
+						<a href="#" class="card-link">View Full Report</a>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

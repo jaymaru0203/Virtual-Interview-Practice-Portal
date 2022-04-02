@@ -554,6 +554,13 @@ def interview_success(request):
     )
 
 
+def all_interviews(request):
+    interviews = Interview.objects.filter(user=request.user).order_by(
+        "-interview_start_time"
+    )
+    return render(request, "all_interviews.html", {"interviews": interviews})
+
+
 # Extracted Functions
 def stopWords_freq_calculator(result):
     word_tokens = word_tokenize(result)
