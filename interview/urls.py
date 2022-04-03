@@ -11,4 +11,7 @@ urlpatterns = [
     path("technical/", views.technical, name="technical"),
     path("interview_success/", views.interview_success, name="interview_success"),
     path("all_interviews/", views.all_interviews, name="all_interviews"),
+    path('full_report/<int:n>/',views.full_report,name="full_report"),
+    path("pagenotfound/", views.pagenotfound, name="pagenotfound"),
+
 ]

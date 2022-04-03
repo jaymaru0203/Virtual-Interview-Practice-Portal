@@ -555,10 +555,42 @@ def interview_success(request):
 
 
 def all_interviews(request):
+    if not request.user.is_authenticated:
+        return redirect("/")
+
+    if "interview_id" in request.session:
+        Interview.objects.filter(id=request.session["interview_id"]).delete()
+        del request.session["interview_id"]
+        messages.error(request, "Interview Terminated Unexpectedly!")
+        return redirect("/")
     interviews = Interview.objects.filter(user=request.user).order_by(
         "-interview_start_time"
     )
     return render(request, "all_interviews.html", {"interviews": interviews})
+
+def pagenotfound(request):
+    return render(request, "pagenotfound.html")
+
+def full_report(request,n):
+    if not request.user.is_authenticated:
+        return redirect("/")
+
+    if "interview_id" in request.session:
+        Interview.objects.filter(id=request.session["interview_id"]).delete()
+        del request.session["interview_id"]
+        messages.error(request, "Interview Terminated Unexpectedly!")
+        return redirect("/")
+    
+    if len(Interview.objects.filter(id=n)) == 0:
+        return render(request, "pagenotfound.html")
+
+    eid = Interview.objects.filter(id=n).first()
+    if eid.user == request.user:
+        answers = InterviewDetail.objects.filter(interview_id=eid).order_by("question_no")
+        details = {"start": eid.interview_start_time, "duration": eid.duration}
+        return render(request, "full_report.html", {"answers": answers,"details": details})
+    else:
+        return render(request, "pagenotfound.html")
 
 
 # Extracted Functions

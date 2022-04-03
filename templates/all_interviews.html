@@ -1,185 +1,121 @@
 {% extends "base.html" %} {% load static %} {% block title %}Your Past Interviews{% endblock %} {% block head_content %}
 
 <style type="text/css">
-	.wrapper {
-		display: flex;
-		width: 100%;
-		align-items: stretch;
-	}
 
-	#profile-page {
-		color: #fff;
-		font-size: 16px;
-		font-weight: 600;
+	.main-screen {
+		padding: 0 15%;
 	}
-
-	.error {
-		color: red;
-		font-size: 14px;
-		font-weight: 500;
-	}
-
-	form {
-		margin-top: 5%;
-		margin-bottom: 5%;
-	}
-	.label_name {
-		font-size: 16px;
-		font-weight: 500;
-		color: #434343;
-	}
-
-	.form-control {
-		width: 400px;
-		height: 48px;
-		background-color: #ffffff;
-		font-size: 14px;
-		font-weight: 500;
-		color: #434343;
-		border-radius: 5px;
-		border: 1px solid #d6d6d6;
-		padding: 6px 12px;
-	}
-
-	.form-group {
-		margin-top: 1.5rem;
-		margin-bottom: 1rem;
-	}
-	.input-group {
-		margin-top: 15px;
-	}
-	input[type="radio"] {
-		margin: 5px -12px;
-	}
-
-	.input-group label {
-		font-weight: 500;
-	}
-
-	.form-control:focus {
-		border-color: #abcdef !important;
-		box-shadow: 0 0 5px rgba(171, 205, 239, 1) !important;
-		font-size: 14px;
-		font-weight: 500;
-		color: #434343;
-	}
-
-	input::placeholder {
-		/* Chrome, Firefox, Opera, Safari 10.1+ */
-		color: #434343; /* Firefox */
-	}
-
 	.logdet {
-		text-align: left;
+		text-align: center;
 		font-size: 30px;
-		margin: 20px 0;
+		margin-top: 60px;
+		margin-bottom: 30px;
 		font-weight: bold;
 		letter-spacing: 1px;
 	}
-	#btn {
-		border-radius: 5px;
-		height: 48px;
-	}
-	button {
-		margin: 0 10px;
+	.cardtext {
+        font-size: 16px;
+		color: rgb(99, 99, 99);
 	}
 
-	.btn:hover {
-		color: white;
-		box-shadow: 0 0 3px #a43fdd !important;
+	.cardanswer{
+		font-size: 18px;
+
 	}
 
-	.foot {
-		text-align: center;
-		margin-top: 30px;
-		letter-spacing: 0.6px;
-		font-size: 15px;
-		font-weight: 500;
+	.noreport{
+		color: rgb(57, 57, 57);
+		font-size: 25px;
+		margin-bottom: 10px;
 	}
 
-	.btn {
-		color: white;
-		background-color: #a43fdd;
-		font-size: 15px;
-		font-weight: 500;
-	}
-	.btn-block + .btn-block {
-		margin-top: 0;
+	.report-text{
+		color: rgb(57, 57, 57);
+		font-size: 16px;
+		font-weight: 400;
 	}
 
-	.fit-image {
-		width: 95%;
-		object-fit: cover;
-		height: auto; /* only if you want fixed height */
-	}
+	.hire-mech{
+        width: 200px;
+        border: none;
+        padding: 12px 8px;
+        margin: 20px 0;
+        border-radius:8px;
+        background-color:  #A43FDD;
+        color: #fff;
+        font-size: 1.2rem;
+      }
 
 	body {
 		background-color: #fff;
 	}
 
 	@media (max-width: 990px) {
-		form {
-			margin-top: 50px;
-		}
+		
 	}
 
 	@media (max-width: 500px) {
-		.form-control {
-			width: 270px;
-			height: 35px;
-			background-color: #ffffff;
-			font-size: 12px;
-			font-weight: 500;
-			color: #737999;
-		}
-
-		input[type="radio"] {
-			margin: 7px -12px;
-		}
-
-		#btn {
-			height: 40px;
-		}
-
-		.form-control:focus {
-			font-size: 12px;
-			font-weight: 500;
-			color: #737999;
-		}
-
 		.logdet {
-			font-size: 25px;
+			font-size: 22px;
 		}
 
-		form {
-			margin-top: 50px;
+		
+		.report-text{
+			color: rgb(57, 57, 57);
+			font-size: 14px;
+			font-weight: 400;
 		}
-	}
 
-	button:focus {
-		outline: 0 !important;
+		  
+        .hire-mech{
+			width: 150px;
+			border: none;
+			padding: 8px 4px;
+			margin: 20px 0;
+			border-radius:8px;
+			background-color:  #A43FDD;
+			color: #fff;
+			font-size: 1.2rem;
+		  }
+		
+		  .noreport{
+			  font-size: 20px;
+		  }
 	}
 </style>
 
 {% endblock %} {% block content %}
-<div class="wrapper mt-4">
-	<div class="container-fluid p-0">
-		<div class="logdet">Your Past Interviews</div>
-		<div class="col-lg-12 p-0">
-			<div class="row m-0 justify-content-center">
-				{% for interview in interviews %}
-				<div class="card" style="width: 18rem">
-					<div class="card-body">
-						<h5 class="card-title">Start Time - {{interview.interview_start_time}}</h5>
-						<h6 class="card-subtitle mb-2 text-muted">Experience Level - {{interview.choice}}</h6>
-						<h6 class="card-subtitle mb-2 text-muted">Interview Duration - {{interview.duration}} minutes</h6>
-						<!-- Put the Inidividual Reports' Link Here for Viewing Full Report -->
-						<a href="#" class="card-link">View Full Report</a>
-					</div>
-				</div>
-				{% endfor %}
-			</div>
-		</div>
+	<div class="container p-2">
+		        
+					<div class="logdet">Your Past Interviews</div>
+					    <div class="card-deck">
+							{% for interview in interviews %}
+									<div class="card mb-4" style="min-width: 16rem; max-width:18rem">
+										<div class="card-header text-white " style="background-color: #A43FDD; font-weight:600;font-size: 20px">{{interview.interview_start_time}}</div>
+										<div class="card-body">
+											<h6 class="card-subtitle mb-3"><span class="cardtext">Experience Level -</span> <span style="text-transform: capitalize;" class="cardanswer">{{interview.choice}}</span></h6>
+											<h6 class="card-subtitle"><span class="cardtext">Interview Duration -</span> <span class="cardanswer">{{interview.duration}} mins</span></h6>
+										</div>
+										<div class="card-footer bg-transparent "><a href="{% url 'interview:full_report' interview.id %}" class="card-link">View Full Report</a></div>
+									</div>
+							{% empty %}
+								<div class="container-fluid p-0">
+									<div class="row">
+										<div class="col-lg-12">
+											<img src="{% static 'images/nodata.png' %}" width="55%" class="img-responsive center-block d-block mx-auto"><br>
+											<h2 class="text-center noreport">No Reports Found</h2>
+											<h4 class="text-center report-text">To see your reports , please take an interview.</h4>
+											<div class="link-button text-center">
+												<a href="/choice/"><button class="hire-mech">Take Interview</button></a>
+											</div>
+										</div>
+								
+								    </div>
+								</div>
+							{% endfor %}
+						 </div>
 	</div>
-</div>
+
+
+
 {% endblock %}
