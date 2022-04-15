@@ -24,7 +24,7 @@ import nltk
 # from nltk.corpus import stopwords
 nltk.download('stopwords')
 from nltk.tokenize import word_tokenize 
-# nltk.download('punkt')
+nltk.download('punkt')
 # nltk.download()
 from nltk.corpus import wordnet
 from nltk.tokenize import sent_tokenize, word_tokenize
