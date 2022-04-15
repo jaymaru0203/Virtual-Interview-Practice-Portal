@@ -1,0 +1,139 @@
+{% extends "base.html" %} {% load static %} {% block title %}Interview{% endblock %} {% block head_content %}
+
+<style type="text/css">
+	.main-screen {
+		padding: 0 15%;
+	}
+
+	#interview-page {
+		color: #fff;
+		font-size: 16px;
+		font-weight: 600;
+	}
+
+	.screen1 {
+		padding: 100px;
+		background-color: #fff;
+	}
+
+	.main-text {
+		font-size: 1.5rem;
+		font-weight: 500;
+		line-height: normal;
+		margin-bottom: 20px;
+	}
+
+	.sub-text {
+		font-size: 1rem;
+		font-weight: 400;
+		line-height: normal;
+		margin-bottom: 20px;
+		text-align: justify;
+		border-left: #a43fdd 8px solid;
+		padding-left: 15px;
+	}
+
+	.center {
+		text-align: center;
+	}
+
+	.d {
+		text-align: center;
+		border: #a43fdd 2px solid;
+		margin-bottom: 20px;
+		padding: 20px;
+	}
+
+	.card-link {
+		color: inherit;
+	}
+
+	.answerbox{
+		background-color: #fff;
+		padding: 15px 30px;
+		border: 1px solid rgb(233, 233, 233);
+	}
+	.answerresponse{
+		font-size: 20px;
+		font-weight: 600;
+		color: rgb(37, 36, 36);
+		display: inline-block;
+		margin-bottom: 5px;
+	}
+
+	@media (max-width: 990px) {
+		.main-screen {
+			padding: 0 8%;
+		}
+		.screen1 {
+			padding: 50px;
+			background-color: #fff;
+		}
+		
+	}
+
+	@media (max-width: 780px) {
+		.main-screen {
+			padding: 0 2%;
+		}
+		.screen1 {
+			padding-top :50px;
+			background-color: #fff;
+		}
+	}
+
+</style>
+{% endblock %} {% block content %}
+
+<div class="container-fluid screen1">
+	<div class="col-lg-12 col-md-12 p-0 align-self-center" data-aos="fade-right">
+		<div class="row m-0 justify-content-center">
+			<div class="main-screen">
+				<div class="main-text text-center">Here is the report of your interview!</div>
+				<div class="d">
+					<strong>
+						Start date and time of your interview is {{details.start}} <br />
+						The duration of your interview is {{details.duration}} minutes.
+					</strong>
+				</div>
+
+				<div id="accordion">
+					{% for ans in answers %}
+					<div class="card mb-3">
+						<div class="card-header bg-transparent">
+							<a class="collapsed card-link" data-toggle="collapse" href="#answer{{ans.question_no}}">
+									<h5 class="card-title">Question {{ans.question_no}}</h5>
+									<p class="card-text">{{ans.question}}</p>
+								
+							</a>
+						</div>
+
+						<div id="answer{{ans.question_no}}" class="collapse" data-parent="#accordion">
+							<div class="card-body p-3" style="background-color: rgb(243, 243, 243);">
+								<div class="col-12 p-0">
+									<div class="row m-0 justify-content-center">
+										<div class="col-lg-4 col-md-4 answerbox"><span class="answerresponse"><img src="{% static 'images/happy.png' %}" width="20px"> Correct Answer</span> <br>{{ans.correct_answer}}</div>
+										<div class="col-lg-4 col-md-4  answerbox"><span class="answerresponse"><img src="{% static 'images/neutral.png' %}" width="20px"> Analysis</span><br> {{ ans.analysis }}</div>
+										<div class="col-lg-4 col-md-4  answerbox"><span class="answerresponse">
+											<img src="{% static 'images/sad.png' %}" width="20px"> Remark</span>	<br>
+											{% if ans.correction_frequency == 1 %}
+											Your answer has {{ans.correction_frequency}} mistake.
+											{% elif ans.correction_frequency == 0 %}
+											Well Done! Your answer is perfect. 
+											{% else %}
+											Your answer has {{ans.correction_frequency}} mistakes. 
+											{% endif %}</div>
+										
+								    </div>
+						        </div>
+						    </div>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

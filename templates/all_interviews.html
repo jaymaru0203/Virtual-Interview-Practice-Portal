@@ -1,0 +1,121 @@
+{% extends "base.html" %} {% load static %} {% block title %}Your Past Interviews{% endblock %} {% block head_content %}
+
+<style type="text/css">
+
+	.main-screen {
+		padding: 0 15%;
+	}
+	.logdet {
+		text-align: center;
+		font-size: 30px;
+		margin-top: 60px;
+		margin-bottom: 30px;
+		font-weight: bold;
+		letter-spacing: 1px;
+	}
+	.cardtext {
+        font-size: 16px;
+		color: rgb(99, 99, 99);
+	}
+
+	.cardanswer{
+		font-size: 18px;
+
+	}
+
+	.noreport{
+		color: rgb(57, 57, 57);
+		font-size: 25px;
+		margin-bottom: 10px;
+	}
+
+	.report-text{
+		color: rgb(57, 57, 57);
+		font-size: 16px;
+		font-weight: 400;
+	}
+
+	.hire-mech{
+        width: 200px;
+        border: none;
+        padding: 12px 8px;
+        margin: 20px 0;
+        border-radius:8px;
+        background-color:  #A43FDD;
+        color: #fff;
+        font-size: 1.2rem;
+      }
+
+	body {
+		background-color: #fff;
+	}
+
+	@media (max-width: 990px) {
+		
+	}
+
+	@media (max-width: 500px) {
+		.logdet {
+			font-size: 22px;
+		}
+
+		
+		.report-text{
+			color: rgb(57, 57, 57);
+			font-size: 14px;
+			font-weight: 400;
+		}
+
+		  
+        .hire-mech{
+			width: 150px;
+			border: none;
+			padding: 8px 4px;
+			margin: 20px 0;
+			border-radius:8px;
+			background-color:  #A43FDD;
+			color: #fff;
+			font-size: 1.2rem;
+		  }
+		
+		  .noreport{
+			  font-size: 20px;
+		  }
+	}
+</style>
+
+{% endblock %} {% block content %}
+	<div class="container p-2">
+		        
+					<div class="logdet">Your Past Interviews</div>
+					    <div class="card-deck">
+							{% for interview in interviews %}
+									<div class="card mb-4" style="min-width: 16rem; max-width:18rem">
+										<div class="card-header text-white " style="background-color: #A43FDD; font-weight:600;font-size: 20px">{{interview.interview_start_time}}</div>
+										<div class="card-body">
+											<h6 class="card-subtitle mb-3"><span class="cardtext">Experience Level -</span> <span style="text-transform: capitalize;" class="cardanswer">{{interview.choice}}</span></h6>
+											<h6 class="card-subtitle"><span class="cardtext">Interview Duration -</span> <span class="cardanswer">{{interview.duration}} mins</span></h6>
+										</div>
+										<div class="card-footer bg-transparent "><a href="{% url 'interview:full_report' interview.id %}" class="card-link">View Full Report</a></div>
+									</div>
+							{% empty %}
+								<div class="container-fluid p-0">
+									<div class="row">
+										<div class="col-lg-12">
+											<img src="{% static 'images/nodata.png' %}" width="55%" class="img-responsive center-block d-block mx-auto"><br>
+											<h2 class="text-center noreport">No Reports Found</h2>
+											<h4 class="text-center report-text">To see your reports , please take an interview.</h4>
+											<div class="link-button text-center">
+												<a href="/choice/"><button class="hire-mech">Take Interview</button></a>
+											</div>
+										</div>
+								
+								    </div>
+								</div>
+							{% endfor %}
+						 </div>
+	</div>
+
+
+
+{% endblock %}

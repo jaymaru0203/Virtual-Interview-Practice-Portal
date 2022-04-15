@@ -186,12 +186,11 @@
 
                   {% if messages %}
                   {% for message in messages %}
-                      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                          <h6>{{ message }}
+                  <div {% if message.tags == "error" %} class="alert alert-danger alert-dismissible fade show" {% else %} class="alert alert-success alert-dismissible fade show" {% endif %}  role="alert">
+                          {{ message }}
                           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
-                          </button>
-                          </h6>
+                          </button>  
                       </div>
                   {% endfor %}
                 {% endif %}
