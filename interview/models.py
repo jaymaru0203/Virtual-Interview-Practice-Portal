@@ -72,3 +72,4 @@ class InterviewDetail(models.Model):
     stopWords_frequency = models.FloatField()
     correction_frequency = models.IntegerField()
     nature = models.TextField()
+    confidence_percent = models.IntegerField()

@@ -44,11 +44,25 @@ import requests
 import cloudscraper
 from textblob import TextBlob
 
+import zipfile
+
+# for video processing
+import tensorflow
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from keras.models import model_from_json
+import cv2
+import glob
+import numpy as np
+
+# video processing ends here
+
+
 # end
 
 URL = "https://services.gingersoftware.com/Ginger/correct/jsonSecured/GingerTheTextFull"  # noqa
 API_KEY = "6ae0c3a0-afdc-4532-a810-82ded0054236"
-
+MODEL = ''
 
 class GingerIt(object):
     def __init__(self):
@@ -107,6 +121,7 @@ def dashboard(request):
 
 
 def instructions(request, choice):
+    
     if not request.user.is_authenticated:
         return redirect("/")
 
@@ -118,6 +133,18 @@ def instructions(request, choice):
 
     if choice == "experienced" or choice == "fresher":
         request.session["choice"] = choice
+
+        # load json and create model
+        json_file = open('model.json', 'r')
+        loaded_model_json = json_file.read()
+        json_file.close()
+        loaded_model = model_from_json(loaded_model_json)
+        # load weights into new model
+        loaded_model.load_weights("model_weights_new.h5")
+        print("Loaded model from disk")
+        global MODEL
+        MODEL = loaded_model
+
         return render(request, "instructions.html")
     else:
         return redirect("/choice/")
@@ -161,20 +188,29 @@ def interview(request):
     if request.method == "POST":
         baseDir = settings.BASE_DIR
         user = request.user.email
+
+        # to load datset
+        
+        # zip_dataset_path = path = os.path.join(baseDir, "confident_unconfident_dataset.zip")
+        # dataset_path = path = os.path.join(baseDir, "dataset\\")
+        # with zipfile.ZipFile(zip_dataset_path, 'r') as zip_ref:
+        #     zip_ref.extractall(dataset_path)
+        
         try:
             path = os.path.join(baseDir, "interview_data\\interview_recordings\\")
 
             # filename = user[0: user.index('@')] + "_" + request.session["interview_id"] + "_" + request.POST['qs']
             filename = user[0 : user.index("@")] + "_" + request.POST["qs"]
             extension = ".webm"
-
             question_text = request.POST["question"]
             qs = request.POST["qs"]
-
+            # print("fecev ",request.FILES["blob"].chunks()[0])  
             with open(path + filename + extension, "wb+") as destination:
+              
                 for chunk in request.FILES["blob"].chunks():
+                    # print("chunk",chunk)
                     destination.write(chunk)
-
+                    
             i = rf"{baseDir}\interview_data\interview_recordings\{filename}.webm"
             o = rf"{baseDir}\interview_data\interview_audios\{filename}.wav"
             bitrate = 3000
@@ -205,11 +241,11 @@ def interview(request):
             print("Result " + result)
 
             # adding punctuations
-            # data = {"text": result}
-            # url = "http://bark.phon.ioc.ee/punctuator"
-            # response = requests.post(url, data)
-            # print("PUNCTT  ", response.text)
-            # punct_result = response.text
+            data = {"text": result}
+            url = "http://bark.phon.ioc.ee/punctuator"
+            response = requests.post(url, data)
+            print("PUNCTT  ", response.text)
+            punct_result = response.text
 
             # p = Punctuator("")
             # print("PUnchhhh   " + Punctuator.punctuate("I love dance I love some text"))
@@ -222,7 +258,7 @@ def interview(request):
             # print("GTRKGRT")
             # text = 'The smelt of fliwers bring back memories.'
             # correct_result  = parser.parse(text)
-            correct_result = GingerIt().parse(result)
+            correct_result = GingerIt().parse(punct_result)
             cfreq = len(correct_result["corrections"])
 
             # stop words frequency
@@ -247,7 +283,7 @@ def interview(request):
             print("analysis 2 " + analysis)
 
             word = "no"
-            if request.POST["qs"] == "1" and word in result:
+            if request.POST["qs"] == "7" and word in result:
                 analysis += "Try asking atleast 1 or 2 questions to the interviewer. "
 
             print("analysis 3 " + analysis)
@@ -270,6 +306,121 @@ def interview(request):
                 nature_polarity = "positive"
 
             print(nature_polarity)
+            
+            # started video processing 
+
+            # img_size = 48
+            # batch_size = 32
+
+            # datagen_validation = ImageDataGenerator(horizontal_flip=True)
+
+            # test_data_path = os.path.join(baseDir, "dataset\\confident-unconfident\\test\\")
+
+            # valid_generator = datagen_validation.flow_from_directory(test_data_path,
+            #                                         target_size=(img_size,img_size),
+            #                                         color_mode="grayscale",
+            #                                         batch_size=batch_size,
+            #                                         class_mode='binary',
+            #                                         shuffle=False)
+            # STEP_SIZE_VALID=valid_generator.n//valid_generator.batch_size
+
+             
+            # # load json and create model
+            # json_file = open('model.json', 'r')
+            # loaded_model_json = json_file.read()
+            # json_file.close()
+            # loaded_model = model_from_json(loaded_model_json)
+            # # load weights into new model
+            # loaded_model.load_weights("model_weights_new.h5")
+            # print("Loaded model from disk")
+            
+            # evaluate loaded model on test data
+            # loaded_model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+            # x = loaded_model.evaluate_generator(generator=valid_generator,steps=STEP_SIZE_VALID)
+            # print(x)
+
+            # to convert video to images
+            
+            # path_output_dir = os.path.join(baseDir, "interview_data\\video_images\\")
+            # vidcap = cv2.VideoCapture(i)
+            # count = 0
+            # li = []
+            # while vidcap.isOpened():
+            #     success, im = vidcap.read()
+            #     if success:
+            #         # cv2.imwrite(os.path.join(path_output_dir, '%d.png') % count, imagee)
+            #         gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+            #         gray = np.array(gray, dtype='uint8')
+            #         faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+            #         faces = faceCascade.detectMultiScale(gray,scaleFactor=1.3,minNeighbors=3,minSize=(30, 30))
+            #         if(len(faces) != 0):
+            #             for (x, y, w, h) in faces:
+            #                 cv2.rectangle(im, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            #                 roi_color = im[y:y + h, x:x + w]
+            #                 cv2.imwrite(os.path.join(path_output_dir, '%d.png') % count, roi_color)
+            #                 pathw = path_output_dir + str(count) + '.png'
+            #                 my_image = image.load_img(pathw,target_size=(48,48),color_mode="grayscale")
+            #                 my_img_arr = image.img_to_array(my_image)
+            #                 p = MODEL.predict(my_img_arr.reshape(1,48,48))
+            #                 li.append(p[0][0])
+            #                 os.remove(pathw)
+            #                 count += 1
+            #         else:
+            #             break
+            # cv2.destroyAllWindows()
+            # vidcap.release()
+            # print(len(li))
+            # print("confidence percent ",sum(li)/len(li))
+
+            # image_list = []
+
+            # video_images_dir = os.path.join(path_output_dir, "*.png")
+
+            # for filename in glob.glob(video_images_dir):
+            #     image_list.append(filename)
+            # # print("image list ", image_list)
+            # print("image list ready")
+
+
+            # count = 0
+            # cropped_images_output_dir = os.path.join(baseDir, "interview_data\\cropped_images\\")
+
+            # for img in image_list:
+            #     im = cv2.imread(img)
+            #     gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+            #     gray = np.array(gray, dtype='uint8')
+            #     faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+            #     faces = faceCascade.detectMultiScale(gray,scaleFactor=1.3,minNeighbors=3,minSize=(30, 30))
+            #     # print("[INFO] Found {0} Faces!".format(len(faces)))
+  
+            #     if(len(faces) != 0):
+            #         for (x, y, w, h) in faces:
+            #             cv2.rectangle(im, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            #             roi_color = im[y:y + h, x:x + w]
+            #             cv2.imwrite(os.path.join(cropped_images_output_dir, '%d.png') % count, roi_color)
+            #             count += 1
+
+            # cropped_image_list = []
+            # cropped_images_dir = os.path.join(cropped_images_output_dir, "*.png")
+
+            # for filename in glob.glob(cropped_images_dir):
+            #     cropped_image_list.append(filename)
+            # # print("cropped image list ", cropped_image_list)
+            # print("cropped image list ready")
+
+            # li=[]
+            # for img in cropped_image_list:
+            #     my_image = image.load_img(img,target_size=(48,48),color_mode="grayscale")
+            #     my_img_arr = image.img_to_array(my_image)
+            #     p = MODEL.predict(my_img_arr.reshape(1,48,48))
+            #     li.append(p[0][0])
+            # print("li ", li)
+            # sum=0
+            # for i in li:
+            #   sum += i
+            # print("confidence % ",sum/len(li))
+
+            # video processing ends here
 
             interview_answer = InterviewDetail()
             interview_answer.interview_id = Interview.objects.filter(
@@ -277,13 +428,14 @@ def interview(request):
             ).first()
             interview_answer.question_no = int(qs)
             interview_answer.question = str(question_text)
-            # interview_answer.answer = str(punct_result)
-            interview_answer.answer = str(result)
+            interview_answer.answer = str(punct_result)
+            # interview_answer.answer = str(result)
             interview_answer.correct_answer = str(correct_result["result"])
             interview_answer.analysis = str(analysis)
             interview_answer.stopWords_frequency = int(stopWords_freq)
             interview_answer.correction_frequency = int(cfreq)
             interview_answer.nature = str(nature_polarity)
+            interview_answer.confidence_percent = 0
             interview_answer.save()
 
             # exporting the result
@@ -293,15 +445,15 @@ def interview(request):
             #     file.write(result)
             #     print("ready!")
 
-            if os.path.exists(i):
-                os.remove(i)
-            else:
-                print("The file does not exist")
+            # if os.path.exists(i):
+            #     os.remove(i)
+            # else:
+            #     print("The i file does not exist")
 
             if os.path.exists(o):
                 os.remove(o)
             else:
-                print("The file does not exist")
+                print("The o file does not exist")
 
             # n = nltk.tokenize.punkt.PunktSentenceTokenizer()
             # n.sentences_from_text(result)
@@ -526,10 +678,64 @@ def interview(request):
 
 
 def interview_success(request):
+    
     if not request.user.is_authenticated:
         return redirect("/")
     if not "interview_id" in request.session:
         return redirect("/")
+
+    #video processing 
+    baseDir = settings.BASE_DIR
+    video_dir = os.path.join(baseDir, "interview_data\\interview_recordings\\")
+    video_images_dir = os.path.join(video_dir, "*.webm")
+    path_output_dir = os.path.join(baseDir, "interview_data\\video_images\\")   
+    video_list = []
+    for filename in glob.glob(video_images_dir):
+        video_list.append(filename)
+
+    qs = 1
+    for filename in video_list:
+        vidcap = cv2.VideoCapture(filename)
+        count = 0
+        li = []
+        while vidcap.isOpened():
+            success, im = vidcap.read()
+            if success:
+                gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+                gray = np.array(gray, dtype='uint8')
+                faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+                faces = faceCascade.detectMultiScale(gray,scaleFactor=1.3,minNeighbors=3,minSize=(30, 30))
+                if(len(faces) == 1):
+                    for (x, y, w, h) in faces:
+                        cv2.rectangle(im, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                        roi_color = im[y:y + h, x:x + w]
+                        cv2.imwrite(os.path.join(path_output_dir, '%d.png') % count, roi_color)
+                        pathw = path_output_dir + str(count) + '.png'
+                        my_image = image.load_img(pathw,target_size=(48,48),color_mode="grayscale")
+                        my_img_arr = image.img_to_array(my_image)
+                        p = MODEL.predict(my_img_arr.reshape(1,48,48))
+                        li.append(p[0][0])
+                        os.remove(pathw)
+                        count += 1
+                else:
+                    break
+            else:
+                break
+        cv2.destroyAllWindows()
+        vidcap.release()
+        print(len(li))
+        if(len(li) != 0):
+            confidence_percent = sum(li)/len(li)
+            print("confidence percent ",confidence_percent)
+            id = Interview.objects.filter(
+                id=request.session["interview_id"]
+            ).first()
+            InterviewDetail.objects.filter(interview_id=id, question_no = qs).update(confidence_percent=round(confidence_percent*100))
+            qs += 1
+        os.remove(filename)
+
+    #video processing ends here
+
     interview_stop_time = datetime.now()
     interviewstart = (
         Interview.objects.filter(id=request.session["interview_id"])
