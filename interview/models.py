@@ -60,6 +60,8 @@ class Interview(models.Model):
     interview_start_time = models.CharField(max_length=50, null=False)
     choice = models.CharField(max_length=20, choices=INTERVIEW_CHOICE)
     duration = models.IntegerField(blank=True, null=True)
+    avg_confidence = models.IntegerField(blank=True,null=True)
+    avg_mistakes = models.IntegerField(blank=True,null=True)
 
 
 class InterviewDetail(models.Model):

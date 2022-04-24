@@ -1,4 +1,5 @@
 from django.core.exceptions import SuspiciousFileOperation
+from django.db.models import Avg
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from .models import *
@@ -744,18 +745,24 @@ def interview_success(request):
     )
     date_object = datetime.strptime(interviewstart, "%b %d, %Y - %H:%M")
     duration = (interview_stop_time - date_object).total_seconds() / 60
-    date_update = Interview.objects.filter(id=request.session["interview_id"]).first()
-    date_update.duration = duration
-    date_update.save()
+    interview_update = Interview.objects.filter(id=request.session["interview_id"]).first()
+    interview_update.duration = duration
+    
     eid = Interview.objects.filter(id=request.session["interview_id"]).first()
     answers = InterviewDetail.objects.filter(interview_id=eid).order_by("question_no")
-    details = {"start": eid.interview_start_time, "duration": eid.duration}
 
+    avg_confidence = int(InterviewDetail.objects.filter(interview_id=eid).aggregate(Avg("confidence_percent"))['confidence_percent__avg'])
+    avg_mistakes = int(InterviewDetail.objects.filter(interview_id=eid).aggregate(Avg("correction_frequency"))['correction_frequency__avg'])
+    interview_update.avg_confidence = avg_confidence
+    interview_update.avg_mistakes = avg_mistakes
+    interview_update.save()
+
+    details = {"start": eid.interview_start_time, "duration": eid.duration ,"avg_confidence" : avg_confidence, "avg_mistakes" : avg_mistakes}
     del request.session["interview_id"]
     del request.session["choice"]
 
     return render(
-        request, "interview_success.html", {"answers": answers, "details": details}
+        request, "full_report.html", {"answers": answers, "details": details,}
     )
 
 
@@ -769,7 +776,7 @@ def all_interviews(request):
         messages.error(request, "Interview Terminated Unexpectedly!")
         return redirect("/")
     interviews = Interview.objects.filter(user=request.user).order_by(
-        "-interview_start_time"
+        "interview_start_time"
     )
     return render(request, "all_interviews.html", {"interviews": interviews})
 
@@ -792,7 +799,7 @@ def full_report(request,n):
     eid = Interview.objects.filter(id=n).first()
     if eid.user == request.user:
         answers = InterviewDetail.objects.filter(interview_id=eid).order_by("question_no")
-        details = {"start": eid.interview_start_time, "duration": eid.duration}
+        details = {"start": eid.interview_start_time, "duration": eid.duration, "avg_confidence": eid.avg_confidence, "avg_mistakes": eid.avg_mistakes}
         return render(request, "full_report.html", {"answers": answers,"details": details})
     else:
         return render(request, "pagenotfound.html")
