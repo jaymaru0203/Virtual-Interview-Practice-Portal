@@ -1,175 +1,293 @@
-{% extends "base.html" %}
-{% load static %}
-{% block title %}Interview{% endblock %}
-{% block head_content %}
+{% extends "base.html" %} {% load static %} {% block title %}Interview{% endblock %} {% block head_content %}
 
-    <style type="text/css">
-        #video{
-            width: 75%;
-            height: 300px;
-            margin: 10px auto;
-            object-fit: cover;
-        }
+<style type="text/css">
+	#video {
+		width: 90%;
+		height: 250px;
+		margin: 10px auto;
+		object-fit: cover;
+	}
 
-        #interview-page{
-          color: #fff;
-          font-size: 16px;
-          font-weight: 600;
-        }
+	#interview-page {
+		color: #fff;
+		font-size: 16px;
+		font-weight: 600;
+	}
 
-        .main-screen{
-            padding: 0 15%;
-          }
-          .screen-1{
-            padding: 100px  20px  50px;
-            background-color: #fff;
-          }
-                    
-          .main-text{
-            font-size: 3rem;
-            font-weight: 700;
-            line-height: normal;
-            margin-bottom: 20px;
-          }
-    
-    
-          .sub-text{
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: normal;
-            margin-bottom: 20px;
-            text-align: justify;
-            border-left: #A43FDD 8px solid;
-            padding-left: 15px;
-          }
-    
-          .hire-mech{
-            width: 200px;
-            border: none;
-            padding: 12px 8px;
-            margin: 20px 0;
-            border-radius:8px;
-            background-color:  #A43FDD;
-            color: #fff;
-            font-size: 1.2rem;
-          }
+	.main-screen {
+		padding: 0 8%;
+	}
+	.screen-1 {
+		padding: 100px 20px 50px;
+		background-color: #fff;
+	}
 
-    
-          @media screen and (max-width: 670px ){
-            .main-screen{
-              padding: 0 80px;
-            }
-          }
-          @media screen and (max-width: 500px ){
-            .main-screen{
-              padding: 0 40px;
-            }
-            .main-text{
-              font-size: 2.5rem;
-              font-weight: 700;
-              line-height: normal;
-              margin-bottom: 20px;
-            }
-      
-      
-            .sub-text{
-              font-size: 0.9rem;
-              font-weight: 400;
-              line-height: normal;
-              margin-bottom: 20px;
-              text-align: justify;
-              border-left: #A43FDD 8px solid;
-              padding-left: 15px;
-            }
-      
-            .hire-mech{
-              width: 150px;
-              border: none;
-              padding: 8px 4px;
-              margin: 20px 0;
-              border-radius:8px;
-              background-color:  #A43FDD;
-              color: #fff;
-              font-size: 1.2rem;
-            }
-            #video{
-                width: 75%;
-                height: 250px;
-                margin: 10px auto;
-                object-fit: cover;
-            }
-    
+	.main-text {
+		font-size: 3rem;
+		font-weight: 700;
+		line-height: normal;
+		margin-bottom: 20px;
+	}
 
-    
-          }
-    </style>
-{% endblock %}
+	.sub-text {
+		font-size: 1rem;
+		font-weight: 400;
+		line-height: normal;
+		margin-bottom: 20px;
+		text-align: justify;
+		border-left: #a43fdd 8px solid;
+		padding-left: 15px;
+	}
 
-{% block content %} 
+	.hire-mech {
+		width: 200px;
+		border: none;
+		padding: 12px 8px;
+		margin: 20px 0;
+		border-radius: 8px;
+		background-color: #a43fdd;
+		color: #fff;
+		font-size: 1.2rem;
+	}
+
+	#mic-button {
+		background-color: #a43fdd;
+	}
+
+	main {
+		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	main > div {
+		display: inline-block;
+		width: 3px;
+		height: 100px;
+		margin: 0 7px;
+		background: #444;
+		transform: scaleY(0.5);
+		opacity: 0.25;
+	}
+
+	main .error {
+		color: #f7451d;
+		min-width: 20em;
+		max-width: 30em;
+		margin: 0 auto;
+		white-space: pre-line;
+	}
+
+	@media screen and (max-width: 670px) {
+		.main-screen {
+			padding: 0 80px;
+		}
+	}
+	@media screen and (max-width: 500px) {
+		.main-screen {
+			padding: 0 40px;
+		}
+		.main-text {
+			font-size: 2.5rem;
+			font-weight: 700;
+			line-height: normal;
+			margin-bottom: 20px;
+		}
+
+		.sub-text {
+			font-size: 0.9rem;
+			font-weight: 400;
+			line-height: normal;
+			margin-bottom: 20px;
+			text-align: justify;
+			border-left: #a43fdd 8px solid;
+			padding-left: 15px;
+		}
+
+		.hire-mech {
+			width: 150px;
+			border: none;
+			padding: 8px 4px;
+			margin: 20px 0;
+			border-radius: 8px;
+			background-color: #a43fdd;
+			color: #fff;
+			font-size: 1.2rem;
+		}
+		#video {
+			width: 75%;
+			height: 250px;
+			margin: 10px auto;
+			object-fit: cover;
+		}
+	}
+</style>
+{% endblock %} {% block content %}
 
 <div class="container-fluid screen-1">
-    <div class="row m-0">
-        <div class="col-lg-6 col-md-6 p-0 align-self-center" data-aos="fade-right">
-          <div class="row m-0 justify-content-center">
-            <div class="main-screen">
-                <div class="main-text">Welcome to Your Virtual Interview</div>
-                <div class="sub-text">Check Your Audio as Well As Video on this page and Be Ready for your Virtual Interview</div>
-                <div class="sub-text">Your interview starts where there will be no pauses in between to ensure a real interview like experience</div>
-                <div class="sub-text">Clicking on the Start Interview Button will start your interview with our virtual interviewer Asking you your first question.</div>
-                <div class="sub-text">As the question ends, recording of your answer will start automatically and the same will be prompted on your screen.</div>
-                <div class="sub-text">Speak your answer in the microphone and click on the button for the next question to start and the cycle goes on.</div>
-                <div class="sub-text">Exiting the Interview in between in any manner will result in complete deletion of the current Interview</div>
-                <div class="sub-text">Experience Level: <b class="text-capitalize">{{request.session.choice}}</b></div>
-            </div>
-           </div>
-        </div>
-          <div class="col-lg-6 col-md-6 p-0 align-middle mt-auto mb-auto text-center" data-aos="fade-left"> 
-             <video muted id="video"></video><br>
-              <div class="link-button">
-                <a href="/interview/"><button class="hire-mech">Start Interview</button></a>
-              </div>
-              <h6>Pro Tip - For a more realistic experience, press <b>F11</b> key on your keyboard</h6>
-          </div>
-      </div>
+	<div class="row m-0">
+		<div class="col-lg-8 col-md-8 p-0 align-self-center" data-aos="fade-right">
+			<div class="row m-0 justify-content-center">
+				<div class="main-screen">
+					<div class="main-text">Welcome to Your Virtual Interview</div>
+
+					<div class="sub-text">Check Your Audio as Well As Video on this page and Be Ready for your Virtual Interview!</div>
+					<div class="sub-text">
+						Clicking on the Start Interview Button will take you to the Interview, where you can start the interview Anytime you want. Once the
+						interview starts, there will be no Pauses to keep your Experience Real Like.
+					</div>
+					<div class="sub-text">
+						As a question ends, recording of your answer will start automatically after 3 seconds and the same will be prompted on your screen.
+						Speak your answer in the microphone and click on the button for the next question to start and the cycle goes on.
+					</div>
+					<div class="sub-text">
+						Exiting the Interview in between in any manner will result in complete deletion of the current Interview. Please do not refresh or
+						leave the page mid interview.
+					</div>
+
+					<div class="sub-text mb-0">Experience Level: <b class="text-capitalize">{{request.session.choice}}</b></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-4 p-0 align-middle mt-auto mb-auto text-center" data-aos="fade-left">
+			<video muted id="video"></video><br />
+			<main>
+				<button onclick="init()" id="mic-button" class="btn btn-sm btn-secondary">Check Mic</button>
+			</main>
+		</div>
+	</div>
+	<div class="mx-auto text-center">
+		<div class="link-button">
+			<a href="/interview/"><button class="hire-mech">Start Interview</button></a>
+		</div>
+
+		<h6>Pro Tip - For a more realistic experience, press <b>F11</b> key on your keyboard</h6>
+	</div>
 </div>
-    <script type="text/javascript">  
+<script type="text/javascript">
+	window.onload = function () {
+		let checking = ["audioinput", "videoinput"];
+		let onlyHas = [];
+		navigator.mediaDevices
+			.enumerateDevices()
+			.then((devices) => {
+				let haveAllDevices = true;
+				devices.forEach((device) => {
+					onlyHas.push(device.kind);
+					if (!(device.kind == checking[0] || device.kind == checking[1])) {
+						haveAllDevices = false;
+					}
+				});
+			})
+			.catch(function (err) {
+				console.log(err.name + ": " + err.message);
+			});
 
-        window.onload = function() {
-            let checking = ["audioinput", "videoinput"];
-            let onlyHas = [];
-            navigator.mediaDevices.enumerateDevices()
-            .then((devices) => {
-                let haveAllDevices = true;
-                devices.forEach((device) => {
-                    onlyHas.push(device.kind);
-                    if (!(device.kind == checking[0] || device.kind == checking[1])) {
-                        haveAllDevices = false;
-                    }
-                });
-                
-            })
-            .catch(function(err) {
-                console.log(err.name + ": " + err.message);
-            });
+		//add constraints object
+		var constraints = { audio: true, video: true };
 
+		//call getUserMedia, then the magic
+		navigator.mediaDevices
+			.getUserMedia(constraints)
+			.then(function (mediaStream) {
+				var video = document.querySelector("video");
+				video.srcObject = mediaStream;
+				video.play();
+			})
+			.catch(function (err) {
+				if (err.name == "NotAllowedError") {
+					console.log("User has denied accessed");
+					window.location.href = "/technical/";
+				}
+			});
+	};
+</script>
 
-            //add constraints object
-            var constraints = { audio: true,
-                                video: true};
-        
-            //call getUserMedia, then the magic
-            navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream){
-                var video = document.querySelector('video');
-                video.srcObject = mediaStream;
-                video.play();
-            }).catch(function(err){
-                if (err.name == "NotAllowedError") {
-                    console.log("User has denied accessed")
-                    window.location.href = "/technical/";
-                 }
-            });
-        
-        }
-    </script>
+<!-- Mic Audio Visualizer JS -->
+<script>
+	class AudioVisualizer {
+		constructor(audioContext, processFrame, processError) {
+			this.audioContext = audioContext;
+			this.processFrame = processFrame;
+			this.connectStream = this.connectStream.bind(this);
+			navigator.mediaDevices
+				.getUserMedia({ audio: true, video: false })
+				.then(this.connectStream)
+				.catch((error) => {
+					if (processError) {
+						processError(error);
+					}
+				});
+		}
+
+		connectStream(stream) {
+			this.analyser = this.audioContext.createAnalyser();
+			const source = this.audioContext.createMediaStreamSource(stream);
+			source.connect(this.analyser);
+			this.analyser.smoothingTimeConstant = 0.5;
+			this.analyser.fftSize = 32;
+
+			this.initRenderLoop(this.analyser);
+		}
+
+		initRenderLoop() {
+			const frequencyData = new Uint8Array(this.analyser.frequencyBinCount);
+			const processFrame = this.processFrame || (() => {});
+
+			const renderFrame = () => {
+				this.analyser.getByteFrequencyData(frequencyData);
+				processFrame(frequencyData);
+
+				requestAnimationFrame(renderFrame);
+			};
+			requestAnimationFrame(renderFrame);
+		}
+	}
+
+	const visualMainElement = document.querySelector("main");
+	const visualValueCount = 16;
+	let visualElements;
+	const createDOMElements = () => {
+		let i;
+		for (i = 0; i < visualValueCount; ++i) {
+			const elm = document.createElement("div");
+			visualMainElement.appendChild(elm);
+		}
+
+		visualElements = document.querySelectorAll("main div");
+	};
+	createDOMElements();
+
+	const init = () => {
+		// Creating initial DOM elements
+		const audioContext = new AudioContext();
+		const initDOM = () => {
+			visualMainElement.innerHTML = "";
+			createDOMElements();
+		};
+		initDOM();
+
+		// Swapping values around for a better visual effect
+		const dataMap = { 0: 15, 1: 10, 2: 8, 3: 9, 4: 6, 5: 5, 6: 2, 7: 1, 8: 0, 9: 4, 10: 3, 11: 7, 12: 11, 13: 12, 14: 13, 15: 14 };
+		const processFrame = (data) => {
+			const values = Object.values(data);
+			let i;
+			for (i = 0; i < visualValueCount; ++i) {
+				const value = values[dataMap[i]] / 255;
+				const elmStyles = visualElements[i].style;
+				elmStyles.transform = `scaleY( ${value} )`;
+				elmStyles.opacity = Math.max(0.25, value);
+			}
+		};
+
+		const processError = () => {
+			visualMainElement.classList.add("error");
+			visualMainElement.innerText =
+				"Please allow access to your microphone in order to see this demo.\nNothing bad is going to happen... hopefully :P";
+		};
+
+		const a = new AudioVisualizer(audioContext, processFrame, processError);
+	};
+</script>
 
 {% endblock %}
