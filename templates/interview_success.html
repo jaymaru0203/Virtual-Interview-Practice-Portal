@@ -94,7 +94,11 @@
 				<div class="d">
 					<strong>
 						Start date and time of your interview is {{details.start}} <br />
-						The duration of your interview is {{details.duration}} minutes.
+						The duration of your interview is  
+						{% if details.duration == "None" %} 0 {% else %} {{details.duration}} {% endif %}
+						{% if details.duration == 1 %} minute {% else %} minutes. {% endif %} <br />
+						Overall confidence is {{confidence}} %.<br/>
+						Average mistake per answer is {{mistakes}}.
 					</strong>
 				</div>
 
@@ -114,9 +118,9 @@
 								<div class="col-12 p-0">
 									<div class="row m-0 justify-content-center">
 										<div class="col-lg-4 col-md-4 answerbox"><span class="answerresponse"><img src="{% static 'images/happy.png' %}" width="20px"> Correct Answer</span> <br>{{ans.correct_answer}}</div>
-										<div class="col-lg-4 col-md-4  answerbox"><span class="answerresponse"><img src="{% static 'images/neutral.png' %}" width="20px"> Analysis</span><br> {{ ans.analysis }}</div>
+										<div class="col-lg-4 col-md-4  answerbox"><span class="answerresponse"><img src="{% static 'images/data-analysis.png' %}" width="20px"> Analysis</span><br> {{ ans.analysis }}</div>
 										<div class="col-lg-4 col-md-4  answerbox"><span class="answerresponse">
-											<img src="{% static 'images/sad.png' %}" width="20px"> Remark</span>	<br>
+											<img src="{% static 'images/results.png' %}" width="20px"> Remark</span>	<br>
 											{% if ans.correction_frequency == 1 %}
 											Your answer has {{ans.correction_frequency}} mistake.
 											{% elif ans.correction_frequency == 0 %}

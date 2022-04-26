@@ -107,11 +107,25 @@
             text-decoration: none;
             color: #000;
         }
+        
+        @media only screen and (orientation:portrait) {
+            #turn { display:block; }
+            #wrapperBlock { display:none; }
+        }
+            @media only screen and (orientation:landscape) {
+            #turn { display:none; }
+            #wrapperBlock { display:block; }
+        }
 
     </style>
 {% endblock %}
 {% block content %}
-  <div class="wrapper">
+
+    <div id="turn">
+        <h1 class="display-1 m-5 text-center">Please Rotate Your Device</h1>
+    </div>
+
+<div class="wrapper" id="wrapperBlock">
       <a href="/" class="cross"><h4> X </h4></a>
     <video name='demo' autoplay="true" id="videoPlayer">
         <source src="../media/questions/{{ request.session.choice }}/{{start}}" type="video/mp4" id="vidSource"/>
@@ -131,7 +145,6 @@
     
 
   </div>
-
 
 
     <script>
@@ -280,14 +293,19 @@
                     }
                 }
                 function redir(){
-                    if (seconds > 0) {
+
+                    videoSource.src = "../static/videos/congratulations.mp4";
+                    player.load();
+                    player.play();
+                    window.location.href = "/interview_success/";
+                    /* if (seconds > 0) {
                         instructions.innerHTML = "Interview Completed Successfully! Redirecting in "+seconds+"..."
                         seconds--;
                         setTimeout(redir, 1000);
                     }
                     else {
                         window.location.href = "/interview_success/";
-                    }
+                    }*/
                 }
             })
 

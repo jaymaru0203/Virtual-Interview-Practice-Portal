@@ -1,4 +1,5 @@
 from django.core.exceptions import SuspiciousFileOperation
+from django.db.models import Avg
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from .models import *
@@ -196,6 +197,7 @@ def interview(request):
         # with zipfile.ZipFile(zip_dataset_path, 'r') as zip_ref:
         #     zip_ref.extractall(dataset_path)
         
+       
         try:
             path = os.path.join(baseDir, "interview_data\\interview_recordings\\")
 
@@ -233,79 +235,115 @@ def interview(request):
             )
             with audio as source:
                 audio_file = r.record(source)
-            result = r.recognize_google(audio_file)
+
+            try:
+                result = r.recognize_google(audio_file)
 
             # if result == "":
             #     result = "You Did Not Answer This Question"
 
-            print("Result " + result)
+                print("Result " + result)
 
-            # adding punctuations
-            data = {"text": result}
-            url = "http://bark.phon.ioc.ee/punctuator"
-            response = requests.post(url, data)
-            print("PUNCTT  ", response.text)
-            punct_result = response.text
+                # adding punctuations
+                data = {"text": result}
+                url = "http://bark.phon.ioc.ee/punctuator"
+                response = requests.post(url, data)
+                print("PUNCTT  ", response.text)
+                punct_result = response.text
 
-            # p = Punctuator("")
-            # print("PUnchhhh   " + Punctuator.punctuate("I love dance I love some text"))
+                # p = Punctuator("")
+                # print("PUnchhhh   " + Punctuator.punctuate("I love dance I love some text"))
 
-            # correcting grammar
+                # correcting grammar
 
-            # commenting from here
+                # commenting from here
 
-            # parser = GingerIt()
-            # print("GTRKGRT")
-            # text = 'The smelt of fliwers bring back memories.'
-            # correct_result  = parser.parse(text)
-            correct_result = GingerIt().parse(punct_result)
-            cfreq = len(correct_result["corrections"])
+                # parser = GingerIt()
+                # print("GTRKGRT")
+                # text = 'The smelt of fliwers bring back memories.'
+                # correct_result  = parser.parse(text)
+                correct_result = GingerIt().parse(punct_result)
+                cfreq = len(correct_result["corrections"])
 
-            # stop words frequency
-            stopWords_freq = stopWords_freq_calculator(result)
+                # stop words frequency
+                stopWords_freq = stopWords_freq_calculator(result)
 
-            # analysis
+                # analysis
 
-            analysis = ""
-            for item in correct_result["corrections"]:
-                if item["definition"] == "Accept comma addition":
-                    analysis += "Please take small pauses in between! "
-                    break
+                analysis = ""
+                for item in correct_result["corrections"]:
+                    if item["definition"] == "Accept comma addition":
+                        analysis += "Please take small pauses in between! "
+                        break
 
-            print("analysis 1 " + analysis)
+                print("analysis 1 " + analysis)
 
-            nature = TextBlob(result).sentiment.polarity
-            print("textblob polarity " + str(nature))
+                nature = TextBlob(result).sentiment.polarity
+                print("textblob polarity " + str(nature))
 
-            if nature <= 0.0:
-                analysis += "Your response should be more positive. "
+                if nature <= 0.0:
+                    analysis += "Your response should be more positive. "
 
-            print("analysis 2 " + analysis)
+                print("analysis 2 " + analysis)
 
-            word = "no"
-            if request.POST["qs"] == "7" and word in result:
-                analysis += "Try asking atleast 1 or 2 questions to the interviewer. "
+                word = "no"
+                if request.POST["qs"] == "7" and word in result:
+                    analysis += "Try asking atleast 1 or 2 questions to the interviewer. "
 
-            print("analysis 3 " + analysis)
+                print("analysis 3 " + analysis)
 
-            if stopWords_freq > 30.0:
-                s = str(stopWords_freq) + "% words in your answer are stop words. "
-                analysis += s
-                analysis += "Avoid using stop words frequently! "
+                if stopWords_freq > 30.0:
+                    s = str(stopWords_freq) + "% words in your answer are stop words. "
+                    analysis += s
+                    analysis += "Avoid using stop words frequently! "
 
-            print("analysis 4 " + analysis)
+                print("analysis 4 " + analysis)
 
-            if analysis == "":
-                analysis += "Good Job! Your answer is perfect!"
+                if analysis == "":
+                    analysis += "Good Job! Your answer is perfect!"
 
-            print("final analysis  " + analysis)
+                print("final analysis  " + analysis)
 
-            if nature <= 0.0:
-                nature_polarity = "negative"
-            else:
-                nature_polarity = "positive"
+                if nature <= 0.0:
+                    nature_polarity = "negative"
+                else:
+                    nature_polarity = "positive"
 
-            print(nature_polarity)
+                print(nature_polarity)
+
+                interview_answer = InterviewDetail()
+                interview_answer.interview_id = Interview.objects.filter(
+                    id=request.session["interview_id"]
+                ).first()
+                interview_answer.question_no = int(qs)
+                interview_answer.question = str(question_text)
+                interview_answer.answer = str(punct_result)
+                # interview_answer.answer = str(result)
+                interview_answer.correct_answer = str(correct_result["result"])
+                interview_answer.analysis = str(analysis)
+                interview_answer.stopWords_frequency = int(stopWords_freq)
+                interview_answer.correction_frequency = int(cfreq)
+                interview_answer.nature = str(nature_polarity)
+                interview_answer.confidence_percent = 0
+                interview_answer.save()
+
+            except:
+                interview_answer = InterviewDetail()
+                interview_answer.interview_id = Interview.objects.filter(
+                    id=request.session["interview_id"]
+                ).first()
+                interview_answer.question_no = int(qs)
+                interview_answer.question = str(question_text)
+                interview_answer.answer = ""
+                # interview_answer.answer = str(result)
+                interview_answer.correct_answer = ""
+                interview_answer.analysis = ""
+                interview_answer.stopWords_frequency = 0
+                interview_answer.correction_frequency = 0
+                interview_answer.nature = ""
+                interview_answer.confidence_percent = 0
+                interview_answer.save()
+
             
             # started video processing 
 
@@ -422,21 +460,7 @@ def interview(request):
 
             # video processing ends here
 
-            interview_answer = InterviewDetail()
-            interview_answer.interview_id = Interview.objects.filter(
-                id=request.session["interview_id"]
-            ).first()
-            interview_answer.question_no = int(qs)
-            interview_answer.question = str(question_text)
-            interview_answer.answer = str(punct_result)
-            # interview_answer.answer = str(result)
-            interview_answer.correct_answer = str(correct_result["result"])
-            interview_answer.analysis = str(analysis)
-            interview_answer.stopWords_frequency = int(stopWords_freq)
-            interview_answer.correction_frequency = int(cfreq)
-            interview_answer.nature = str(nature_polarity)
-            interview_answer.confidence_percent = 0
-            interview_answer.save()
+
 
             # exporting the result
             # pathw = os.path.join(baseDir, "interview_data\\interview_answers\\")
@@ -744,18 +768,24 @@ def interview_success(request):
     )
     date_object = datetime.strptime(interviewstart, "%b %d, %Y - %H:%M")
     duration = (interview_stop_time - date_object).total_seconds() / 60
-    date_update = Interview.objects.filter(id=request.session["interview_id"]).first()
-    date_update.duration = duration
-    date_update.save()
+    interview_update = Interview.objects.filter(id=request.session["interview_id"]).first()
+    interview_update.duration = duration
+    
     eid = Interview.objects.filter(id=request.session["interview_id"]).first()
     answers = InterviewDetail.objects.filter(interview_id=eid).order_by("question_no")
-    details = {"start": eid.interview_start_time, "duration": eid.duration}
 
+    avg_confidence = int(InterviewDetail.objects.filter(interview_id=eid).aggregate(Avg("confidence_percent"))['confidence_percent__avg'])
+    avg_mistakes = int(InterviewDetail.objects.filter(interview_id=eid).aggregate(Avg("correction_frequency"))['correction_frequency__avg'])
+    interview_update.avg_confidence = avg_confidence
+    interview_update.avg_mistakes = avg_mistakes
+    interview_update.save()
+
+    details = {"start": eid.interview_start_time, "duration": eid.duration ,"avg_confidence" : avg_confidence, "avg_mistakes" : avg_mistakes}
     del request.session["interview_id"]
     del request.session["choice"]
 
     return render(
-        request, "interview_success.html", {"answers": answers, "details": details}
+        request, "full_report.html", {"answers": answers, "details": details,}
     )
 
 
@@ -769,7 +799,7 @@ def all_interviews(request):
         messages.error(request, "Interview Terminated Unexpectedly!")
         return redirect("/")
     interviews = Interview.objects.filter(user=request.user).order_by(
-        "-interview_start_time"
+        "interview_start_time"
     )
     return render(request, "all_interviews.html", {"interviews": interviews})
 
@@ -792,7 +822,7 @@ def full_report(request,n):
     eid = Interview.objects.filter(id=n).first()
     if eid.user == request.user:
         answers = InterviewDetail.objects.filter(interview_id=eid).order_by("question_no")
-        details = {"start": eid.interview_start_time, "duration": eid.duration}
+        details = {"start": eid.interview_start_time, "duration": eid.duration, "avg_confidence": eid.avg_confidence, "avg_mistakes": eid.avg_mistakes}
         return render(request, "full_report.html", {"answers": answers,"details": details})
     else:
         return render(request, "pagenotfound.html")
