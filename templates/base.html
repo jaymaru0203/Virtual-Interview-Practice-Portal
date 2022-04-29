@@ -1,164 +1,171 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-            <!-- Bootstrap CSS -->
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-                  <!-- CSS only -->
-            {% comment %} <link rel="stylesheet" type="text/css" href="css/homepage.css"> {% endcomment %}
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<!-- Bootstrap CSS -->
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+			crossorigin="anonymous"
+		/>
+		<!-- CSS only -->
+		{% comment %}
+		<link rel="stylesheet" type="text/css" href="css/homepage.css" />
+		{% endcomment %}
 
-            <!-- Font Awesome Icons -->
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-            <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  
-        <title>
-          {% block title %}
-          {% endblock %}
-        </title>
+		<!-- Font Awesome Icons -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+		<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 
-        <style type="text/css">
-            .wrapper {
-                display: flex;
-                width: 100%;
-                align-items: stretch;
-            }
-            .main-nav button{
-              position:absolute;
-              right: 0px;
-              top: 0px;
-              border:none;
-              height:40px;
-              outline:none;
-              text-align:center;
-            }
-            
-            .navbar{
-              background-color: #222;
-              padding: 0;
-              min-height: 40px;
-              box-shadow: 0px 1px 10px #222;
-              border-radius: 0;
-              opacity: 0.85;
-              color: #fff;
-            }
-            
-            .main-nav a{
-              color: #eee;
-              font-size: 16px;
-              font-weight: 400;
-              margin-right: 20px;
-            }
-            
-            .main-nav a:hover{
-              color: #fff;
-              font-size: 16px;
-              font-weight: 600;
-            }
-            
-            .main-nav a.active{
-              color: #fff;
-              font-size: 16px;
-              font-weight: 600;
-            }
+		<title>{% block title %} {% endblock %}</title>
 
-            .fa{
-              color: white;
-            }
-            
-            .navbar-toggler:focus{
-              border: none;
-              outline: none;
-              align-items: center;
-              
-            }
-            #navbarCollapse{
-              background-color: #222;
-              padding:0px 10px;
-            }
-            
-            .hidden{
-              display: none;
-            }  
+		<style type="text/css">
+			.wrapper {
+				display: flex;
+				width: 100%;
+				align-items: stretch;
+			}
+			.main-nav button {
+				position: absolute;
+				right: 0px;
+				top: 0px;
+				border: none;
+				height: 40px;
+				outline: none;
+				text-align: center;
+			}
 
-            #logo{
-              width: 40%;
-              margin: 5px 10px;
-            }
-            
-            @media screen and (max-width: 768px){
-              #logo{
-                width: 80%;
-              }
-              #logo-anchor{
-                width: 40%;
-              }
-            }
-            
-        </style>
-        {% block head_content %}
-        {% endblock %}
+			.navbar {
+				background-color: #222;
+				padding: 0;
+				min-height: 40px;
+				box-shadow: 0px 1px 10px #222;
+				border-radius: 0;
+				opacity: 0.85;
+				color: #fff;
+			}
 
-    </head>
-<body>
-    <div class="wrapper">
-      <nav class="navbar navbar-expand-md fixed-top main-nav">
-        <!-- <a href="#" class="navbar-brand">Brand</a> -->
-        <a class="navbar-brand" href="/" id="logo-anchor">
-          <img src="{% static 'images/logo.png' %}" id="logo">
-        </a>
+			.main-nav a {
+				color: #eee;
+				font-size: 16px;
+				font-weight: 400;
+				margin-right: 20px;
+			}
 
-        <button type="button" id="ChangeToggle" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-            <div id="navbar-hamburger"><i class="fa fa-bars"></i></div>
-            <div id="navbar-close" class="hidden"><i class="fa fa-times"></i></div>
-        </button>
+			.main-nav a:hover {
+				color: #fff;
+				font-size: 16px;
+				font-weight: 600;
+			}
 
+			.main-nav a.active {
+				color: #fff;
+				font-size: 16px;
+				font-weight: 600;
+			}
 
+			.fa {
+				color: white;
+			}
 
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <div class="navbar-nav ml-auto">
-              <!-- <img src="{% static 'images/logo.png' %}" id="logo"> -->
+			.navbar-toggler:focus {
+				border: none;
+				outline: none;
+				align-items: center;
+			}
+			#navbarCollapse {
+				background-color: #222;
+				padding: 0px 10px;
+			}
 
-                <a href="/" class="nav-item nav-link" id="home-page">Home</a>
-                {% if user.is_authenticated %}
-                <a href="/choice/" class="nav-item nav-link" id="interview-page">Interview</a>
-                <a href="/all_interviews/" class="nav-item nav-link" id="all-interviews-page">Reports</a>
-                <a href="/resources/" class="nav-item nav-link" id="resources-page">Resources</a>
-                <a href="/profile/" class="nav-item nav-link" id="profile-page">Profile</a>
-                <a href="/logout/" class="nav-item nav-link" id="logout-page">Logout</a>
-                {% else %}
-                <a href="/login/" class="nav-item nav-link" id="login-page">Login</a>
-                <a href="/signup/" class="nav-item nav-link" id="signup-page">Sign Up</a>
-                {% endif %}
-            </div>
+			.hidden {
+				display: none;
+			}
 
-        </div>
-    </nav>
+			#logo {
+				width: 40%;
+				margin: 5px 10px;
+			}
 
-    {% block content %}  {% endblock %}
+			@media screen and (max-width: 768px) {
+				#logo {
+					width: 80%;
+				}
+				#logo-anchor {
+					width: 40%;
+				}
+			}
+		</style>
+		{% block head_content %} {% endblock %}
+	</head>
+	<body>
+		<div class="wrapper">
+			<nav class="navbar navbar-expand-md fixed-top main-nav">
+				<!-- <a href="#" class="navbar-brand">Brand</a> -->
+				<a class="navbar-brand" href="/" id="logo-anchor">
+					<img src="{% static 'images/logo.png' %}" id="logo" />
+				</a>
 
-  </div>
-<!-- Jquery -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+				<button type="button" id="ChangeToggle" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+					<div id="navbar-hamburger"><i class="fa fa-bars"></i></div>
+					<div id="navbar-close" class="hidden"><i class="fa fa-times"></i></div>
+				</button>
 
-    <script type="text/javascript">   
-      $(function() {
-        $('#ChangeToggle').click(function() {
-        $('#navbar-hamburger').toggleClass('hidden');
-        $('#navbar-close').toggleClass('hidden');  
-      });
-        });
+				<div class="collapse navbar-collapse" id="navbarCollapse">
+					<div class="navbar-nav ml-auto">
+						<!-- <img src="{% static 'images/logo.png' %}" id="logo"> -->
 
-        $(document).ready(function(){
-          AOS.init();
-        });
+						<a href="/" class="nav-item nav-link" id="home-page">Home</a>
+						{% if user.is_authenticated %}
+						<a href="/choice/" class="nav-item nav-link" id="interview-page">Interview</a>
+						<a href="/all_interviews/" class="nav-item nav-link" id="all-interviews-page">Reports</a>
+						<a href="/resources/" class="nav-item nav-link" id="resources-page">Resources</a>
+						<a href="/profile/" class="nav-item nav-link" id="profile-page">Profile</a>
+						<a href="/logout/" class="nav-item nav-link" id="logout-page">Logout</a>
+						{% else %}
+						<a href="/login/" class="nav-item nav-link" id="login-page">Login</a>
+						<a href="/signup/" class="nav-item nav-link" id="signup-page">Sign Up</a>
+						{% endif %}
+					</div>
+				</div>
+			</nav>
 
-      </script>
-</body>
+			{% block content %} {% endblock %}
+		</div>
+		<!-- Jquery -->
+		<script
+			src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+			integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+			integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+			integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+			crossorigin="anonymous"
+		></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+		<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+		<script type="text/javascript">
+			$(function () {
+				$("#ChangeToggle").click(function () {
+					$("#navbar-hamburger").toggleClass("hidden");
+					$("#navbar-close").toggleClass("hidden");
+				});
+			});
+
+			$(document).ready(function () {
+				AOS.init();
+			});
+		</script>
+	</body>
 </html>

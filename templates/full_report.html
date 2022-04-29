@@ -5,7 +5,7 @@
 		padding: 0 3%;
 	}
 
-	#all-interviews-page{
+	#all-interviews-page {
 		color: #fff;
 		font-size: 16px;
 		font-weight: 600;
@@ -48,9 +48,17 @@
 		color: inherit;
 	}
 
+	.highlight-text {
+		font-size: 36px;
+		color: #a43fdd;
+	}
+	.highlight-text-2 {
+		font-size: 48px;
+	}
+
 	.answerbox {
 		background-color: #fff;
-		padding: 15px 30px;
+		padding: 10px 15px;
 		border: 1px solid rgb(233, 233, 233);
 	}
 	.answerresponse {
@@ -79,6 +87,12 @@
 			padding-top: 50px;
 			background-color: #fff;
 		}
+		.highlight-text {
+			font-size: 24px;
+		}
+		.highlight-text-2 {
+			font-size: 36px;
+		}
 	}
 </style>
 {% endblock %} {% block content %}
@@ -87,19 +101,25 @@
 	<div class="col-lg-12 col-md-12 p-0 align-self-center" data-aos="fade-right">
 		<div class="row m-0 justify-content-center">
 			<div class="main-screen">
-				<!-- <div class="text-center display-4 mb-5">Report of your Interview!</div> -->
-				<div class="text-center display-4 mb-5">Interview Completed Successfully 🤩<br/>Here is the report of your interview!</div>
-					<div class="row">
+				<div class="display-4 mb-2">Here is the Report of your Interview!</div>
+				<div class="mb-5 text-secondary h4 font-weight-normal">🕒 - {{details.start}}</div>
+				<div class="row">
 					<div class="col-lg-8">
-						<div class="d">
-							<strong>
-								Start date and time of your interview is {{details.start}} <br />
-								The duration of your interview is 
-								{% if details.duration == "None" %} 0 {% else %} {{details.duration}} {% endif %}
-								{% if details.duration == 1 %} minute {% else %} minutes. {% endif %} <br />
-								Overall confidence is {{details.avg_confidence}} %.<br />
-								Average mistake per answer is {{details.avg_mistakes}}.
-							</strong>
+						<div class="row text-center align-self-center mb-5 h5">
+							<div class="col-4">
+								Interview Duration<br />
+								<div class="highlight-text my-1">{{details.duration}}<br /></div>
+								{% if details.duration == 1 %}Minute{% else %}Minutes{% endif %}
+							</div>
+							<div class="col-4">
+								Overall Confidence<br />
+								<div class="highlight-text my-1 highlight-text-2">{{details.avg_confidence}}%</div>
+							</div>
+							<div class="col-4">
+								Average Mistakes<br />
+								<div class="highlight-text my-1">{{details.avg_mistakes}}<br /></div>
+								Per Answer
+							</div>
 						</div>
 
 						<div id="accordion">
@@ -117,7 +137,7 @@
 										<div class="col-12 p-0">
 											<div class="row m-0 justify-content-center answerbox">
 												{% if ans.correct_answer == "" %}
-													<span class="answerresponse">You didn't answer this question.</span>
+												<span class="answerresponse">You didn't answer this question.</span>
 
 												{% else %}
 												<div class="col-lg-4 col-md-4 answerbox">
@@ -130,16 +150,17 @@
 													<span class="answerresponse"
 														><img src="{% static 'images/data-analysis.png' %}" width="20px" style="margin-top: -5px" /> Analysis</span
 													><br />
-													{{ ans.analysis }} Your confidence percent is {{ ans.confidence_percent }} %
+													{{ ans.analysis }} <br />
+													You were <b>{{ ans.confidence_percent }}%</b> Confident in this Answer!
 												</div>
 												<div class="col-lg-4 col-md-4 answerbox">
 													<span class="answerresponse">
 														<img src="{% static 'images/results.png' %}" width="20px" style="margin-top: -5px" /> Remark</span
 													>
 													<br />
-													{% if ans.correction_frequency == 1 %} Your answer has {{ans.correction_frequency}} mistake. 
+													{% if ans.correction_frequency == 1 %} Your answer has <b>{{ans.correction_frequency}}</b> mistake. 
 													{% elif ans.correction_frequency == 0 %} Well Done! Your answer is perfect. {% else %} Your answer has
-													{{ans.correction_frequency}} mistakes. {% endif %}
+													<b>{{ans.correction_frequency}}</b> mistakes. {% endif %}
 												</div>
 												{% endif %}
 											</div>

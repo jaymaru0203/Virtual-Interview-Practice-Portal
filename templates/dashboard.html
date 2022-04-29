@@ -21,6 +21,10 @@
         font-size: 16px;
         font-weight: 600;
       }
+
+      .hero-text {
+        text-align: left;
+      }
                 
       .main-text{
         font-size: 3rem;
@@ -96,6 +100,11 @@
         margin-top: 0;
       }
 
+      @media screen and (max-width: 768px ){
+        .hero-text {
+          text-align: center;
+        }
+      }
       @media screen and (max-width: 670px ){
         .main-screen{
           padding: 0 80px;
@@ -162,7 +171,9 @@
 {% block content %} 
 <div class="container-fluid screen-1">
 
-    {% if messages %}
+    <div class="text-center mb-5">
+      <div class="container">
+        {% if messages %}
         {% for message in messages %}
             <div {% if message.tags == "error" %} class="alert alert-danger alert-dismissible fade show" {% else %} class="alert alert-success alert-dismissible fade show" {% endif %}  role="alert">
                 {{ message }}
@@ -172,31 +183,32 @@
             </div>
         {% endfor %}
     {% endif %}
-
-
-    <div class="px-4 py-5 text-center hero">
-      <img class="d-block mx-auto mb-4" src="{% static 'images/hero.png' %}" alt="" width="140" height="">
-      <h1 class="display-5 fw-bold">Virtual Interview Practice Portal</h1>
-      <div class="col-lg-6 mx-auto">
-        <p class="lead mb-4">The  Virtual Interview Practice Portal is a platform for interview aspirants to practice before their actual interviews and get a hands on experience of the same.
-          A Virtual Interview experience will be opened for the user where questions will be prompted to the user one by one and the user can answer them in front of the webcam verbally.
-          </p>
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-          <a href="/choice/"><button type="button" class="btn btn-primary btn-lg px-4 mx-3 gap-3 interview-button">Interview</button></a> 
-          <a href="/resources/"><button type="button" class="btn btn-outline-secondary btn-lg mx-3 px-4 resources-button">Resources</button></a>
+      </div>
+      <div class="container-fluid" data-aos="zoom-in-up" data-aos-duration="2000">
+        <div class="row">
+          <div class="col-md-8 col-sm-12">
+            <img src="{% static 'images/dashboard-hero.jpg' %}" alt="" style="width: 68vw;">
+          </div>
+          <div class="col-md-4 align-self-center hero-text">
+            <div class="display-4 mt-3">The Virtual Interview Practice Portal</div>
+            <a href="/choice/"><button type="button" class="hire-mech mt-4">Interview</button></a> 
+          </div>
         </div>
       </div>
+        <!-- <div class="d-grid d-sm-flex justify-content-sm-center">
+          <a href="/all_interviews/"><button type="button" class="btn btn-outline-dark btn-lg mx-4 px-4 resources-button">Reports</button></a>
+          <a href="/resources/"><button type="button" class="btn btn-outline-dark btn-lg mx-4 px-4 resources-button">Resources</button></a>
+        </div> -->
     </div>
-
 
     <div class="row m-0">
       <div class="col-lg-6 col-md-6 p-0 align-self-center" data-aos="fade-right">
         <div class="row m-0 justify-content-center">
           <div class="main-screen">
-        <div class="main-text">Practice for the Pressure</div>
-        <div class="sub-text">We use your built-in camera to recreate the pressure of actual interviews so you can gain realistic experience and feel prepared for anything.</div>
+        <div class="main-text">Prepare Beforehand</div>
+        <div class="sub-text">Access the Resources Page for some Valuable Tips and Guidance on How to Ace Your Interviews Like a Pro! You can Also find Curated Links of our Interview Specialists</div>
         <div class="link-button">
-          <a href="/choice/"><button class="hire-mech">Explore</button></a>
+          <a href="/resources/"><button class="hire-mech">Resources</button></a>
           </div>
          </div>
         </div>
@@ -213,10 +225,10 @@
       <div class="col-lg-6 col-md-6 p-0 align-self-center" data-aos="fade-right">
         <div class="row m-0 justify-content-center">
           <div class="main-screen">
-        <div class="main-text">Say Goodbye to Anxiety</div>
-        <div class="sub-text">With our unique Real-Life like Interview Experience, get a hands on and prepare for your actual interviews, while kicking out all anxiety</div>
+        <div class="main-text">Track Your Progress</div>
+        <div class="sub-text">With our unique Reports Section, you can easily track your progress through the Interviews. Graphical presentation of Confidence and Mistakes makes the reports easy to read. </div>
         <div class="link-button">
-          <a href="/choice/"><button class="hire-mech">Explore</button></a>
+          <a href="/all_interviews/"><button class="hire-mech">Reports</button></a>
           </div>
          </div>
         </div>
