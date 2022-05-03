@@ -32,16 +32,7 @@ nltk.download("punkt")
 from nltk.corpus import wordnet
 from nltk.tokenize import sent_tokenize, word_tokenize
 
-# import en_core_web_sm
-# import spacy
-# from spacy.lang.en.examples import sentences
-# import os
-# from pocketsphinx import AudioFile, get_model_path, get_data_path
 
-# from ibm_watson import SpeechToTextV1
-# from ibm_watson.websocket import RecognizeCallback, AudioSource
-# from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
-# from punctuator import Punctuator
 import requests
 import cloudscraper
 from textblob import TextBlob
@@ -167,13 +158,6 @@ def choice(request):
     return render(request, "choice.html")
 
 
-# def aa(request):
-#     corrections = [{'start': 21, 'text': 'KJ Somaiya College', 'correct': 'the KJ Somaiya College', 'definition': None}, {'start': 16, 'text': 'from', 'correct': '', 'definition': None}]
-#     eid = Interview.objects.filter(id=186).first()
-#     answers = InterviewDetail.objects.filter(interview_id=eid).order_by('question_no')
-#     # answers = InterviewDetail.objects.filter(question_no=6).order_by('question_no')
-#     link = "https://www.ibm.com/docs/en/zos-basic-skills?topic=zos-what-is-database-management-system"
-#     return render(request, "aa.html", {"link": link})
 
 
 def resources(request):
@@ -193,26 +177,16 @@ def interview(request):
         
         user = request.user.email
 
-        # to load datset
-
-        # zip_dataset_path = path = os.path.join(baseDir, "confident_unconfident_dataset.zip")
-        # dataset_path = path = os.path.join(baseDir, "dataset\\")
-        # with zipfile.ZipFile(zip_dataset_path, 'r') as zip_ref:
-        #     zip_ref.extractall(dataset_path)
 
         try:
             path = os.path.join(baseDir, "interview_data\\interview_recordings\\")
-
-            # filename = user[0: user.index('@')] + "_" + request.session["interview_id"] + "_" + request.POST['qs']
             filename = user[0 : user.index("@")] + "_" + request.POST["qs"]
             extension = ".webm"
             question_text = request.POST["question"]
             qs = request.POST["qs"]
-            # print("fecev ",request.FILES["blob"].chunks()[0])
             with open(path + filename + extension, "wb+") as destination:
 
                 for chunk in request.FILES["blob"].chunks():
-                    # print("chunk",chunk)
                     destination.write(chunk)
 
             i = rf"{baseDir}\interview_data\interview_recordings\{filename}.webm"
@@ -241,9 +215,6 @@ def interview(request):
             try:
                 result = r.recognize_google(audio_file)
 
-                # if result == "":
-                #     result = "You Did Not Answer This Question"
-
                 print("Result " + result)
 
                 # adding punctuations
@@ -253,17 +224,7 @@ def interview(request):
                 print("PUNCTT  ", response.text)
                 punct_result = response.text
 
-                # p = Punctuator("")
-                # print("PUnchhhh   " + Punctuator.punctuate("I love dance I love some text"))
-
-                # correcting grammar
-
-                # commenting from here
-
-                # parser = GingerIt()
-                # print("GTRKGRT")
-                # text = 'The smelt of fliwers bring back memories.'
-                # correct_result  = parser.parse(text)
+               
                 correct_result = GingerIt().parse(punct_result)
                 cfreq = len(correct_result["corrections"])
 
@@ -322,7 +283,6 @@ def interview(request):
                 interview_answer.question_no = int(qs)
                 interview_answer.question = str(question_text)
                 interview_answer.answer = str(punct_result)
-                # interview_answer.answer = str(result)
                 interview_answer.correct_answer = str(correct_result["result"])
                 interview_answer.analysis = str(analysis)
                 interview_answer.stopWords_frequency = int(stopWords_freq)
@@ -339,7 +299,6 @@ def interview(request):
                 interview_answer.question_no = int(qs)
                 interview_answer.question = str(question_text)
                 interview_answer.answer = ""
-                # interview_answer.answer = str(result)
                 interview_answer.correct_answer = ""
                 interview_answer.analysis = ""
                 interview_answer.stopWords_frequency = 0
@@ -348,208 +307,13 @@ def interview(request):
                 interview_answer.confidence_percent = 0
                 interview_answer.save()
 
-            # started video processing
-
-            # img_size = 48
-            # batch_size = 32
-
-            # datagen_validation = ImageDataGenerator(horizontal_flip=True)
-
-            # test_data_path = os.path.join(baseDir, "dataset\\confident-unconfident\\test\\")
-
-            # valid_generator = datagen_validation.flow_from_directory(test_data_path,
-            #                                         target_size=(img_size,img_size),
-            #                                         color_mode="grayscale",
-            #                                         batch_size=batch_size,
-            #                                         class_mode='binary',
-            #                                         shuffle=False)
-            # STEP_SIZE_VALID=valid_generator.n//valid_generator.batch_size
-
-            # # load json and create model
-            # json_file = open('model.json', 'r')
-            # loaded_model_json = json_file.read()
-            # json_file.close()
-            # loaded_model = model_from_json(loaded_model_json)
-            # # load weights into new model
-            # loaded_model.load_weights("model_weights_new.h5")
-            # print("Loaded model from disk")
-
-            # evaluate loaded model on test data
-            # loaded_model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-            # x = loaded_model.evaluate_generator(generator=valid_generator,steps=STEP_SIZE_VALID)
-            # print(x)
-
-            # to convert video to images
-
-            # path_output_dir = os.path.join(baseDir, "interview_data\\video_images\\")
-            # vidcap = cv2.VideoCapture(i)
-            # count = 0
-            # li = []
-            # while vidcap.isOpened():
-            #     success, im = vidcap.read()
-            #     if success:
-            #         # cv2.imwrite(os.path.join(path_output_dir, '%d.png') % count, imagee)
-            #         gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-            #         gray = np.array(gray, dtype='uint8')
-            #         faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-            #         faces = faceCascade.detectMultiScale(gray,scaleFactor=1.3,minNeighbors=3,minSize=(30, 30))
-            #         if(len(faces) != 0):
-            #             for (x, y, w, h) in faces:
-            #                 cv2.rectangle(im, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            #                 roi_color = im[y:y + h, x:x + w]
-            #                 cv2.imwrite(os.path.join(path_output_dir, '%d.png') % count, roi_color)
-            #                 pathw = path_output_dir + str(count) + '.png'
-            #                 my_image = image.load_img(pathw,target_size=(48,48),color_mode="grayscale")
-            #                 my_img_arr = image.img_to_array(my_image)
-            #                 p = MODEL.predict(my_img_arr.reshape(1,48,48))
-            #                 li.append(p[0][0])
-            #                 os.remove(pathw)
-            #                 count += 1
-            #         else:
-            #             break
-            # cv2.destroyAllWindows()
-            # vidcap.release()
-            # print(len(li))
-            # print("confidence percent ",sum(li)/len(li))
-
-            # image_list = []
-
-            # video_images_dir = os.path.join(path_output_dir, "*.png")
-
-            # for filename in glob.glob(video_images_dir):
-            #     image_list.append(filename)
-            # # print("image list ", image_list)
-            # print("image list ready")
-
-            # count = 0
-            # cropped_images_output_dir = os.path.join(baseDir, "interview_data\\cropped_images\\")
-
-            # for img in image_list:
-            #     im = cv2.imread(img)
-            #     gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-            #     gray = np.array(gray, dtype='uint8')
-            #     faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-            #     faces = faceCascade.detectMultiScale(gray,scaleFactor=1.3,minNeighbors=3,minSize=(30, 30))
-            #     # print("[INFO] Found {0} Faces!".format(len(faces)))
-
-            #     if(len(faces) != 0):
-            #         for (x, y, w, h) in faces:
-            #             cv2.rectangle(im, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            #             roi_color = im[y:y + h, x:x + w]
-            #             cv2.imwrite(os.path.join(cropped_images_output_dir, '%d.png') % count, roi_color)
-            #             count += 1
-
-            # cropped_image_list = []
-            # cropped_images_dir = os.path.join(cropped_images_output_dir, "*.png")
-
-            # for filename in glob.glob(cropped_images_dir):
-            #     cropped_image_list.append(filename)
-            # # print("cropped image list ", cropped_image_list)
-            # print("cropped image list ready")
-
-            # li=[]
-            # for img in cropped_image_list:
-            #     my_image = image.load_img(img,target_size=(48,48),color_mode="grayscale")
-            #     my_img_arr = image.img_to_array(my_image)
-            #     p = MODEL.predict(my_img_arr.reshape(1,48,48))
-            #     li.append(p[0][0])
-            # print("li ", li)
-            # sum=0
-            # for i in li:
-            #   sum += i
-            # print("confidence % ",sum/len(li))
-
-            # video processing ends here
-
-            # exporting the result
-            # pathw = os.path.join(baseDir, "interview_data\\interview_answers\\")
-            # extensionw = ".txt"
-            # with open(pathw + filename + extensionw,mode='w') as file:
-            #     file.write(result)
-            #     print("ready!")
-
-            # if os.path.exists(i):
-            #     os.remove(i)
-            # else:
-            #     print("The i file does not exist")
+            
 
             if os.path.exists(o):
                 os.remove(o)
             else:
                 print("The o file does not exist")
 
-            # n = nltk.tokenize.punkt.PunktSentenceTokenizer()
-            # n.sentences_from_text(result)
-            # print(result)
-
-            # api_key =
-            # endpoint =
-
-            # json = {
-            #     "audio_url": ""
-            # }
-
-            # headers = {
-            #     "authorization": api_key,
-            #     "content-type": "application/json"
-            # }
-
-            # response = requests.post(endpoint, json=json, headers=headers)
-            # print(response.json())
-
-            # apikey =
-            # url =
-
-            # # Setup Service
-            # authenticator = IAMAuthenticator(apikey)
-            # stt = SpeechToTextV1(authenticator=authenticator)
-            # stt.set_service_url(url)
-
-            # # Perform conversion
-            # # with open('converted.mp3', 'rb') as f:
-            # f = "{baseDir}\interview_data\interview_audios\{filename}.wav"
-
-            # res = stt.recognize(audio=f, content_type='audio/mp3', model='en-US_NarrowbandModel').get_result()
-
-            # print(res)
-
-            # synonyms = []
-            # print(wordnet.synsets("good"))
-            # for syn in wordnet.synsets("reading"):
-            #     for l in syn.lemmas():
-            #         synonyms.append(l.name())
-            # print(set(synonyms))
-
-            # n = nltk.tokenize.punkt.PunktSentenceTokenizer()
-            # n.sentences_from_text(result)
-
-            # sents = result.replace('\n', '.\n')
-
-            # nlp = en_core_web_sm.load()
-            # text = nlp(sents)
-
-            # for sent in text.sents:
-            #     sentence = sent
-            #     print(sentence)
-
-            # model_path = get_model_path()
-            # data_path = get_data_path()
-
-            # config = {
-            # 'verbose': False,
-            # 'audio_file': os.path.join(data_path, ''),
-            # 'buffer_size': 2048,
-            # 'no_search': False,
-            # 'full_utt': False,
-            # 'hmm': os.path.join(model_path, 'en-us'),
-            # 'lm': os.path.join(model_path, 'en-us.lm.bin'),
-            # 'dict': os.path.join(model_path, 'cmudict-en-us.dict')
-            # }
-
-            # audio = AudioFile(**config)
-            # for phrase in audio:
-            #     print("below phrase")
-            #     print(phrase)
 
             return HttpResponse("")
 
@@ -654,40 +418,7 @@ def interview(request):
         json_videos_list = json.dumps(list)
         json_questions_list = json.dumps(questions)
 
-        # OLD CODE TO RETRIEVE RANDOM FILES FROM OLD FILE SYSTEM
-        # list = ["1.mp4"]
 
-        # vidsInDB = len(Question.objects.filter(choice=request.session["choice"]))
-        # if vidsInDB < 3:
-        #     messages.error(
-        #         request, "Request Cannot be Processed Right Now! Please Try Again Later"
-        #     )
-        #     return redirect("/")
-        # if request.session["choice"] == "fresher":
-        #     randomlist = random.sample(range(2, vidsInDB - 1), 1)
-        # else:
-        #     randomlist = random.sample(range(2, vidsInDB + 2), 4)
-        # randomlist.sort()
-
-        # for i in range(0, 1):
-        #     vid = str(randomlist[i]) + ".mp4"
-        #     list.append(vid)
-
-        # list.append("16.mp4")
-        # list.append("0.mp4")
-        # json_videos_list = json.dumps(list)
-
-        # questions = [Question.objects.filter(filename=1).first().question]
-        # question_list = Question.objects.filter(
-        #     choice=request.session["choice"], filename__in=randomlist
-        # ).values_list("question", flat=True)
-
-        # for qs in question_list:
-        #     questions.append(qs)
-
-        # questions.append(Question.objects.filter(filename=16).first().question)
-        # questions.append(Question.objects.filter(filename=0).first().question)
-        # json_questions_list = json.dumps(questions)
 
         return render(
             request,
@@ -785,7 +516,6 @@ def interview_success(request):
     ).first()
     interview_update.duration = duration
 
-    # eid = Interview.objects.filter(id=request.session["interview_id"]).first()
     answers = InterviewDetail.objects.filter(interview_id=interview_update).order_by(
         "question_no"
     )

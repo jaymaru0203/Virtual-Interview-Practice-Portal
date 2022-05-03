@@ -237,10 +237,7 @@
         }else{
             navigator.mediaDevices.enumerateDevices()
             .then(devices => {
-                devices.forEach(device=>{
-                    //console.log(device.kind.toUpperCase(), device.label);
-                    //, device.deviceId
-                })
+                devices.forEach(device=>{})
             })
             .catch(err=>{
                 console.log(err.name, err.message);
@@ -299,14 +296,7 @@
                     player.load();
                     player.play();
                     window.location.href = "/interview_success/";
-                    /* if (seconds > 0) {
-                        instructions.innerHTML = "Interview Completed Successfully! Redirecting in "+seconds+"..."
-                        seconds--;
-                        setTimeout(redir, 1000);
-                    }
-                    else {
-                        window.location.href = "/interview_success/";
-                    }*/
+                   
                 }
             })
 
