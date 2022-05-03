@@ -190,6 +190,7 @@ def interview(request):
 
     if request.method == "POST":
         baseDir = settings.BASE_DIR
+        
         user = request.user.email
 
         # to load datset
@@ -708,6 +709,8 @@ def interview_success(request):
 
     # video processing
     baseDir = settings.BASE_DIR
+    
+    user = request.user.email
     video_dir = os.path.join(baseDir, "interview_data\\interview_recordings\\")
     video_images_dir = os.path.join(video_dir, "*.webm")
     path_output_dir = os.path.join(baseDir, "interview_data\\video_images\\")
@@ -717,8 +720,9 @@ def interview_success(request):
 
     qs = 1
     for filename in video_list:
+        print("file being processed is ",filename)
         vidcap = cv2.VideoCapture(filename)
-        count = 0
+        count = 1
         li = []
         while vidcap.isOpened():
             success, im = vidcap.read()
@@ -735,10 +739,12 @@ def interview_success(request):
                     for (x, y, w, h) in faces:
                         cv2.rectangle(im, (x, y), (x + w, y + h), (0, 255, 0), 2)
                         roi_color = im[y : y + h, x : x + w]
+                        fname = user[0 : user.index("@")] + "_" + str(count)
+                        print("fnameee ",fname)
                         cv2.imwrite(
-                            os.path.join(path_output_dir, "%d.png") % count, roi_color
+                            os.path.join(path_output_dir, "%s.png") % fname, roi_color
                         )
-                        pathw = path_output_dir + str(count) + ".png"
+                        pathw = path_output_dir + fname + ".png"
                         my_image = image.load_img(
                             pathw, target_size=(48, 48), color_mode="grayscale"
                         )
@@ -753,7 +759,7 @@ def interview_success(request):
                 break
         cv2.destroyAllWindows()
         vidcap.release()
-        print(len(li))
+        print("no. of images ",len(li))
         if len(li) != 0:
             confidence_percent = sum(li) / len(li)
             print("confidence percent ", confidence_percent)
