@@ -492,13 +492,21 @@ def interview_success(request):
         vidcap.release()
         print("no. of images ",len(li))
         if len(li) != 0:
-            confidence_percent = sum(li) / len(li)
-            print("confidence percent ", confidence_percent)
+            confidence_percent = round((1 - (sum(li) / len(li)))*100)
+            print("confidence percent ************************************************** ", confidence_percent)
             id = Interview.objects.filter(id=request.session["interview_id"]).first()
-            InterviewDetail.objects.filter(interview_id=id, question_no=qs).update(
-                confidence_percent=round(confidence_percent * 100)
-            )
-            qs += 1
+            if confidence_percent == 0:
+                # InterviewDetail.objects.filter(interview_id=id, question_no=qs).update(confidence_percent=50)
+                print("0 VALUE Put in Database *********** - ", confidence_percent)
+            else: 
+                InterviewDetail.objects.filter(interview_id=id, question_no=qs).update(confidence_percent=confidence_percent)
+                print("Confidence Percent Put in Database *********** - ", confidence_percent)
+        # else:
+        #         InterviewDetail.objects.filter(interview_id=id, question_no=qs).update(confidence_percent=0)
+        #         print("0 Put in Database FROM ELSE CODE *********** - ")
+                
+        qs += 1
+        
         os.remove(filename)
 
     # video processing ends here
